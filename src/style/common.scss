@@ -1,0 +1,48 @@
+body, div, span, header, footer, nav, section, aside, article, ul, dl, dt, dd, li, a, p, h1, h2, h3, h4,h5, h6, i, b, textarea, button, input, select, figure, figcaption{
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  font-style: normal;
+  text-decoration: none;
+  border: none;
+  color: #333;
+  font-weight: normal;
+  font-family: "Microsoft Yahei";
+  box-sizing: border-box;
+  -webkit-tap-highlight-color:transparent;
+  -webkit-font-smoothing: antialiased;
+  &:hover{
+    outline: none;
+  }
+}
+html,body{
+  width: 100%;
+  height:100%;
+}
+@font-face {
+  font-family: 'iconfont';  /* project id 407663 */
+  src: url('//at.alicdn.com/t/font_407663_9ukuhm61hbhxs9k9.eot');
+  src: url('//at.alicdn.com/t/font_407663_9ukuhm61hbhxs9k9.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_407663_9ukuhm61hbhxs9k9.woff') format('woff'),
+  url('//at.alicdn.com/t/font_407663_9ukuhm61hbhxs9k9.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_407663_9ukuhm61hbhxs9k9.svg#iconfont') format('svg');
+}
+@mixin clearfix{
+  &:after{
+    content:"";
+    display:table;
+    clear:both;
+  }
+}
+
+.swiper-pagination-bullet-active{
+  background: rgb(248,203,57) !important;
+}
+.swiper-pagination-bullet{
+  border-radius:0 ;
+}
+
+.iconfont{
+  font-style:normal;
+  font-family: iconfont;
+}
