@@ -1,5 +1,5 @@
 <template>
-  <div class="head">
+  <div id="head" :style="{color:color} ">
     <span class="goBack" v-if="goBack" @click="fun_goBack()"><i class="iconfont">&#xe61c;</i></span>
     <span class="title">{{title_head}}</span>
     <span class="more"><i class="iconfont">&#xe602;</i></span>
@@ -10,13 +10,23 @@
 
   export default {
     data() {
-      return{
-
+      return {}
+    },
+    props: {
+      goBack: {
+        default: false
+      },
+      title_head: {
+        type: String,
+        default: ''
+      },
+      color: {
+        type: String,
+        default: '#333'
       }
     },
-    props: ["goBack","title_head","more"],
-    methods:{
-      fun_goBack(){
+    methods: {
+      fun_goBack() {
         window.history.go(-1);
       }
     }
@@ -25,28 +35,29 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../style/common.scss";
-  .head {
+
+  #head {
     background: #fff;
     height: 3.5rem;
     text-align: center;
-    position:relative;
-    padding-bottom:1rem;
+    position: relative;
+    padding-bottom: 1rem;
     box-sizing: content-box;
-    .goBack ,.more{
+    .goBack, .more {
       position: absolute;
-      font-size:3rem;
+      font-size: 3rem;
 
     }
-    .goBack{
-      left:10px;
+    .goBack {
+      left: 10px;
     }
-    .title{
-      font-size:1.7rem;
-      line-height:3.5rem;
-      font-weight:bold;
+    .title {
+      font-size: 1.7rem;
+      line-height: 3.5rem;
+      font-weight: bold;
     }
-    .more{
-      right:15px;
+    .more {
+      right: 15px;
     }
   }
 </style>

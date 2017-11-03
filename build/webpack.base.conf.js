@@ -63,6 +63,7 @@ module.exports = {
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
       },
+      { test: /iview.src.*?js$/, loader: 'babel-loader' }
       // {
       //   test: /\.css$/,
       //   loader: 'style-loader!css-loader'

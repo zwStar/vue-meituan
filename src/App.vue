@@ -1,26 +1,29 @@
 <template>
   <div id="app">
     <transition name="router-fade" mode="out-in">
-        <router-view></router-view>
+      <router-view></router-view>
     </transition>
   </div>
 </template>
 
 <script>
-export default {
-  name: 'app',
-  data(){
-    return {
-      keepAlive:false
+  import BScroll from 'better-scroll'
+
+  export default {
+    name: 'app',
+    data() {
+      return {
+        keepAlive: false
+      }
     }
   }
-}
 </script>
 
-<style>
+<style rel="stylesheet/scss" lang="scss">
   @import "./style/common.scss";
-  #app{
-    width:100%;
-    height:100%;
+
+  #app {
+    width: 100%;
+    height: 100%;
   }
 </style>

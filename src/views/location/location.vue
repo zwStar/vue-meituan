@@ -42,8 +42,6 @@
           _this.suggestionLists = result.data.data;
           //_this.RECORD_SUGGESTION(result.data.data);
           localStorage.setItem("suggestionLists", JSON.stringify(result.data.data))
-          console.log("setItem")
-          console.log(JSON.parse(localStorage.getItem("suggestionLists")))
         })
       },
       ...mapMutations([

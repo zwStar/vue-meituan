@@ -9,6 +9,10 @@ const Location = r=>require.ensure([],()=>r(require('@/views/location/location')
 const Home = r=>require.ensure([],()=>r(require('@/views/home/home'),'Home'))
 const Order = r=>require.ensure([],()=>r(require('@/views/order/order'),'Order'))
 const Login = r=>require.ensure([],()=>r(require('@/views/login/login'),'Login'))
+const Store = r=>require.ensure([],()=>r(require('@/views/store/store'),'Store'))
+const Menu = r=>require.ensure([],()=>r(require('@/views/store/menu/menu'),'Menu'))
+const Evaluate = r=>require.ensure([],()=>r(require('@/views/store/evaluate/evaluate'),'Evaluate'))
+const Seller = r=>require.ensure([],()=>r(require('@/views/store/seller/seller'),'Seller'))
 Vue.use(Router)
 
 
@@ -45,6 +49,35 @@ export default new Router({
       path:'/login',
       name:'Login',
       component:Login
+    },
+    {
+      path:'/store',
+      component:Store,
+      children:[
+        {
+          path:'menu',
+          name:'Menu',
+          component:Menu
+        },
+        {
+          path:'evaluate',
+          name:'Evaluate',
+          component:Evaluate
+        },
+        {
+          path:'seller',
+          name:'Seller',
+          component:Seller
+        },
+        {
+          path:'',
+          redirect:'/store/menu'
+        }
+      ]
+    },
+    {
+      path:'*',
+      redirect:'/index'
     }
   ]
 })

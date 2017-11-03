@@ -5,10 +5,20 @@ import App from './App'
 import router from './router'
 import store from './stores'
 import './utils/rem'
+
 import Head from '@/components/head'
 import Bottom from '@/components/Bottom'
+import Star from '@/components/star'
+import 'iview/dist/styles/iview.css'
+import { Carousel,CarouselItem  } from 'iview'
+
+// Vue.use(Carousel)
+// Vue.use(CarouselItem)
+Vue.component('Carousel',Carousel)
+Vue.component('CarouselItem',CarouselItem)
 Vue.component('v-head', Head);
 Vue.component('v-bottom',Bottom);
+Vue.component('Star',Star);
 Vue.config.productionTip = false
 
 
