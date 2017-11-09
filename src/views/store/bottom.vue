@@ -1,12 +1,18 @@
 <template>
   <div id="bottom">
     <span class="shopping-cart"><i class="iconfont icon-cart">&#xe66b;</i></span>
-    <span class="deliver-fee">免配送费</span>
-    <span class="submit">12元起送</span>
+    <span class="deliver-fee">{{shipping_fee_tip}}</span>
+    <span class="submit" v-if="totalPrice">{{totalPrice}}</span>
+    <span class="submit" v-else-if="totalPrice< min_price">还差{{min_price - totalPrice}}</span>
+    <span class="submit" v-else>{{totalPrice}}</span>
   </div>
 </template>
 
 <script>
+
+  export default {
+    props:['totalPrice', 'shipping_fee', 'min_price','min_price_tip','shipping_fee_tip']
+  }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>

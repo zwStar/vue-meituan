@@ -41,7 +41,7 @@ compiler.plugin('compilation', function (compilation) {
     cb()
   })
 })
-
+/*
 // 定义 HTTP 代理表，代理到 API 服务器
 var proxyContent = config.dev.proxyContent
 var proxyPath = config.dev.proxyPath;
@@ -54,15 +54,15 @@ var options = {
 if (proxyContent.length) {
   app.use(proxyMiddleware(proxyContent, options))
 }
-
+*/
 // proxy api requests
-// Object.keys(proxyTable).forEach(function (context) {
-//   var options = proxyTable[context]
-//   if (typeof options === 'string') {
-//     options = { target: options }
-//   }
-//   app.use(proxyMiddleware(options.filter || context, options))
-// })
+Object.keys(proxyTable).forEach(function (context) {
+  var options = proxyTable[context]
+  if (typeof options === 'string') {
+    options = { target: options }
+  }
+  app.use(proxyMiddleware(options.filter || context, options))
+})
 
 // handle fallback for HTML5 history API
 app.use(require('connect-history-api-fallback')())

@@ -10,14 +10,14 @@
       </div>
       <div class="passWord">
         <label for="passWord">密码</label>
-        <input id="passWord" type="password" placeholder="请输入密码" v-model="password" v-if="!passwordVisible">
-        <input id="passWord" type="text" placeholder="请输入密码" v-model="password" v-else>
+        <input id="passWord" type="password" placeholder="请输入密码" v-model="password" v-if="!passwordVisible" @keyup.enter="login()">
+        <input id="passWord" type="text"  placeholder="请输入密码" v-model="password" v-else @keyup.enter="login()">
         <span @click="changeVisible()">
           <i class="iconfont icon" v-if="!passwordVisible">&#xe60a;</i>
           <i class="iconfont icon" v-else >&#xe6d0;</i>
         </span>
       </div>
-      <div class="button">
+      <div class="button" @click.prevent="login();">
         <span>登录</span>
       </div>
       <span class="question">未注册直接输入账号密码，自动注册！</span>
@@ -26,17 +26,32 @@
 </template>
 
 <script>
+  import {sendLogin} from '@/api/getData'
   export default {
     data(){
       return {
-        username:'',
-        password:'',
+        username:null,
+        password:null,
         passwordVisible:false
       }
     },
     methods:{
       changeVisible(){
         this.passwordVisible = !this.passwordVisible;
+      },
+      async login(){
+        if(!this.username){
+          console.log("用户名输入不合法")
+          return;
+        }else if(!this.password){
+          console.log("密码输入不合法");
+          return;
+        }
+        let loginInfo = await sendLogin(this.username,this.password);
+        if(loginInfo.data.status >=0 ){
+          localStorage.setItem('username',this.username);
+          this.$router.go(-1);
+        }
       }
     }
   }
@@ -65,6 +80,10 @@
           width: 70%;
           margin-left:3rem;
         }
+        input:-webkit-autofill {
+          -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+        }
+        input:focus{  outline:none; }
       }
       .passWord{
         span{

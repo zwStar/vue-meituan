@@ -35,25 +35,29 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../style/common.scss";
-
   #head {
     background: #fff;
     height: 3.5rem;
     text-align: center;
     position: relative;
-    padding-bottom: 1rem;
-    box-sizing: content-box;
-    .goBack, .more {
-      position: absolute;
-      font-size: 3rem;
 
+    box-sizing: content-box;
+    line-height: 3.5rem;
+    .goBack, .more{
+      position: absolute;
+      top:50%;
+      transform: translateY(-50%);
+    }
+    .goBack, .more {
+      i{
+        font-size: 3rem;
+      }
     }
     .goBack {
       left: 10px;
     }
     .title {
-      font-size: 1.7rem;
-      line-height: 3.5rem;
+      font-size: 1.5rem;
       font-weight: bold;
     }
     .more {

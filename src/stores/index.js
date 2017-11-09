@@ -11,7 +11,11 @@ const state = {
   longitude: '', // 当前位置经度
   address:'',    //当前位置
   suggestionLists:[],
-  sortBy:'综合排序'     //当前排序方式 默认综合排序
+  sortBy:'综合排序',     //当前排序方式 默认综合排序,
+  cartList:{
+    totalPrice:0
+  },      //加入购物车列表
+  totalPrice:0
 }
 
 export default new Vuex.Store({

@@ -1,2 +1,3 @@
+export const ADD_CART = 'ADD_CART'
 export const RECORD_ADDRESS = 'RECORD_ADDRESS'
 export const RECORD_SUGGESTION = 'RECORD_SUGGESTION'

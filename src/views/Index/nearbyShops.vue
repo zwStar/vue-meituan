@@ -17,7 +17,7 @@
       </transition>
     </nav>
     <article>
-      <section v-for="list in foodLists">
+      <router-link v-for="(list,index) in foodLists" :to="{path:'store',query:{id:list.id}}" :key="index" tag="section">
         <div class="imgShow">
           <img :src="list.pic_url">
         </div>
@@ -50,35 +50,46 @@
             </ul>
           </div>
         </div>
-      </section>
+      </router-link>
       <div class="shade" v-show="showSort" @click="closeSelectSort()">
-
       </div>
     </article>
+    <div class="loading" v-show="loading" ref="loading">
+      加载中
+    </div>
   </div>
 </template>
 
 <script>
+  import BScroll from 'better-scroll'
   import data from '@/api/nearbyShops.json'
   import Sort from './sort.vue'
+  import {getRestaurants} from '@/api/getData'
 
   export default {
     data() {
       return {
         foodLists: [],
-        showSort: false,
+        showSort: false,  //显示选择排序列表
+        indexScroll: null,
+        loading: false  //加载更多
       }
     },
-    props: ['indexScroll'],
+    //props: ['indexScroll','scrollWrapper'],
+    props: ['scrollWrapper'],
     methods: {
-      closeSelectSort() {
+      closeSelectSort() { //关闭选择排序
         this.showSort = false;
       },
       scrollTo() {
+        //获取元素离顶部的距离 并活动到顶部
         let offsetTop = this.$refs['nav'].offsetTop
         this.indexScroll.scrollTo(0, -offsetTop, 500);
-        this.showSort = true;
+        this.showSort = false;
       },
+      initBetterScroll() {
+
+      }
       /*scrollToTop(scrollPosition, scrollDuration) { //动画实现 滚动条滑动到指定位置
         let _this = this;
         const scrollHeight = scrollPosition - window.scrollY  //要滚动的高度
@@ -101,8 +112,37 @@
       }*/
     },
     mounted() {
-      this.foodLists = data.data.poilist;
-      console.log(this.foodLists)
+      getRestaurants().then((result) => {
+        this.foodLists = result.data.data;
+        this.$nextTick(() => {
+          let _this = this;
+          //dom渲染完成 初始化better-scroll
+          _this.indexScroll = new BScroll(this.scrollWrapper, {click: true, probeType: 2});
+          //监听scroll事件
+          _this.indexScroll.on('scroll', function (obj) {
+            //如果到达底部  请求加载更多数据
+            if (Math.abs(obj.y) + _this.scrollWrapper.clientHeight >= _this.scrollWrapper.childNodes[0].clientHeight - 30) {
+
+              if (!_this.loading) {   //避免加载过程中 重复请求
+                _this.loading = true
+                getRestaurants(1, 10).then((result) => {
+                  _this.loading = false
+                  let data = result.data.data;
+//                  data.forEach((el)=>{
+//                    _this.foodLists.push(el);
+//                  })
+                  for (let i = 0; i < data.length; i++) {
+                    _this.foodLists.push(data[i]);
+                  }
+                  _this.$nextTick(() => {
+                    _this.indexScroll.refresh();
+                  })
+                })
+              }
+            }
+          })
+        })
+      })
     },
     components: {
       Sort
@@ -115,6 +155,7 @@
   /*附近商家*/
   .nearbyShops {
     margin: 1rem 0;
+    padding-bottom: 7rem;
     /*标题*/
     .head {
       text-align: center;
@@ -135,7 +176,7 @@
     /*选择排序功能样式*/
     nav {
       border-bottom: 1px solid $bottomLine;
-      position:relative;
+      position: relative;
       ul {
         display: flex;
         li {

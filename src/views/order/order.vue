@@ -1,7 +1,7 @@
 <template>
   <div id="order">
     <v-head goBack="true" title_head="订单"></v-head>
-    <div class="wrap">
+    <div class="toLogin-wrap" v-if="!username">
       <div class="avatar">
         <i class="iconfont icon">&#xe623;</i>
       </div>
@@ -10,18 +10,32 @@
         <span class="toLogin">登录/注册</span>
       </router-link>
     </div>
+    <div class="main" v-else>
+      <span class="tip">最近三个月没有订单哦</span>
+    </div>
     <v-bottom></v-bottom>
   </div>
 </template>
 
 <script>
+  export default {
+    data(){
+      return {
+        username:null
+      }
+    },
+    mounted(){
+      this.username = localStorage.getItem('username')
+      console.log(this.username)
+    }
+  }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../../style/mixin.scss";
 
   #order {
-    .wrap {
+    .toLogin-wrap {
       width: 100%;
       position: absolute;
       top: 50%;

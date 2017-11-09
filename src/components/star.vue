@@ -2,23 +2,33 @@
   <div id="star">
     <span class="on" v-for="item in  on"></span>
     <span class="half" v-for="item in half"></span>
-    <span class="off" v-for=" item in (5 -on - half)"></span>
+    <span class="off" v-for=" item in (5 - on - half)"></span>
   </div>
 </template>
 
 <script>
   export default {
-    props:['score'],
-    data(){
-      return {
-        on:0,
-        half:0
+    props:{
+      score:{
+        type:Number,
+        default:0
       }
     },
-    mounted(){
-      this.on = parseInt(this.score);
-      this.half = this.score - this.on >=0.5 ? 1 : 0;
-    }
+    data(){
+      return {
+      }
+    },
+    computed:{
+      on(){
+        return  parseInt(this.score);
+      },
+      half(){
+        return this.score - this.on >=0.5 ? 1 : 0;
+      },
+      off(){
+        return 5 - this.on - this.half;
+      }
+    },
   }
 </script>
 

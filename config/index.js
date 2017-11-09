@@ -32,7 +32,7 @@ module.exports = {
     proxyContent:[
       '/v1'
     ],
-    proxyPath: 'http://127.0.0.1:3000',
+    proxyPath: 'http://192.168.200.2:3000',
     // CSS Sourcemaps off by default because relative paths are "buggy"
     // with this option, according to the CSS-Loader README
     // (https://github.com/webpack/css-loader#sourcemaps)

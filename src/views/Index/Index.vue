@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper" ref="wrapper">
+  <div class="wrapper" ref="scrollWrapper">
     <div class="home">
       <v-head title_head="美团外卖+">
       </v-head>
@@ -9,9 +9,12 @@
           class="iconfont">&#xe6d7;</i></router-link>
         <router-link to="/search" class="search"><i class="iconfont">&#xe7d1;</i><span>请输入商家 商品名</span></router-link>
       </div>
+      <!--导航轮播部分-->
       <mt-nav></mt-nav>
-      <nearbyShops :indexScroll="indexScroll"></nearbyShops>
+      <!--附近商家-->
+      <nearbyShops :indexScroll="indexScroll" :scrollWrapper="scrollWrapper"></nearbyShops>
     </div>
+    <!--底部 主页 订单 我的-->
     <v-bottom></v-bottom>
   </div>
 </template>
@@ -23,20 +26,19 @@
   import {mapMutations} from 'vuex'
   import '@/style/swiper.min.css'
   import '@/plugins/swiper.min.js'
-  import BScroll from 'better-scroll'
 
   export default {
     data() {
       return {
         address: '',
-        indexScroll: null    //首页的better-scroll实例对象 传递给自组件
+        indexScroll: null,    //首页的better-scroll实例对象 传递给自组件
+        scrollWrapper:null    //存放 scrollWrapper这个DOM元素 用于等附近商家列表加载后 初始化better-scroll
       }
     },
     mounted() {
-      this.getLocation();
+      this.getLocation();   //定位
       let id = this.$route.query
-      console.log('id', id)
-
+      this.scrollWrapper = this.$refs.scrollWrapper;  //把DOM元素赋值 用于传递给子组件nearbyShops
       let lists = localStorage.getItem("suggestionLIsts");
 
 
@@ -47,9 +49,6 @@
 //          _this.RECORD_ADDRESS(el);
 //        }
 //      })
-      this.$nextTick(() => {
-        this.indexScroll = new BScroll(this.$refs.wrapper, {click: true});
-      })
     },
     methods: {
       ...mapMutations(["RECORD_ADDRESS"]),
@@ -72,14 +71,11 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../../style/common.scss";
-
   .wrapper {
     height: 100%;
     overflow: hidden;
   }
-
   .home {
-
     .guide {
       display: flex;
       .location, .search {
@@ -125,6 +121,4 @@
       }
     }
   }
-
-
 </style>

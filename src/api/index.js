@@ -1,4 +1,8 @@
+import config from '../config'
+const baseURL = config.baseURL;
+console.log(baseURL)
 const axios = require('axios').create({
+  baseURL: baseURL,            //api请求的baseURL
   timeout: 10000,
   withCredentials: true, // 允许跨域 cookie
   headers: { 'X-Requested-With': 'XMLHttpRequest' },

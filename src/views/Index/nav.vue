@@ -1,22 +1,14 @@
 <template>
   <nav class="category slide" ref="slide">
     <div class="slide-box" ref="slide-box">
-      <!--因为每页轮播图有8个list 所以总数量除以8 向上取整为轮播页数-->
-      <div class="lists sMain" v-for="index in Math.ceil(category_list.length / 8)">
+      <div class="lists sMain" v-for="(item, index) in category_list" :key="index">
         <ul>
-          <!--
-             如果当前不是最后一张轮播图  每张轮播图里面就有8个list  如果是最后一张 就是总的lists数量 减到前面几张轮播图 乘以每张8个list 得到剩下的
-             三元表达式为：(index === Math.ceil(category_list.length / 8) ? (category_list.length - (index-1) * 8) :8
-             循环每个list 获取新的_index（第一个是从1开始） 用上层的 （index - 1）* 8 + （_index - 1） 就可以得到该list在数组里面的具体下标
-             表达式为  category_list[8 * index + _index - 9]
-          -->
-          <router-link tag="li"
-                       v-for="_index in (index === Math.ceil(category_list.length / 8) ? (category_list.length - (index-1) * 8) :8) "
-                       :to="{path:'order',query:{type:category_list[8 * index + _index - 9].type}}" :key="(index *_index)">
+          <router-link tag="li" v-for="foodItem in item"
+                       :to="{path:'order',query:{type:foodItem.type}}" :key="foodItem.id">
             <div class="category_img">
-              <img :src="category_list[ 8 * index + _index - 9].url" >
+              <img :src="foodItem.url">
             </div>
-            <span class="category_name">{{category_list[8 * index + _index - 9].name}}</span>
+            <span class="category_name">{{foodItem.name}}</span>
           </router-link>
         </ul>
       </div>
@@ -30,7 +22,7 @@
   export default {
     data() {
       return {
-        category_list: [
+        category_list_res: [
           {
             name: '美食',
             url: 'http://p1.meituan.net/jungle/bd3ea637aeaa2fb6120b6938b5e468a13442.png',
@@ -87,20 +79,34 @@
             type: 'freeDeliver'
           }
         ],
+        category_list:[]
       }
 
     },
     mounted() {
       let refs = this.$refs;
-      let obj = {
 
-        slide: refs['slide'],
-        slideBox: refs['slide-box'],
-        sMain: document.querySelectorAll('.sMain'),
-        time: 5000,
-        item: 0
-      };
-      new Carousel(obj);
+//      let resArr = [...res]; // 返回一个新的数组
+      let resArr = [...this.category_list_res];
+      let foodArr = [];
+      for (let i = 0, j = 0; i <  this.category_list_res.length; i += 8, j++) {
+//        this.category_list[j] = resArr.splice(0, 8);
+        foodArr[j] =  resArr.splice(0, 8);
+
+      }
+      this.category_list = foodArr;
+      console.log(this.category_list)
+      this.$nextTick(()=>{
+        let obj = {
+
+          slide: refs['slide'],
+          slideBox: refs['slide-box'],
+          sMain: document.querySelectorAll('.sMain'),
+          time: 5000,
+          item: 0
+        };
+        new Carousel(obj);
+      })
     },
     methods:{
       aaa(){
