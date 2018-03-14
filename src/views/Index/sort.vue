@@ -11,12 +11,11 @@
     data(){
       return {
         sortBy:'',
-        lists:['综合排序','速度最快','评分最高','起送价最低','配送费最低','人均高到低','人均低到高']
+        lists:['综合排序','速度最快','评分最高','起送价最低']
       }
     },
     mounted(){
       this.sortBy = this.$store.state.sortBy;
-      console.log(this.sortBy)
     }
   }
 </script>
@@ -27,16 +26,16 @@
     width: 100%;
     background: #fff;
     position:absolute;
-    top:4rem;
+    @include px2rem(top, 80);
     left:0;
     z-index:1000;
     ul{
       li{
         color:rgb(119,120,103);
-        font-size:1.3rem;
-        line-height: 4rem;
+        font-size:0.3rem;
+        @include px2rem(line-height,90);
         border-top:1px solid $mtGrey;
-        padding-left:0.3rem;
+        padding-left:0.1rem;
         &.active{
           color:$mtYellow;
         }

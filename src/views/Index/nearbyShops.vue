@@ -1,10 +1,6 @@
 <template>
   <div class="nearbyShops">
-    <div class="head">
-      <span class="line"></span>
-      <h2>附近商家</h2>
-      <span class="line"></span>
-    </div>
+
     <nav ref="nav">
       <ul>
         <li @click="scrollTo()">综合排序 <i class="iconfont icon-sort">&#xe601;</i></li>
@@ -12,12 +8,15 @@
         <li>距离最近</li>
         <li>筛选</li>
       </ul>
+      <!--选择排序-->
       <transition name="fade">
         <Sort v-show="showSort"></Sort>
       </transition>
     </nav>
+    <!--商家列表-->
     <article>
-      <router-link v-for="(list,index) in foodLists" :to="{path:'store',query:{id:list.id}}" :key="index" tag="section">
+      <router-link v-for="(list,index) in shopLists" :to="{path:'store',query:{id:list.id}}" :key="list.id"
+                   tag="section">
         <div class="imgShow">
           <img :src="list.pic_url">
         </div>
@@ -54,95 +53,124 @@
       <div class="shade" v-show="showSort" @click="closeSelectSort()">
       </div>
     </article>
-    <div class="loading" v-show="loading" ref="loading">
-      加载中
+
+    <!--加载更多-->
+    <div class="loading_wrap" ref="loading">
+      <span class="loading" v-show="loading && !noMore">正在努力加载中…</span>
+      <span class="no_more" v-show="noMore">已经到底了</span>
     </div>
   </div>
 </template>
 
 <script>
   import BScroll from 'better-scroll'
-  import data from '@/api/nearbyShops.json'
   import Sort from './sort.vue'
-  import {getRestaurants} from '@/api/getData'
+  import {getRestaurants} from '@/api/restaurant'
+  import {mapGetters} from 'vuex'
 
   export default {
     data() {
       return {
-        foodLists: [],
+        shopLists: [],      //商家列表
         showSort: false,  //显示选择排序列表
-        indexScroll: null,
-        loading: false  //加载更多
+        BScrollEvent: null,   //better-scroll实例
+        loading: false,  //加载更多
+        page: 1,                    //当前餐馆列表加载到第几页
+        limit: 5,    //每次拉去的餐馆数量
+        lat: '',
+        lng: '',
+        noMore: false
       }
     },
-    //props: ['indexScroll','scrollWrapper'],
-    props: ['scrollWrapper'],
+    computed: {
+      ...mapGetters(['locationReady', 'address'])
+    },
+    props: ['scrollWrapper', 'ready'], //进行better-scroll的DOM对象 餐馆类型 是否地位好准备开始拉去餐馆数据
     methods: {
-      closeSelectSort() { //关闭选择排序
+      closeSelectSort() { //关闭选择排序列表
         this.showSort = false;
       },
-      scrollTo() {
-        //获取元素离顶部的距离 并活动到顶部
-        let offsetTop = this.$refs['nav'].offsetTop
-        this.indexScroll.scrollTo(0, -offsetTop, 500);
-        this.showSort = false;
-      },
-      initBetterScroll() {
-
-      }
-      /*scrollToTop(scrollPosition, scrollDuration) { //动画实现 滚动条滑动到指定位置
+      scrollTo() {  //点击排序  nav元素滚动到页面的顶部
+        //获取元素离顶部的距离 并滚动到顶部
         let _this = this;
-        const scrollHeight = scrollPosition - window.scrollY  //要滚动的高度
-        let scrollStep = Math.PI / ( scrollDuration / 15 ) //每次滚动的步伐
-        let cosParameter = scrollHeight / 2;
-        let scrollCount = 0,
-          scrollMargin,
-          scrollInterval = setInterval(function () {
-            if (window.scrollY <= scrollPosition) {
-              scrollCount = scrollCount + 1;
-              scrollMargin = cosParameter - cosParameter * Math.cos(scrollCount * scrollStep);
-              window.scrollTo(0, ( window.scrollY + scrollMargin ));
-            }
-            else {
-              window.scrollTo(0, scrollPosition);
-              clearInterval(scrollInterval);
-
-            }
-          }, 15);
-      }*/
-    },
-    mounted() {
-      getRestaurants().then((result) => {
-        this.foodLists = result.data.data;
-        this.$nextTick(() => {
-          let _this = this;
-          //dom渲染完成 初始化better-scroll
-          _this.indexScroll = new BScroll(this.scrollWrapper, {click: true, probeType: 2});
-          //监听scroll事件
-          _this.indexScroll.on('scroll', function (obj) {
-            //如果到达底部  请求加载更多数据
-            if (Math.abs(obj.y) + _this.scrollWrapper.clientHeight >= _this.scrollWrapper.childNodes[0].clientHeight - 30) {
-
-              if (!_this.loading) {   //避免加载过程中 重复请求
-                _this.loading = true
-                getRestaurants(1, 10).then((result) => {
-                  _this.loading = false
-                  let data = result.data.data;
-//                  data.forEach((el)=>{
-//                    _this.foodLists.push(el);
-//                  })
-                  for (let i = 0; i < data.length; i++) {
-                    _this.foodLists.push(data[i]);
-                  }
-                  _this.$nextTick(() => {
-                    _this.indexScroll.refresh();
-                  })
+        let offsetTop = _this.$refs['nav'].offsetTop;
+        let BScroll = _this.BScrollEvent;
+        if (Math.abs(BScroll.y) !== offsetTop) {
+          _this.BScrollEvent.scrollTo(0, -offsetTop, 500);
+          setTimeout(function () {
+            _this.showSort = true
+          }, 500)
+        } else {
+          this.showSort = true   //如果当前位置是顶部 不需要滚动
+        }
+      },
+      //监听better-scroll滚动事件  判断是否滑动到底部 加载更多
+      listenScroll() {
+        let _this = this;
+        _this.BScrollEvent.on('scroll', function (obj) {
+          //如果到达底部  请求加载更多数据
+          if (Math.abs(obj.y) + _this.scrollWrapper.clientHeight >= _this.scrollWrapper.childNodes[0].clientHeight - 30) {
+            if (!_this.loading) {   //避免加载过程中 重复请求
+              _this.loading = true;
+              //请求加载更多
+              _this.getRestaurants(_this.page, _this.limit, function (data) {
+                _this.page++;
+                data.forEach((el) => {
+                  _this.shopLists.push(el);
+                });
+                //DOM重新渲染完毕后 重新计算better-scroll
+                _this.$nextTick(() => {
+                  _this.loading = false;
+                  _this.BScrollEvent.refresh();
                 })
-              }
+              })
             }
+          }
+        })
+      },
+      getRestaurants(page, limit, callback) {
+        let offset = (page - 1) * limit;
+        let lat = this.address.lat;
+        let lng = this.address.lng;
+        getRestaurants({offset, limit, lng, lat}).then((response) => {
+          let data = response.data.data;
+          if (!data.length) {
+            this.noMore = true;
+          } else {
+            callback(data);
+          }
+        });
+      },
+      firstFetch() {
+        let _this = this;
+        //获取餐馆列表
+        this.page = 1;
+        this.getRestaurants(this.page, this.limit, function (data) {
+          _this.shopLists = data;
+          _this.$nextTick(() => {
+            //dom渲染完成 初始化better-scroll
+            _this.BScrollEvent = new BScroll(_this.scrollWrapper, {click: true, probeType: 2});
+            //监听scroll事件
+            _this.listenScroll();
           })
         })
-      })
+      }
+    },
+    mounted() {
+      if (this.$route.path === '/category') {
+        if (this.address.lat && this.address.lng) {
+          this.firstFetch();
+        } else {
+          this.$store.dispatch('location');
+        }
+      }
+    },
+    watch: {
+      locationReady(boolean) {
+        if (boolean) {
+          this.firstFetch();
+        }
+      }
     },
     components: {
       Sort
@@ -154,55 +182,39 @@
   @import "../../style/mixin.scss";
   /*附近商家*/
   .nearbyShops {
-    margin: 1rem 0;
-    padding-bottom: 7rem;
-    /*标题*/
-    .head {
-      text-align: center;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid $bottomLine;
-      .line {
-        vertical-align: middle;
-        display: inline-block;
-        width: 2rem;
-        height: 0;
-        border-bottom: 1px solid #000;
-      }
-      h2 {
-        display: inline-block;
-        margin: 0 1rem;
-      }
-    }
+    margin: 0.1rem 0;
     /*选择排序功能样式*/
     nav {
       border-bottom: 1px solid $bottomLine;
       position: relative;
+      @include px2rem(line-height, 80);
       ul {
         display: flex;
         li {
-          font-size: 1.3rem;
+          font-size: 0.4rem;
           text-align: center;
-          padding: 1rem 0 1rem 0.3rem;
+          padding: 0 0.1rem;
           flex: 1;
           .icon-sort {
             display: inline-block;
-            width: 2rem;
-            font-size: 1.3rem;
+            @include px2rem(width, 20);
+            font-size: 0.3rem;
           }
         }
       }
     }
     article {
       position: relative;
+
       section {
         display: flex;
-        padding: 1.5rem 0;
-        margin: 0 0.5rem;
+        padding: 0.3rem 0;
+        margin: 0 0.2rem;
         border-bottom: 1px solid $mtGrey;
         .imgShow {
-          width: 7.262rem;
-          height: 5.46rem;
-          margin-right: 1rem;
+          @include px2rem(width, 170);
+          @include px2rem(height, 130);
+          margin-right: 0.2rem;
           border: 1px solid $mtGrey;
           text-align: center;
           img {
@@ -213,58 +225,57 @@
         .detail {
           flex: 1;
           h4 {
-            font-size: 1.5rem;
+            font-size: 0.45rem;
             font-weight: bold;
           }
-          .priceMessage {
-            margin: 0.5rem 0;
-            span {
-              font-size: 1.1rem;
-              line-height: 2.6rem;
-            }
-
-          }
           .shopsMessage {
-            margin: 0.5rem 0;
-
+            display: flex;
+            margin-top: 0.3rem;
+            align-items: center;
             span {
               display: inline-block;
               vertical-align: bottom;
-              font-size: 1.1rem;
+              font-size: 0.3rem;
             }
             .sellNum {
-              margin-left: 0.5rem;
+              flex: 1;
             }
             .delivery-info {
-              vertical-align: top;
-              float: right;
+              display: flex;
+              align-items: center;
             }
           }
+          .priceMessage {
+            span {
+              font-size: 0.2rem;
+            }
+          }
+
           .activeMeaage {
             ul {
               li {
-                margin-top: 0.5rem;
                 .info {
+                  font-size: 0.3rem;
                   display: inline-block;
-                  width: 13rem;
+                  @include px2rem(width, 260);
                   overflow: hidden;
                   text-overflow: ellipsis;
                   white-space: nowrap;
                 }
                 .icon {
                   display: inline-block;
-                  width: 1.4rem;
-                  height: 1.4rem;
                   vertical-align: top;
+                  @include px2rem(width, 34);
+                  @include px2rem(height, 34);
                   img {
                     width: 100%;
                     height: 100%;
                   }
                 }
                 .icon-entry {
-                  font-size: 1.3rem;
+                  font-size: 0.3rem;
                   float: right;
-                  margin-right: 0.8rem;
+                  margin-right: 0.2rem;
                 }
               }
             }
@@ -278,6 +289,38 @@
         width: 100%;
         height: 100%;
         background: rgba(47, 43, 43, 0.8);
+      }
+    }
+
+    /*loading部分*/
+    .loading_wrap {
+      text-align: center;
+      font-size: 14px;
+      height: 26px;
+      line-height: 26px;
+      .loading:before {
+        content: "";
+        display: inline-block;
+        position: relative;
+        left: -11px;
+        padding: 0;
+        border: 0;
+        background: 0;
+        width: 2px;
+        height: 2px;
+        border-radius: 100%;
+        box-shadow: 0 -7px 0 0.9px #666, 7px 0 #999, 0 7px #999, -7px 0 #999, -5px -5px 0 0.4px #999, 5px -5px 0 1.1px #666, 5px 5px #999, -5px 5px #999;
+        animation: spin 1.5s linear infinite;
+        -webkit-animation: spin 1.5s linear infinite;
+        top: -4px;
+      }
+      @keyframes spin {
+        from {
+          transform: rotate(0deg)
+        }
+        to {
+          transform: rotate(360deg)
+        }
       }
     }
   }

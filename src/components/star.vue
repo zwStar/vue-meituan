@@ -33,14 +33,16 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+  @import "../style/mixin.scss";
   #star{
-    width: 4rem;
+    @include px2rem(width, 140);
     display: inline-block;
     font-size:0;
     .on,.half,.off{
       display: inline-block;
-      width: 0.7rem;
-      height:0.7rem;
+      @include px2rem(width, 20);
+      @include px2rem(height, 20);
+      margin-right:3px;
       background-size: 100%;
       background-repeat: no-repeat;
     }

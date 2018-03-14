@@ -1,7 +1,10 @@
 <template>
   <div id="store">
+    <!--头部商家信息-->
     <div class="head-wrapper">
-      <v-head :title_head="poi_info.name" goBack=true    color="#fff"></v-head>
+      <!--头部-->
+      <v-head :title_head="poi_info.name" goBack=true  color="#fff" bgColor="#333" more="true"></v-head>
+      <!--商家信息-->
       <div class="store-info">
         <div class="logo">
           <img :src="poi_info.pic_url">
@@ -11,8 +14,9 @@
           <p><i class="iconfont icon-broadcast">&#xe62d;</i>{{poi_info.bulletin}}</p>
         </div>
       </div>
+      <!--活动列表-->
       <div class="actives">
-        <ul :style=" 'transform: translateY('+ positionY % discountsLength * -3 +'rem)'">
+        <ul :style=" 'transform: translateY('+ positionY % discountsLength * -0.9 +'rem)'">
           <li v-for="item in poi_info.discounts2">
             <i class="icon"
                :style="{backgroundImage:'url('+ item.icon_url+')'}"></i>
@@ -22,54 +26,48 @@
         <span class="active-number" @click="showStoreDetail();">{{discountsLength}}个活动 > </span>
       </div>
     </div>
-
+    <!--导航 有3个路由  点菜 评价 和商家-->
     <div class="nav">
-      <router-link :to="{name:'Menu',query:{id:restaurant_id}}" class="menu"><span class="active">点菜</span>
+      <router-link :to="{name:'Menu',query:{id:restaurant_id}}" class="menu" active-class="active"><span class="active">点菜</span>
       </router-link>
-      <router-link :to="{name:'Evaluate',query:{id:restaurant_id}}" class="evaluate"><span>评价</span></router-link>
-      <router-link :to="{name:'Seller',query:{id:restaurant_id}}" class="seller"><span>商家</span></router-link>
+      <router-link :to="{name:'Comment',query:{id:restaurant_id}}" class="comment" active-class="active">
+        <span>评价</span></router-link>
+      <router-link :to="{name:'Seller',query:{id:restaurant_id}}" class="seller" active-class="active"><span>商家</span>
+      </router-link>
     </div>
+    <!--商家所有详细信息 当点击活动列表右侧的 > 箭头时显示 -->
     <StoreDetail class="store-detail" v-show="showDetatil" :showFlag.sync="showDetatil"
                  :poi_info="poi_info"></StoreDetail>
-    <router-view></router-view>
-    <Bottom
-      :totalPrice="totalPrice"
-      :shipping_fee="poi_info.shipping_fee"
-      :min_price="poi_info.min_price"
-      :min_price_tip="poi_info.min_price_tip"
-      :shipping_fee_tip="poi_info.shipping_fee_tip"
-    ></Bottom>
+    <!--点菜 评价 和商家-->
+    <keep-alive>
+      <router-view></router-view>
+    </keep-alive>
   </div>
 </template>
 
 <script>
-  import {getRestaurant} from '@/api/getData'
-  import Bottom from './bottom.vue'
+
+  import {getRestaurant, getFoods} from '@/api/restaurant'
+  import Bottom from './menu/bottom.vue'
   import StoreDetail from './store-detail.vue'
-  import {mapState} from 'vuex'
+  import {mapGetters, mapMutations} from 'vuex'
 
   export default {
     components: {
-      Bottom,
       StoreDetail
     },
     data() {
       return {
         showDetatil: false, //商家详情显示
         restaurant_id: 0,   //商店id
-        poi_info: {},        //商家信息
-        positionY: 0         //活动滚动
+        positionY: 0,         //活动滚动
       }
     },
     computed: {
-      //商家活动数量
-      ...mapState([
-        'cartList'
+      ...mapGetters([
+        'cartList', 'poi_info'
       ]),
-      totalPrice() {
-        return this.cartList.totalPrice;
-      },
-      discountsLength() {
+      discountsLength() { //打折列表数量
         return this.poi_info.discounts2 ? this.poi_info.discounts2.length : 0;
       }
     },
@@ -79,21 +77,14 @@
         this.showDetatil = true;
       }
     },
-    mounted() {
+    created() {
       //根据路由query获得商店id
       let restaurant_id = this.$route.query.id;
+      this.restaurant_id = restaurant_id;
       localStorage.setItem('restaurant_id', restaurant_id);
-      getRestaurant(restaurant_id).then((result) => {
-        let data = result.data.data;
-        console.log(data)
-        this.poi_info = data.poi_info;
-        console.log(this.poi_info)
-        this.food_spu_tags = data.food_spu_tags;
-//        this.$nextTick(() => {
-//          this.leftScroll = new BScroll(this.$refs.left, {});
-//          this.rightScroll = new BScroll(this.$refs.right, {});
-//        })
-      })
+      //根据商店id获取店家信息
+      this.$store.dispatch('getRestaurant', restaurant_id);
+      //活动列表不停滚动播放
       this.timer = setInterval(() => {
         this.positionY++;
       }, 4000);
@@ -105,20 +96,23 @@
   @import "../../style/mixin.scss";
 
   #store {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
     .head-wrapper {
       background: rgb(51, 51, 51);
       #head {
         background: rgb(51, 51, 51);
       }
       .store-info {
-        padding-bottom: 1rem;
+        padding-bottom: 0.1rem;
         border-bottom: 1px solid $mtGrey;
         display: flex;
-        margin-top: 1rem;
+        margin-top: 0.2rem;
         .logo {
-          width: 3rem;
-          height: 3rem;
-          margin: 0 1rem;
+          @include px2rem(width, 82);
+          @include px2rem(height, 82);
+          margin: 0 0.2rem;
           img {
             width: 100%;
             height: 100%;
@@ -128,18 +122,18 @@
           flex: 1;
           span, p {
             color: $mtGrey;
-            font-size: 1.0rem;
+            font-size: 0.35rem;
           }
           p {
-            width: 20rem;
-            margin-top: 0.7rem;
+            @include px2rem(width, 400);
+            margin-top: 0.1rem;
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
             .icon-broadcast {
               display: inline-block;
-              font-size: 1.4rem;
-              margin-right: 0.5rem;
+              font-size: 0.4rem;
+              margin-right: 0.1rem;
               vertical-align: middle;
             }
           }
@@ -147,25 +141,26 @@
       }
       /*活动列表样式*/
       .actives {
-        height: 3rem;
+        @include px2rem(height, 70);
+        @include px2rem(line-height, 70);
         overflow: hidden;
-        line-height: 3rem;
-        margin: 0 1rem;
+        margin: 0 0.2rem;
         position: relative;
         ul {
           transition: all 2s;
           li {
+            display: flex;
+            align-items: center;
             .icon {
               display: inline-block;
-              width: 1.5rem;
-              height: 1.5rem;
+              @include px2rem(width, 30);
+              @include px2rem(height, 30);
               background-size: cover;
-              vertical-align: middle;
-              margin-right: 0.5rem;
-              img {
-                width: 100%;
-                height: 100%;
-              }
+              /*vertical-align: middle;*/
+              margin-right: 0.1rem;
+            }
+            span {
+              font-size: 0.3rem;
             }
           }
         }
@@ -174,6 +169,7 @@
           display: inline-block;
         }
         .active-number {
+          font-size: 0.3rem;
           position: absolute;
           top: 0;
           right: 0;
@@ -182,20 +178,22 @@
     }
     .nav {
       display: flex;
-      .menu, .seller, .evaluate {
+      flex-shrink: 0;
+      .menu, .seller, .comment {
         flex: 1;
         text-align: center;
-        line-height: 3.385rem;
-        font-size: 1.4rem;
+        @include px2rem(line-height, 80);
+        font-size: 0.4rem;
         span {
           display: inline-block;
-          &.active {
+        }
+        &.active {
+          span {
             color: $mtYellow;
-            margin-bottom: 0.2rem;
+            margin-bottom: 0.1rem;
             border-bottom: 3px solid $mtYellow;
           }
         }
-
       }
     }
   }

@@ -1,8 +1,129 @@
 <template>
+  <div class="seller-info">
+    <div class="position container">
+      <span class="location-icon icon"><i class="iconfont">&#xe605;</i></span>
+      <p class="address describe">{{sellerInfo.address}}</p>
+      <span class="phone-icon icon"><i class="iconfont">&#xe620;</i></span>
+    </div>
+    <div class="safe-file container">
+      <span class="safe-icon icon"><i class="iconfont">&#xe67a;</i></span>
+      <span class="describe">查看食品安全档案</span>
+      <span class="entry-icon icon"><i class="iconfont">&#xe63f;</i></span>
+    </div>
+
+    <div class="delivery-info container">
+      <span class="icon"><i class="iconfont">&#xe603;</i></span>
+      <span class="describe">配送服务:{{sellerInfo.app_delivery_tip}}</span>
+    </div>
+    <div class="delivery-time container">
+      <span class="icon"><i class="iconfont">&#xe62f;</i></span>
+      <span class="describe">配送时间: {{sellerInfo.shipping_time}}</span>
+    </div>
+
+    <div class="notification container" v-if="sellerInfo.bulletin">
+      <span class="icon"><i class="iconfont">&#xe6aa;</i></span>
+      <span class="describe">{{sellerInfo.bulletin}}</span>
+      <span class="entry-icon icon"><i class="iconfont">&#xe63f;</i></span>
+    </div>
+    <div class="poi_service container">
+      <span class="icon"><i class="iconfont">&#xe632;</i></span>
+      <span class="service">商家服务</span>
+      <span v-for="service in sellerInfo.poi_service"><i class="icon_service" :style="{backgroundImage:'url('+ service.icon +')'}"></i><span>{{service.content}}</span></span>
+    </div>
+    <div class="discount">
+      <ul>
+        <li v-for="discount in sellerInfo.discounts2">
+          <span class="active-icon" :style="{backgroundImage:'url('+ discount.icon_url +')'}"></span>
+          <span>{{discount.info}}</span>
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <script>
+  export default {
+    data(){
+      return {
+        sellerInfo:[]
+      }
+    },
+    mounted(){
+    }
+  }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+  @import "../../../style/mixin.scss";
+  .seller-info{
+    flex:1;
+    background: $mtGrey;
+    height:$storeMainHeight;
+    padding-top:0.1rem;
+    .container{
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border-bottom:1px solid $mtGrey;
+      padding:0 0.1rem;
+    }
+    .address{
+      display: flex;
+      align-items: center;
+      @include px2rem(height, 100);
+    }
+    .icon{
+      font-size:0.4rem;
+    }
+    .describe{
+      flex:1;
+      color:#222;
+      font-size:0.4rem;
+      margin:0 0.1rem;
+    }
+    .safe-file,.delivery-info,.delivery-time,.notification,.poi_service{
+      @include px2rem(height, 80);
+    }
+    .poi_service{
+      .service{
+        color:#222;
+        margin:0 0.1rem;
+      }
+      .icon_service{
+        display: inline-block;
+        @include px2rem(width, 30);
+        @include px2rem(height, 30);
+        margin:0 0.5rem;
+        background-size: cover;
+        vertical-align: middle;
+      }
+      span{
+        font-size:0.4rem;
+        vertical-align: middle;
+      }
+    }
+    .safe-file,.delivery-time{
+      margin-bottom:0.2rem;
+    }
+    .discount{
+      ul{
+        background: #fff;
+        li{
+          display: flex;
+          align-items: center;
+          @include px2rem(line-height, 60);
+          .active-icon{
+            display: inline-block;
+            @include px2rem(width, 30);
+            @include px2rem(height, 30);
+            background-size: cover;
+            margin:0 0.1rem;
+          }
+          span{
+            font-size:0.4rem;
+          }
+        }
+      }
+    }
+  }
 </style>

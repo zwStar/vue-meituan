@@ -2,124 +2,132 @@
   <div id="menu">
     <div class="left" ref="left">
       <ul>
-        <li v-for="(food_spu_tag,index) in food_spu_tags" :key="index" @click="mappingScroll(index)" :class="{activity_menu: index == menuIndex}">
-          {{food_spu_tag.name}}
+        <li v-for="(category,index) in foodsData" :key="category.id" @click="mappingScroll(index)"
+            :class="{activity_menu: index == menuIndex}">
+          {{category.name}}
         </li>
       </ul>
     </div>
     <div class="right" ref="right">
       <article>
-        <section v-for="(food_spu_tag,index) in food_spu_tags" :key="index">
-          <h2>{{food_spu_tag.name}}</h2>
-          <ul>
-            <li v-for="sups in food_spu_tag.spus">
-              <div class="img-wrap">
-                <img :src="sups.picture">
+        <section v-for="(category,index) in foodsData" :key="index">
+          <h2>{{category.name}}</h2>
+          <article>
+            <section v-for="spus in category.spus">
+              <div class="img_container">
+                <img :src="spus.pic_url">
               </div>
               <div class="info">
-                <span class="name">{{sups.name}}</span>
-                <span class="sell-num">{{sups.month_saled_content}} {{sups.praise_content}}</span>
-                <span class="price">￥{{sups.praise_num}}</span>
+                <div class="name">{{spus.name}}</div>
+                <div class="sell-num">月售 {{spus.month_saled_content}}</div>
+                <div class="footer">
+                  <span class="price"> ￥{{spus.skus[0].price}}</span>
+                  <Selector @showDot="showDotFun" :name="spus.name" :food_id="spus.skus[0].id"
+                            :price="spus.skus[0].price" :pic="spus.pic_url"></Selector>
+                </div>
               </div>
-              <Selector :sups="sups" @showDot="showDotFun"></Selector>
-            </li>
-          </ul>
+            </section>
+          </article>
         </section>
       </article>
     </div>
-
-    <div class="balls">
-          <transition v-for="ball in balls" v-show="ball" appear  @after-appear = 'afterEnter' @before-appear="beforeEnter">
-            <span class="ball"></span>
-          </transition>
-    </div>
+    <transition appear
+                @after-appear='afterEnter'
+                @before-appear="beforeEnter" v-for="(ball,index) in balls" :key="index">
+      <div class="balls" ref="balls" v-if="ball">
+        <span class="ball"></span>
+      </div>
+    </transition>
+    <Bottom></Bottom>
   </div>
 </template>
 
 <script>
   import BScroll from 'better-scroll'
-  import Selector from './selector.vue'
-  import {getRestaurant} from '@/api/getData'
+  import {getRestaurant, getFoods} from '@/api/restaurant'
+  import Bottom from './bottom.vue'
 
   export default {
     components: {
-      Selector
+      Bottom
     },
     data() {
       return {
-        food_spu_tags: [],
-        topPosition:[],
-        menuIndex:0,
-        balls:[],
-        elLeft: 0, //当前点击加按钮在网页中的绝对top值
+        topPosition: [],    //存放各个分类的topPosition 为了点击左侧让右侧对应滚动
+        menuIndex: 0,   //左侧当前是第几个分类
+        balls: [],      //加入购物车时的小球
+        elRight: 0, //当前点击加按钮在网页中的绝对top值
         elBottom: 0, //当前点击加按钮在网页中的绝对left值
+        restaurant_id: 0, //当前商店id
+        fontSize: 0,      //用来获取当前1rem等于多少px 因为小球用transition运动 需要用到px 而左下角购物车的位置是rem为单位 需要转换成px 才能让小球找到落地点
+        shipping_fee: null,  //配送费
+        min_price: null,     //最低价起送
+        min_price_tip: null, //最低价起送提示
+        shipping_fee_tip: null,  //配送费提示
+        foodsData: []       //食物数据
       }
     },
     methods: {
-      mappingScroll(index){
-        //判断当前是左侧index  右侧滚动到对应的位置
+      mappingScrolli(pos) {   //右侧滚动时  判断当前左侧是第几个分类
+        for (let i = 0; i < this.topPosition.length; i++) {
+          if (this.topPosition[i] <= Math.ceil(Math.abs(pos.y)) && i === this.topPosition.length - 1 || this.topPosition[i + 1] > Math.ceil(Math.abs(pos.y))) {
+            this.menuIndex = i;
+            break;
+          }
+        }
+      },
+      mappingScroll(index) {
+        //点击左侧  右侧滚动到对应的位置
+        this.rightScroll.off('scroll', this.mappingScrolli)
         this.rightScroll.scrollTo(0, -this.topPosition[index], 500);
         this.menuIndex = index;
+        setTimeout(this.listenScroll, 500);
       },
-      listenScroll(){
-        this.rightScroll.on('scroll',(pos)=>{
-          this.topPosition.forEach((item,index)=>{
-            if(item <= Math.abs(pos.y) && this.topPosition[index+1]>=Math.abs(pos.y) && this.menuIndex !== index){
-              this.menuIndex = index;
-            }
-          })
-        })
+      listenScroll() {  //监听滚动事件
+        this.rightScroll.on('scroll', this.mappingScrolli)
       },
-      showDotFun(balls,elLeft,elBottom){
+      showDotFun(elRight, elBottom) { //触发购物车小球
+//        alert(elBottom)
         this.balls.push(true)
-        this.elLeft = elLeft;
+        this.elRight = elRight;
         this.elBottom = elBottom;
       },
-      beforeEnter(el){
-        console.log(el)
-        console.log(this.elLeft)
-        console.log(this.elBottom)
-
-        el.style.transform = `translate3d(${this.elLeft }px,${this.elBottom }px,0)`;
-//        el.style.transform =
-//        el.children[0].style.transform = `translate3d(${this.elLeft - 30}px,0,0)`;
-//        el.children[0].style.opacity = 0;
+      beforeEnter(el) {
+        let _this = this;
+        this.fontSize = document.documentElement.style.fontSize.split("px")[0];
+        el.style.transform = `translate3d(${this.elRight - this.fontSize * 1}px,${this.elBottom - this.fontSize * 1}px,0)`
+        el.children[0].addEventListener('transitionend', function () {
+          _this.balls.splice(0, 1);
+        })
       },
-      afterEnter(el){
-        el.style.transform = `translate3d(20px,630px,0)`;
-//        el.children[0].style.transform = `translate3d(0,0,0)`;
-        el.style.transition = 'transform 3.55s cubic-bezier(0.3, -0.25, 0.7, -0.15)';
-//        el.children[0].style.transition = 'transform .55s linear';
-        this.balls = this.balls.map(item => false);
-//        el.children[0].style.opacity = 1;
-//        el.children[0].addEventListener('transitionend', () => {
-//          this.listenInCart();
-//        })
-//        el.children[0].addEventListener('webkitAnimationEnd', () => {
-//          this.listenInCart();
-//        })
+      afterEnter(el) {
+        el.style.transform = `translate3d(${this.elRight - this.fontSize * 1}px,${window.innerHeight - 50}px,0)`
+        el.children[0].style.transform = `translate3d(-300px,0px,0)`
+        el.style.transition = 'transform .55s cubic-bezier(0.29,-0.25, 0.79,-0.14)';
+        el.children[0].style.transition = 'transform .55s linear';
       }
     },
-    mounted() {
+    created() {
       this.windowHeight = window.innerHeight;
-      let restaurant_id = localStorage.getItem('restaurant_id');
-      getRestaurant(restaurant_id).then((result) => {
-        console.log(result)
-        this.food_spu_tags = result.data.data.food_spu_tags;
+      let restaurant_id = this.$route.query.id;
+      //根据餐馆id获取食物
+      getFoods({restaurant_id}).then((response) => {
+        this.foodsData = response.data.data;
+        console.log('foodsData',this.foodsData)
         this.$nextTick(() => {
-          this.leftScroll = new BScroll(this.$refs.left, {click:true});
-          this.rightScroll = new BScroll(this.$refs.right, {click:true,probeType: 3,});
+          //初始化better-scroll
+          this.leftScroll = new BScroll(this.$refs.left, {click: true});
+          this.rightScroll = new BScroll(this.$refs.right, {click: true, probeType: 3,});
+          //确定各分类topPostion
           let dom = (this.$refs.right.children)[0];
-//          console.log(dom.childNodes[1].offsetTop);
-          let listsArr =  Array.from(dom.childNodes);
-          listsArr.forEach((item,index)=>{
+          let listsArr = Array.from(dom.childNodes);
+          listsArr.forEach((item, index) => {
             this.topPosition[index] = item.offsetTop;
           });
           this.listenScroll();
         })
       })
     },
-
   }
 </script>
 
@@ -127,77 +135,86 @@
   @import "../../../style/mixin.scss";
 
   #menu {
+
     display: flex;
+    flex: 1;
+    padding-bottom: 1.368rem;
     .left, .right {
-      height: calc(100vh - 19rem);
       overflow: hidden;
     }
+    /*菜单左侧列表样式*/
     .left {
-      width: 7rem;
+      @include px2rem(width, 140);
       background: rgb(244, 244, 244);
       ul {
         li {
           display: flex;
-          height: 5.24rem;
-          padding: 0 1rem;
+          @include px2rem(height, 100);
+          padding: 0 0.2rem;
           justify-content: center;
           align-items: center;
-          font-size: 1.2rem;
+          font-size: 0.3rem;
+          @include px2rem(line-height, 40);
           border-bottom: 1px dashed $mtGrey;
-          &.activity_menu{
+          &.activity_menu {
             background: #fff;
           }
         }
       }
     }
+    /*右侧商品样式*/
     .right {
+      position:relative;
       flex: 1;
       article {
-        section {
-          padding-top:1rem;
+        & > section {
+          padding-top: 0.2rem;
           h2 {
-            font-size: 1.3rem;
+            font-size: 0.4rem;
             font-weight: bold;
-            margin: 0 1rem;
-            padding-left: 0.5rem;
+            margin: 0 0.2rem;
+            padding-left: 0.2rem;
             border-left: 3px solid $mtYellow;
           }
-          ul {
-            li {
-              margin: 0 1.5rem;
-              padding: 1rem 0;
-              border-bottom: 1px solid $mtGrey;
+          article {
+            section {
               display: flex;
-              .img-wrap {
-                width: 6rem;
-                height: 6rem;
-                /*display: inline-block;*/
-                margin-right: 1rem;
+              position: relative;
+              margin: 0 0.5rem;
+              padding: 0.2rem 0;
+              border-bottom: 1px solid $mtGrey;
+              .img_container {
+                @include px2rem(width, 122);
+                @include px2rem(height, 126);
+                margin-right: 0.2rem;
                 img {
                   width: 100%;
                   height: 100%;
                 }
               }
+
               .info {
                 flex: 1;
-                /*display: inline-block;*/
                 vertical-align: top;
-                .name, .sell-num, .price {
-                  display: block;
-                }
                 .name, .price {
                   font-weight: bold;
                 }
                 .name {
-                  font-size: 1.3rem;
+                  font-size: 0.3rem;
                 }
                 .sell-num {
-                  margin: 0.3rem 0;
+                  font-size: 0.3rem;
+                  margin: 0.2rem 0;
                 }
                 .price {
                   color: rgb(251, 79, 69);
-                  font-size: 1.8rem;
+                  font-size: 0.4rem;
 
+                }
+                .footer{
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
                 }
               }
             }
@@ -205,18 +222,26 @@
         }
       }
     }
-    .balls{
-      position:absolute;
-      top:0;
-      left:0;
+    .balls {
+      position: absolute;
+      top: 0;
+      left: 0;
       z-index: 999;
-      .ball{
+      .ball {
         display: inline-block;
-        width:1rem;
-        height:1rem;
+        @include px2rem(width, 20);
+        @include px2rem(height, 20);
         border-radius: 50%;
-        background: #C40000;
+        background: $mtYellow;
       }
     }
+  }
+
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .5s
+  }
+
+  .fade-enter, .fade-leave-to { /* .fade-leave-active in below version 2.1.8 */
+    opacity: 0
   }
 </style>

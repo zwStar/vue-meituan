@@ -1,62 +1,70 @@
 <template>
   <div class="search_foods">
-    <Search placeholder="请输入商品 店铺名" title_head="选择收货地址" fun_click="fun_click"></Search>
+    <v-head title_head="搜索" goBack=true></v-head>
+    <Search placeholder="请输入商品 店铺名" title_head="选择收货地址" :fun_click="fun_click"></Search>
     <div class="lists">
       <ul>
-        <li>
-          <span class="avatar"><img src=""></span>
-          <span class="name">东莞市美食刻蛋糕观</span>
-          <span class="delivery_time">50分钟送达</span>
+        <router-link v-for="item in search_result" :to="{path:'store',query:{id:item.id}}" :key="index" tag="li">
+          <span class="avatar"><img :src="item.pic_url"></span>
+          <span class="name" v-html="high_light(item.name)"></span>
+          <span class="delivery_time">{{item.delivery_time_tip}}送达</span>
           <span class="icon"><i class="iconfont">&#xe63f;</i></span>
-        </li>
+        </router-link>
       </ul>
     </div>
   </div>
 </template>
 
 <script>
-  import * as api from '@/api'
   import {mapMutations} from 'vuex'
+  import {search_restaurant} from '@/api/restaurant'
   import Search from '@/components/search.vue'
+
   export default {
-    components:{
+    components: {
       Search
     },
     data() {
       return {
-        search_val: "",
-        search_active: false
+        keyword: "",
+        search_active: false,
+        search_result: []
       }
     },
-    methods:{
-      fun_click(val){
-        api._get({
-          url:"/v1/search",
-          data:{search:val}
-        }).then(res=>{
-          console.log(res)
-          this.RECORD_ADDRESS(res);
+    methods: {
+      fun_click(val) {
+        this.keyword = val;
+        search_restaurant({keyword: val}).then((response) => {
+          this.search_result = response.data.data;
+          console.log('search_result', this.search_result)
         })
       },
       ...mapMutations([
         'RECORD_ADDRESS'
-      ])
+      ]),
+      high_light: function (value) {
+        console.log('keyword', this.keyword)
+        let a = value.replace(this.keyword, `<span style="color:#ffd161;">${this.keyword}</span>`)
+        return a;
+      }
     }
   }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  .search_foods {
+  @import "../../style/mixin";
 
+  .search_foods {
     .lists {
       ul {
         li {
-          height: 5.01rem;
+          @include px2rem(line-height, 115);
           display: flex;
           align-items: center;
           .avatar {
-            width: 3.85rem;
-            height: 3.85rem;
+            @include px2rem(width, 80);
+            @include px2rem(height, 80);
+            margin: 0 0.5rem;
             border-radius: 50%;
             overflow: hidden;
             img {
@@ -66,11 +74,11 @@
           }
           .name {
             flex: 1;
-            font-size: 1.3rem;
+            font-size: 0.4rem;
           }
           .delivery_time {
-            width: 7.71rem;
-            font-size: 1rem;
+            @include px2rem(width, 125);
+            font-size: 0.2rem;
           }
           .icon {
 

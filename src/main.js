@@ -4,21 +4,22 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './stores'
-import './utils/rem'
+import './utils/rem.min'
 
 import Head from '@/components/head'
 import Bottom from '@/components/Bottom'
 import Star from '@/components/star'
-import 'iview/dist/styles/iview.css'
-import { Carousel,CarouselItem  } from 'iview'
+import Selector from '@/components/selector'    //商品选择器
 
-// Vue.use(Carousel)
-// Vue.use(CarouselItem)
-Vue.component('Carousel',Carousel)
-Vue.component('CarouselItem',CarouselItem)
+import {Swipe, SwipeItem} from 'mint-ui';
+
+Vue.component(Swipe.name, Swipe);
+Vue.component(SwipeItem.name, SwipeItem);
+
 Vue.component('v-head', Head);
 Vue.component('v-bottom',Bottom);
 Vue.component('Star',Star);
+Vue.component('Selector',Selector)
 Vue.config.productionTip = false
 
 

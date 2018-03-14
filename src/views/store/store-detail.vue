@@ -1,6 +1,5 @@
 <template>
   <div id="store-detail">
-    <div class="bg"></div>
     <div class="main">
       <div class="logo">
         <img :src="poi_info.pic_url">
@@ -61,10 +60,10 @@
 
   #store-detail {
     position: absolute;
-    top: 4.5rem;
+    @include px2rem(top, 90);
     left: 0;
     width: 100vw;
-    height: calc(100vh - 4.5rem);
+    height: calc(100vh - 2rem);
     background: rgba(10, 8, 8, 0.4);
     z-index: 99;
     .main {
@@ -72,15 +71,14 @@
       top: 45%;
       left: 50%;
       transform: translate(-50%, -60%);
-      width: 29rem;
-      height: 36.65rem;
-      background: rgba(142, 143, 148,0.6);
-      padding-top: 2rem;
+      @include px2rem(width, 650);
+      @include px2rem(height, 850);
+      background: #151515;
       overflow: auto;
       .logo {
-        width: 5.19rem;
-        height: 5.19rem;
-        margin: 2rem auto;
+        @include px2rem(width, 125);
+        @include px2rem(height, 120);
+        margin: 0.8rem auto;
         img {
           width: 100%;
           height: 100%;
@@ -88,37 +86,43 @@
       }
       .name {
         color: #fff;
+        font-size:0.4rem;
         text-align: center;
       }
       .score {
-        margin: 1rem 0;
+        margin: 0.1rem 0;
         text-align: center;
         span {
+          font-size:0.4rem;
           color: #dcd7d6;
         }
       }
       .deliver-info {
+        font-size:0.4rem;
         display: block;
         color: #dcd7d6;
-        margin: 1rem 0;
+        margin: 0.3rem 0;
         text-align: center;
       }
       .active-lists {
-        padding: 2rem 0;
-        margin: 0 0.5rem;
+        padding: 0.2rem 0;
+        margin: 0 0.1rem;
         border-top: 1px solid $mtGrey;
         border-bottom: 1px solid $mtGrey;
         ul {
           li {
             color: #fff;
-            margin: 0.5rem;
+            margin: 0.2rem;
             i {
               display: inline-block;
-              width: 1.5rem;
-              height: 1.5rem;
+              @include px2rem(width, 35);
+              @include px2rem(height, 35);
               background-size: cover;
               vertical-align: middle;
-              margin-right: 0.5rem;
+              margin-right: 0.1rem;
+            }
+            span{
+              font-size:0.3rem;
             }
           }
         }
@@ -128,24 +132,14 @@
         color: #fff;
         h2{
           text-align: center;
-          font-size:1.3rem;
+          font-size:0.3rem;
         }
         p {
-          margin: 1rem 1rem;
-          line-height: 1.5rem;
+          font-size: 0.3rem;
+          margin: 0.3rem;
+          line-height: 0.1rem;
         }
       }
-    }
-    /*背景虚化层*/
-    .bg{
-      position: absolute;
-      top: 45%;
-      left: 50%;
-      transform: translate(-50%, -60%);
-      width: 29rem;
-      height: 36.65rem;
-      background:url("http://p1.meituan.net/aichequan/e597d736e85846ee41d55440a5a86ad9193992.png.webp") no-repeat;
-      filter: blur(5px);
     }
     .close {
       position: absolute;
@@ -154,7 +148,7 @@
       transform: translateX(-50%);
       .icon-close {
         display: inline-block;
-        font-size: 4rem;
+        font-size: 1rem;
         color: #fff;
       }
     }

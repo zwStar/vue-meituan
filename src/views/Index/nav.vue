@@ -1,23 +1,25 @@
 <template>
-  <nav class="category slide" ref="slide">
-    <div class="slide-box" ref="slide-box">
-      <div class="lists sMain" v-for="(item, index) in category_list" :key="index">
-        <ul>
-          <router-link tag="li" v-for="foodItem in item"
-                       :to="{path:'order',query:{type:foodItem.type}}" :key="foodItem.id">
-            <div class="category_img">
-              <img :src="foodItem.url">
-            </div>
-            <span class="category_name">{{foodItem.name}}</span>
-          </router-link>
-        </ul>
-      </div>
-    </div>
+  <nav>
+    <mt-swipe :auto="0" :show-indicators="false">
+      <mt-swipe-item class="lists" v-for="(list, index) in categoryList" :key="index">
+        <router-link v-for="foodList in list"
+                     :to="{path:'/category',query:{type:foodList.name}}"
+                     :key="foodList.id" class="type">
+          <div class="category_img">
+            <img :src="foodList.url">
+          </div>
+          <span class="category_name">{{foodList.name}}</span>
+        </router-link>
+      </mt-swipe-item>
+    </mt-swipe>
   </nav>
 </template>
 
 <script>
-  import {Carousel} from '@/utils/carousel.js'
+
+  import {Swipe, SwipeItem} from 'mint-ui';
+  import 'mint-ui/lib/style.css'
+  import {mapGetters} from 'vuex'
 
   export default {
     data() {
@@ -79,69 +81,91 @@
             type: 'freeDeliver'
           }
         ],
-        category_list:[]
+        categoryList: [],
+        location: {}
       }
-
     },
-    mounted() {
+    components: {
+      [Swipe.name]: Swipe,
+      [SwipeItem.name]: SwipeItem,
+    },
+    computed: {
+      ...mapGetters(['address'])
+    },
+    created() {
       let refs = this.$refs;
-
-//      let resArr = [...res]; // 返回一个新的数组
       let resArr = [...this.category_list_res];
       let foodArr = [];
-      for (let i = 0, j = 0; i <  this.category_list_res.length; i += 8, j++) {
-//        this.category_list[j] = resArr.splice(0, 8);
-        foodArr[j] =  resArr.splice(0, 8);
-
+      for (let i = 0, j = 0; i < this.category_list_res.length; i += 8, j++) {
+        foodArr[j] = resArr.splice(0, 8);
       }
-      this.category_list = foodArr;
-      console.log(this.category_list)
-      this.$nextTick(()=>{
-        let obj = {
-
-          slide: refs['slide'],
-          slideBox: refs['slide-box'],
-          sMain: document.querySelectorAll('.sMain'),
-          time: 5000,
-          item: 0
-        };
-        new Carousel(obj);
-      })
-    },
-    methods:{
-      aaa(){
-        console.log(111)
-      }
+      this.categoryList = foodArr;
     }
   }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+  @import "../../style/mixin";
+
+  nav {
+    padding: 0.3rem 0;
+    @include px2rem(height, 390);
+    .lists {
+      height: 100%;
+    }
+    .type {
+      width: 25%;
+      text-align: center;
+      display: inline-block;
+      @include px2rem(height, 140);
+      margin: 0.2rem 0;
+      .category_img {
+        margin: 0 auto;
+        @include px2rem(width, 100);
+        @include px2rem(height, 95);
+        img {
+          width: 100%;
+          height: 100%;
+        }
+      }
+    }
+  }
+
   .category {
-    margin: 1.5rem 0;
+    height: 50px;
+  }
+
+  .lists {
+    width: 100vw;
+    height: 100px;
+    display: inline-block;
+    vertical-align: top;
+    .category_img {
+      img {
+        width: 70%;
+        height: 70%;
+        margin-bottom: 0.3rem;
+      }
+    }
+    .category_name {
+      font-size: 0.3rem;
+    }
+  }
+
+  .category {
+    margin: 0.5rem 0;
     .slide-box {
-      font-size: 0;
+      /*font-size: 0;*/
       .lists {
-        width: 100vw;
-        display: inline-block;
-        vertical-align: top;
+
         ul {
-          font-size: 0;
+          /*font-size: 0;*/
           li {
             width: 25%;
             display: inline-block;
-            padding: 0.5rem;
+            padding: 0.2rem;
             text-align: center;
-            .category_img {
-              img {
-                width: 70%;
-                height: 70%;
-                margin-bottom: 0.3rem;
-              }
-            }
-            .category_name {
-              font-size: 1.3rem;
-            }
+
           }
         }
       }

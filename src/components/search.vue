@@ -1,7 +1,7 @@
 <template>
-  <div class="search">
+  <div class="search_container">
     <div class="search_input">
-      <i class="iconfont">&#xe7d1;</i><input type="text" v-model.trim="search_val" :placeholder="placeholder">
+      <i class="iconfont">&#xe7d1;</i><input type="text" autofocus="autofocus" v-model.trim="search_val" :placeholder="placeholder">
     </div>
     <span class="btn_search" v-bind:class="{ active: search_active }">搜索</span>
   </div>
@@ -22,7 +22,6 @@
       search_val(data) {
         if (data !== "") {
           this.search_active = true;
-          console.log(this.fun_click)
           this.fun_click(data);
         }
 
@@ -36,19 +35,19 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  .search {
+  @import "../style/mixin";
+  .search_container {
     display: flex;
-    padding-bottom: 1rem;
+    padding-bottom: 0.2rem;
     background: #fff;
     .search_input, .btn_search {
-      height: 2.8rem;
-      font-size: 1.2rem;
-      line-height: 2.8rem;
+      @include px2rem(line-height, 60);
+      font-size: 0.2rem;
     }
     .search_input {
       flex: 1;
       background: rgb(239, 238, 244);
-      border-radius: 1.4rem;
+      border-radius: 0.4rem;
       margin: 0 10px;
       padding-left: 10px;
       input {
@@ -59,7 +58,7 @@
         outline: none;
         background: rgba(237, 237, 237, 0.1);
         &::-webkit-input-placeholder {
-          font-size: 1.2rem;
+          font-size: 0.2rem;
         }
       }
     }
@@ -67,9 +66,9 @@
       display: inline-block;
       color: #fff;
       background: rgb(145, 145, 145);
-      width: 5rem;
+      @include px2rem(width, 145);
       text-align: center;
-      border-radius: 0.4rem;
+      border-radius: 0.1rem;
       margin: 0 10px;
       &.active {
         color: rgb(161, 133, 70);

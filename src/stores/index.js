@@ -7,20 +7,21 @@ import getters from './getters'
 Vue.use(Vuex)
 
 const state = {
-  latitude: '', // 当前位置纬度
-  longitude: '', // 当前位置经度
-  address:'',    //当前位置
   suggestionLists:[],
   sortBy:'综合排序',     //当前排序方式 默认综合排序,
-  cartList:{
-    totalPrice:0
-  },      //加入购物车列表
-  totalPrice:0
+  delivery_address:{},   //配送地址
 }
 
+import cart from './modules/cart'
+import address from './modules/address'
+import restaurant from './modules/restaurant'
 export default new Vuex.Store({
   state,
   getters,
   actions,
-  mutations,
+  modules:{
+    cart,
+    address,
+    restaurant
+  }
 })

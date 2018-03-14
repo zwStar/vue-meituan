@@ -6,7 +6,7 @@ body, div, span, header, footer, nav, section, aside, article, ul, dl, dt, dd, l
   text-decoration: none;
   border: none;
   font-weight: normal;
-  font-family: "Microsoft Yahei";
+  //font-family: "Microsoft Yahei";
   box-sizing: border-box;
   -webkit-tap-highlight-color:transparent;
   -webkit-font-smoothing: antialiased;
@@ -22,13 +22,14 @@ html,body{
   height:100%;
   line-height:1;
 }
+//iconfont
 @font-face {
   font-family: 'iconfont';  /* project id 407663 */
-  src: url('//at.alicdn.com/t/font_407663_dj5lqehhg9orbe29.eot');
-  src: url('//at.alicdn.com/t/font_407663_dj5lqehhg9orbe29.eot?#iefix') format('embedded-opentype'),
-  url('//at.alicdn.com/t/font_407663_dj5lqehhg9orbe29.woff') format('woff'),
-  url('//at.alicdn.com/t/font_407663_dj5lqehhg9orbe29.ttf') format('truetype'),
-  url('//at.alicdn.com/t/font_407663_dj5lqehhg9orbe29.svg#iconfont') format('svg');
+  src: url('//at.alicdn.com/t/font_407663_dfyeyy6cifmeu3di.eot');
+  src: url('//at.alicdn.com/t/font_407663_dfyeyy6cifmeu3di.eot?#iefix') format('embedded-opentype'),
+  url('//at.alicdn.com/t/font_407663_dfyeyy6cifmeu3di.woff') format('woff'),
+  url('//at.alicdn.com/t/font_407663_dfyeyy6cifmeu3di.ttf') format('truetype'),
+  url('//at.alicdn.com/t/font_407663_dfyeyy6cifmeu3di.svg#iconfont') format('svg');
 }
 @mixin clearfix{
   &:after{
@@ -49,3 +50,10 @@ html,body{
   font-style:normal;
   font-family: iconfont;
 }
+
+//自动填写密码出现的黄色背景
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+}
+//focus产生黄色边框
+input:focus{  outline:none; }

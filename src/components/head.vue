@@ -1,8 +1,9 @@
 <template>
-  <div id="head" :style="{color:color} ">
+  <div id="head" :style="{color:color,background:bgColor}">
     <span class="goBack" v-if="goBack" @click="fun_goBack()"><i class="iconfont">&#xe61c;</i></span>
     <span class="title">{{title_head}}</span>
-    <span class="more"><i class="iconfont">&#xe602;</i></span>
+    <span class="more" v-if="more"><i class="iconfont">&#xe602;</i></span>
+    <slot name="save_address"></slot>
   </div>
 </template>
 
@@ -23,6 +24,13 @@
       color: {
         type: String,
         default: '#333'
+      },
+      more: {
+        default: false
+      },
+      bgColor:{
+        type:String,
+        default:'#fff'
       }
     },
     methods: {
@@ -35,30 +43,26 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../style/common.scss";
+  @import "../style/mixin.scss";
   #head {
-    background: #fff;
-    height: 3.5rem;
+    position:relative;
     text-align: center;
-    position: relative;
-
-    box-sizing: content-box;
-    line-height: 3.5rem;
-    .goBack, .more{
-      position: absolute;
-      top:50%;
-      transform: translateY(-50%);
-    }
+    @include px2rem(line-height, 80);
+    padding:0 0.2rem;
     .goBack, .more {
-      i{
-        font-size: 3rem;
+      position:absolute;
+      i {
+        font-size: 0.7rem;
       }
     }
     .goBack {
       left: 10px;
     }
     .title {
-      font-size: 1.5rem;
+      flex: 1;
+      font-size: 0.5rem;
       font-weight: bold;
+      text-align: center;
     }
     .more {
       right: 15px;

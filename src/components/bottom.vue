@@ -43,25 +43,35 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
+  @import "../style/mixin.scss";
   #bottom{
     width: 100%;
     position: fixed;
     bottom:0;
     left:0;
     z-index:999;      //保证底部在商家列表上层 当点击综合排序时  不会被遮罩挡住
+    span{
+      font-size:0.3rem;
+    }
     ul{
       display: flex;
       background: rgb(250,250,250);
-      padding:0.3rem 0;
+      /*padding:0.15rem 0;*/
       li{
-        text-align: center;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         flex:1;
+        line-height: 0.75;
         .index,.home,.order{
-          width: 3rem;
-          margin:0 auto;
+          @include px2rem(width, 60);
+          margin:0.1rem auto;
           img{
             width: 100%;
           }
+        }
+        span{
+          font-size:0.2rem;
         }
       }
     }

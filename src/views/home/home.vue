@@ -3,9 +3,10 @@
     <v-head title_head="我的" goBack="true"></v-head>
     <div id="userInfo">
       <div class="avatar">
-        <img src="../../assets/my.png">
+        <img src="../../assets/default-avatar.png">
       </div>
-      <span class="login">登录/注册</span>
+      <router-link v-if="!username" class="login" to="/login">登录/注册</router-link>
+      <span v-else class="username">{{username}}</span>
     </div>
     <div class="myFunction">
       <ul>
@@ -41,12 +42,12 @@
           </div>
           <span>答谢记录</span>
         </li>
-        <li>
+        <router-link to="/home/address" tag="li">
           <div class="imgWrap">
             <img src="http://p0.meituan.net/50.0.100/xianfu/a813bff1813024b05ff45422deac24bd4276.jpg">
           </div>
           <span>我的地址</span>
-        </li>
+        </router-link>
       </ul>
     </div>
     <div class="assets">
@@ -79,114 +80,141 @@
       </ul>
     </div>
     <div class="intro">
-        <h3>更多推荐</h3>
-        <ul>
-          <li>
-            <div class="imgWrap">
-              <img src="http://p0.meituan.net/50.0.100/xianfu/cf5ddfcae114ed8d7d147d51064532252477.jpg">
-            </div>
-            <span>邀请有奖</span>
-          </li>
-          <li>
-           <div class="imgWrap">
-             <img src="http://p1.meituan.net/50.0.100/xianfu/55748d5fa531a057258f68d029fe20542466.jpg">
-           </div>
-            <span>商家入驻</span>
-          </li>
-          <li>
-            <div class="imgWrap">
-              <img src="http://p1.meituan.net/50.0.100/xianfu/317aabdd31dfcfa1739149089a2e041a2780.jpg">
-            </div>
-            <span>帮助与反馈</span>
-          </li>
-          <li>
-           <div class="imgWrap">
-             <img src="http://p0.meituan.net/50.0.100/xianfu/55454d4faaed6ad212b2b8a929edef372425.jpg">
-           </div>
-            <span>在线客服</span>
-          </li>
-        </ul>
+      <h3>更多推荐</h3>
+      <ul>
+        <li>
+          <div class="imgWrap">
+            <img src="http://p0.meituan.net/50.0.100/xianfu/cf5ddfcae114ed8d7d147d51064532252477.jpg">
+          </div>
+          <span>邀请有奖</span>
+        </li>
+        <li>
+          <div class="imgWrap">
+            <img src="http://p1.meituan.net/50.0.100/xianfu/55748d5fa531a057258f68d029fe20542466.jpg">
+          </div>
+          <span>商家入驻</span>
+        </li>
+        <li>
+          <div class="imgWrap">
+            <img src="http://p1.meituan.net/50.0.100/xianfu/317aabdd31dfcfa1739149089a2e041a2780.jpg">
+          </div>
+          <span>帮助与反馈</span>
+        </li>
+        <li>
+          <div class="imgWrap">
+            <img src="http://p0.meituan.net/50.0.100/xianfu/55454d4faaed6ad212b2b8a929edef372425.jpg">
+          </div>
+          <span>在线客服</span>
+        </li>
+      </ul>
     </div>
     <v-bottom></v-bottom>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-
+  export default {
+    data() {
+      return {
+        username: null
+      }
+    },
+    mounted() {
+      this.username = localStorage.getItem('username');
+    }
+  }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../../style/common.scss";
   @import "../../style/mixin.scss";
-  #home{
-    height:100%;
-    background: rgb(244,244,244);
+
+  #home {
+    height: 100%;
+    background: rgb(244, 244, 244);
   }
-  #userInfo{
-    height:6.53rem;
-    color:#000;
+
+  #userInfo {
+    @include px2rem(height, 200);
+    color: #000;
     display: flex;
     align-items: center;
     background: #fff;
-    .avatar{
-      width: 10rem;
+    .avatar {
+      @include px2rem(width, 115);
+      @include px2rem(height, 115);
       text-align: center;
-      border:1px solid #fff;
-      border-radius: 25%;
-
+      margin: 0 0.8rem;
+      border-radius: 50%;
+      border: 1px solid #333;
+      img {
+        width: 100%;
+        height: 100%;
+      }
     }
-    .login{
-      line-height: 8.53rem;
-      font-size:1.6rem;
+    .login {
+      font-size: 0.45rem;
+    }
+    .username {
+      font-size: 0.5rem;
     }
   }
-  .myFunction{
-    margin-top:1rem;
+
+  .myFunction {
+    margin-top: 0.3rem;
     background: #fff;
-    ul{
+    ul {
       @include clearfix;
-      li{
+      li {
         width: 25%;
-        height:5.35rem;
-        float:left;
+        @include px2rem(height, 145);
+        float: left;
         text-align: center;
-        margin:0.5rem 0;
-        .imgWrap{
-          width: 3rem;
-          height: 3rem;
-          margin:0.3rem auto;
-          img{
-            width:100%;
-            height:100%;
+        margin: 0.2rem 0;
+        .imgWrap {
+          @include px2rem(width, 70);
+          @include px2rem(height, 70);
+          margin: 0.1rem auto;
+          img {
+            width: 100%;
+            height: 100%;
           }
+        }
+        span {
+          font-size: 0.35rem;
         }
       }
     }
   }
-  .assets,.intro{
-    margin-top:1rem;
+
+  .assets, .intro {
+    margin-top: 0.2rem;
     background: #fff;
-    h3{
-      font-size:1.5rem;
-      margin-left:1rem;
-      padding-top:1rem;
-      padding-bottom: 0.5rem;
+    h3 {
+      font-size: 0.5rem;
+      margin-left: 0.3rem;
+      padding-top: 0.3rem;
+      padding-bottom: 0.2rem;
       border-bottom: 1px solid $bottomLine;
     }
-    ul{
+    ul {
       display: flex;
-      padding:1rem 0;
-      li{
-        flex:1;
+      padding: 0.3rem 0;
+      li {
+        flex: 1;
         text-align: center;
-        .imgWrap{
-          width: 3rem;
-          height: 3rem;
-          margin:0.3rem auto;
-          img{
-            width:100%;
-            height:100%;
+        .imgWrap {
+          @include px2rem(width, 55);
+          @include px2rem(height, 55);
+          margin: 0.1rem auto;
+          img {
+            width: 100%;
+            height: 100%;
           }
+        }
+        span {
+          font-size: 0.35rem;
         }
       }
     }
