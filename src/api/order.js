@@ -35,6 +35,16 @@ export const orders = (data) => {
   return _get(req);
 }
 
+//订单评论
+export const makeComment = (data) =>{
+  let req = {
+    data,
+    url:'v1/comment'
+  }
+  return _post(req)
+}
+
+
 //请求支付
 export const request_pay = (data) => {
   let req = {

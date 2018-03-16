@@ -41,6 +41,7 @@ const actions = {
 
 const mutations = {
   [types.RECORD_ADDRESS](state, address) {
+    console.log('vuex',address);
     state.address = {...address}
   },
   //定位完成拉取附近餐馆
@@ -49,6 +50,7 @@ const mutations = {
   },
   [types.RECORD_DELIVERY_ADDRESS](state, address) {
     state.deliveryAddress = {...address};
+    console.log('state.deliveryAddress',state.deliveryAddress)
   }
 }
 

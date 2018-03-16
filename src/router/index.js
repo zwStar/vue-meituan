@@ -20,7 +20,8 @@ const Pay = r => require.ensure([], () => r(require('@/views/pay/pay'), 'PAY')) 
 const Cart = r => require.ensure([], () => r(require('@/views/cart/cart'), 'CART'))   //购物车
 const OrderDetail = r => require.ensure([], () => r(require('@/views/order/order_detail'), 'ORDERDETAIL'))   //订单详情
 const Category = r => require.ensure([], () => r(require('@/views/category/category'), 'CATEGORY'))   //食物分类
-const MyAddress = r => require.ensure([], () => r(require('@/views/home/children/address'), 'MyAddress'))   //食物分类
+const MyAddress = r => require.ensure([], () => r(require('@/views/home/children/address'), 'MyAddress'))   //我的收货地址
+const EditAddress = r => require.ensure([], () => r(require('@/views/home/children/editAddress'), 'EditAddress'))  //编辑收货地址
 const MakeComment = r => require.ensure([], () => r(require('@/views/order/comment'), 'MakeComment'))   //作评论
 Vue.use(Router)
 
@@ -42,11 +43,11 @@ export default new Router({
       name: 'Order',
       component: Order,
       meta: {keepAlive: true},
-      children:[
+      children: [
         {
-          path:'comment',
-          name:'作评价',
-          component:MakeComment
+          path: 'comment',
+          name: '作评价',
+          component: MakeComment
         }
       ]
     },
@@ -81,7 +82,13 @@ export default new Router({
         {
           path: 'address',
           name: '我的收获地址',
-          component: MyAddress
+          component: MyAddress,
+          children: [
+            {
+              path:'edit',
+              name:'编辑地址',
+              component:EditAddress
+            }]
         }
       ]
     },

@@ -3,12 +3,12 @@
     <v-head title_head="收货地址" goBack=true   bgColor="#f4f4f4"></v-head>
     <div class="container">
       <ul>
-        <li v-for="item in addressLists" :key="item.id" @click="selectAddress(item)">
-          <p>{{item.address}} {{item.house_number}}</p>
-          <span class="name">{{item.name}}</span>
-          <span class="sex">{{item.gender === 'female' ? '女士' : '先生'}}</span>
-          <span class="phone">{{item.phone}}</span>
-          <i class="iconfont icon_select" v-if="item.id === selectAddressId">&#xe6da;</i>
+        <li v-for="list in addressLists" :key="list.id" @click="selectAddress(list)">
+          <p>{{list.address}} {{list.house_number}}</p>
+          <span class="name">{{list.name}}</span>
+          <span class="sex">{{list.gender === 'female' ? '女士' : '先生'}}</span>
+          <span class="phone">{{list.phone}}</span>
+          <i class="iconfont icon_select" v-if="list.id === selectAddressId">&#xe6da;</i>
         </li>
       </ul>
     </div>
@@ -30,9 +30,9 @@
       }
     },
     methods: {
-      selectAddress(item) {
-        this.select_address_id = item.id;
-        this.$store.dispatch('recodeDeliveryAddress', item); //地址信息由vuex管理
+      selectAddress(list) {
+        this.select_address_id = list.id;
+        this.$store.dispatch('recodeDeliveryAddress', list); //地址信息由vuex管理
         this.$router.go(-1);                //返回上一个路由
       },
     },

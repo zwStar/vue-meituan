@@ -187,7 +187,7 @@
           margin: 0.1rem;
         }
         .date_type_tip {
-          font-size: 0.5rem;
+          font-size: 0.4rem;
           font-weight: 500;
         }
         .select_view_time {
@@ -273,7 +273,7 @@
               }
               .price {
                 display: block;
-                font-size: 0.5rem;
+                font-size: 0.45rem;
                 font-weight: 500;
               }
             }
@@ -307,7 +307,7 @@
           color: #999;
         }
         .totalPrice {
-          font-size: 0.5rem;
+          font-size: 0.45rem;
           font-weight: 500;
           strong {
             color: #fb4e44;

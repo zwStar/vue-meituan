@@ -7,3 +7,6 @@ export const RECORD_DELIVERY_ADDRESS = 'RECORD_DELIVERY_ADDRESS'
 export const RECORD_RESTAURANT = 'RECORD_RESTAURANT'
 export const UPDATE_CART = 'UPDATE_CART'  //页面刷新时 更新购物车信息
 export const LOCATION_READY = 'LOCATION_READY'  // 拉取餐馆信息
+export const DELETE_CART = 'DELETE_CART'    //删除购物车某种食物
+export const SAVE_PATH = 'SAVE_PATH'        //保存路由路径
+export const  RESET_PATH= 'RESET_PATH'     //重置路径

@@ -8,15 +8,15 @@
     </nav>
     <div class="container">
       <ul>
-        <li v-for="item in addressLists" :key="item.id" @click="selectAddress(item)">
+        <li v-for="(list,index) in addressLists" :key="list.id">
           <div>
-            <p>{{item.address}} {{item.house_number}}</p>
-            <span class="name">{{item.name}}</span>
-            <span class="sex">{{item.gender === 'female' ? '女士' : '先生'}}</span>
-            <span class="phone">{{item.phone}}</span>
+            <p>{{list.address}} {{list.house_number}}</p>
+            <span class="name">{{list.name}}</span>
+            <span class="sex">{{list.gender === 'female' ? '女士' : '先生'}}</span>
+            <span class="phone">{{list.phone}}</span>
           </div>
-          <i class="iconfont edit" v-show="status">&#xe60b;</i>
-          <i class="iconfont delete" v-show="status">&#xe615;</i>
+          <i class="iconfont edit" v-show="status" @click="editAddress(list.id)">&#xe60b;</i>
+          <i class="iconfont delete" v-show="status" @click="deleteAddress(list.id,index)">&#xe615;</i>
         </li>
       </ul>
     </div>
@@ -24,11 +24,12 @@
       <i class="iconfont icon">&#xe606;</i>
       <span>新增收获地址</span>
     </router-link>
+    <router-view></router-view>
   </div>
 </template>
 
 <script>
-  import {getAddress} from '@/api/user'
+  import {getAllAddress, deleteAddress} from '@/api/user'
 
   export default {
     data() {
@@ -39,20 +40,26 @@
       }
     },
     methods: {
-      selectAddress(item) {
-        this.select_address_id = item.id;
-        this.$store.dispatch('recodeDeliveryAddress', item); //地址信息由vuex管理
-        this.$router.go(-1);                //返回上一个路由
-      },
       managerAddress() {
         this.status = 1;
       },
       finish() {
         this.status = 0;
+      },
+      deleteAddress(id, index) {
+        deleteAddress({address_id: id}).then((response) => {
+          console.log('delete response', response)
+          if (response.data.status === 1) {
+            this.addressLists.splice(index, 1); //通过splice 删除数据
+          }
+        })
+      },
+      editAddress(id) {
+        this.$router.push({path: '/home/address/edit', query: {address_id: id}});
       }
     },
     created() {
-      getAddress().then((response) => {
+      getAllAddress().then((response) => {
         this.addressLists = response.data.address;
         this.selectAddressId = this.addressLists[0].id;
       })
@@ -90,7 +97,7 @@
 
     }
     .container {
-      margin-top:0.2rem;
+      margin-top: 0.2rem;
       ul {
         li {
           display: flex;

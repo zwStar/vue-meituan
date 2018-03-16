@@ -1,6 +1,6 @@
 <template>
-  <div id="address">
-    <v-head title_head="新增收货地址" goBack=true>
+  <div id="editAddress">
+    <v-head title_head="编辑收货地址" goBack=true>
       <span slot="save_address" style="position:absolute; right:15px;top:2px;font-size: 0.5rem; font-weight: 600;"
             @click="save();">保存</span>
     </v-head>
@@ -10,7 +10,7 @@
 </template>
 
 <script>
-  import {add_address} from '@/api/user'
+  import {getAddress} from '@/api/user'
   import {mapGetters} from 'vuex'
   import AddressInfo from '@/components/addressInfo'
 
@@ -28,6 +28,7 @@
     computed: {
       ...mapGetters(['deliveryAddress'])
     },
+
     methods: {
       save() {
         console.log('formData', this.formData);
@@ -53,14 +54,23 @@
         this.formData.title = val.title;
         this.formData = {...this.formData}
       }
+    },
+    created() {
+      let address_id = this.$route.query.address_id;
+      getAddress({address_id}).then((response) => {
+        console.log('获取指定地址response', response)
+        let data = response.data;
+        this.formData = data.address;
+        this.formData.title = data.address_detail;
+      })
     }
   }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  @import "../../../../style/mixin";
+  @import "../../../style/mixin";
 
-  #address {
+  #editAddress {
     position: fixed;
     left: 0;
     right: 0;

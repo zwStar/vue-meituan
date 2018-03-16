@@ -1,6 +1,5 @@
 <template>
   <div class="nearbyShops">
-
     <nav ref="nav">
       <ul>
         <li @click="scrollTo()">综合排序 <i class="iconfont icon-sort">&#xe601;</i></li>
@@ -294,34 +293,7 @@
 
     /*loading部分*/
     .loading_wrap {
-      text-align: center;
-      font-size: 14px;
-      height: 26px;
-      line-height: 26px;
-      .loading:before {
-        content: "";
-        display: inline-block;
-        position: relative;
-        left: -11px;
-        padding: 0;
-        border: 0;
-        background: 0;
-        width: 2px;
-        height: 2px;
-        border-radius: 100%;
-        box-shadow: 0 -7px 0 0.9px #666, 7px 0 #999, 0 7px #999, -7px 0 #999, -5px -5px 0 0.4px #999, 5px -5px 0 1.1px #666, 5px 5px #999, -5px 5px #999;
-        animation: spin 1.5s linear infinite;
-        -webkit-animation: spin 1.5s linear infinite;
-        top: -4px;
-      }
-      @keyframes spin {
-        from {
-          transform: rotate(0deg)
-        }
-        to {
-          transform: rotate(360deg)
-        }
-      }
+      @include loading;
     }
   }
 

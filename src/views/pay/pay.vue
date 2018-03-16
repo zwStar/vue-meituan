@@ -4,9 +4,12 @@
     <div class="img_wrap">
       <img src="../../assets/pay_adv.png">
     </div>
-    <div class="remain_time">
+    <div class="remain_time_wrap">
       <h3>支付剩余时间</h3>
-      <span>{{minutes.slice(0, 1)}}</span><span>{{minutes.slice(1, 2)}}</span><span>:</span><span>{{seconds.slice(0, 1)}}</span><span>{{seconds.slice(1, 2)}}</span>
+      <div class="remain_time" v-if="!overtime">
+        <span>{{minutes.slice(0, 1)}}</span><span>{{minutes.slice(1, 2)}}</span><span>:</span><span>{{seconds.slice(0, 1)}}</span><span>{{seconds.slice(1, 2)}}</span>
+      </div>
+      <span class="overtime" v-else>支付超时</span>
     </div>
     <div class="order_info">
       <div class="avatar">
@@ -18,7 +21,6 @@
       </div>
     </div>
     <ul class="pay_way">
-
 
       <li @click="payType = '1'">
         <span class="pay_icon"><i class="iconfont" style="color:#3d91e4;">&#xe60f;</i></span>
@@ -73,8 +75,6 @@
       <input type="hidden" name="timestamp" v-model="form_data.timestamp">
       <input type="hidden" name="version" v-model="form_data.version">
     </form>
-
-
   </div>
 </template>
 
@@ -82,7 +82,6 @@
   import Scan from './scan.vue'
   import {init_pay, order_info} from '@/api/order'
   import {request_pay} from '@/api/order'
-
 
   export default {
     data() {
@@ -99,7 +98,8 @@
         payWayShow: false,
         method: 'trpay.trade.create.scan',
         scanShow: false,
-        orderData: {}
+        orderData: {},
+        overtime: false    //支付超时
       }
     },
     methods: {
@@ -117,13 +117,17 @@
           }
         })
       },
-      calc_remain_time(remain_time) {
+      calc_remain_time(remain_time) {   //倒计时
         let minutes = (remain_time / 60 % 60)
         this.minutes = minutes >= 10 ? minutes + '' : '0' + minutes;//计算剩余的分钟
         let seconds = (remain_time % 60);
         this.seconds = seconds >= 10 ? seconds + '' : '0' + seconds;//计算剩余的分钟;//计算剩余的秒数
+        if (!this.minutes && !this.seconds) {
+          clearInterval(this.timer);
+          this.overtime = true;    //支付超时
+        }
       },
-      close(){
+      close() {
         this.payWayShow = false;
       }
     },
@@ -131,11 +135,14 @@
       let _this = this;
       this.order_id = this.$route.query.order_id;
       order_info({order_id: this.order_id}).then((response) => {
-        console.log('order_response', response)
         this.order_info = response.data.data;
         let remain_time = response.data.data.pay_remain_time;    //支付剩余时间
-        this.restaurant_info = this.order_info.restaurant;
-        setInterval(function () {
+        this.restaurant_info = this.order_info.restaurant;   //商家信息
+        if (remain_time == false) {
+          this.overtime = true;
+        }
+
+        this.timer = setInterval(function () {
           remain_time--;
           _this.calc_remain_time(remain_time);
         }, 1000)
@@ -163,25 +170,31 @@
       }
     }
     //剩余时间
-    .remain_time {
+    .remain_time_wrap {
       text-align: center;
       h3 {
         font-size: 0.4rem;
         color: #727272;
       }
-      span {
-        font-size: 0.3rem;
-        display: inline-block;
-        @include px2rem(width, 35);
-        @include px2rem(line-height, 30);
-        color: #fff;
-        background: #656467;
-        margin: 0.05rem;
-        border-radius: 3px;
+      .remain_time {
+        span {
+          font-size: 0.3rem;
+          display: inline-block;
+          @include px2rem(width, 35);
+          @include px2rem(line-height, 30);
+          color: #fff;
+          background: #656467;
+          margin: 0.05rem;
+          border-radius: 3px;
+        }
+        span:nth-of-type(3) {
+          color: #656467;
+          background: #f3f3f6;
+        }
       }
-      span:nth-of-type(3) {
-        color: #656467;
-        background: #f3f3f6;
+      .overtime {
+        font-size: 0.4rem;
+        margin: 0.4rem 0;
       }
     }
 
@@ -308,13 +321,13 @@
         }
       }
 
-      .close{
-        position:absolute;
-        top:90%;
-        left:50%;
+      .close {
+        position: absolute;
+        top: 90%;
+        left: 50%;
         transform: translateX(-50%);
-        .icon_close{
-          color:#fff;
+        .icon_close {
+          color: #fff;
         }
       }
     }

@@ -18,6 +18,9 @@ const actions = {
   reduceToCart({commit}, {restaurant_id, food_id}) {
     commit('REDUCE_CART', {restaurant_id, food_id})
   },
+  deleteFood({commit}, {restaurant_id, food_id}) {
+    commit('DELETE_CART', {restaurant_id, food_id})
+  },
   emptyCart({commit}, {restaurant_id}) {
     commit('EMPTY_CART', {restaurant_id});
   }
@@ -69,6 +72,22 @@ const mutations = {
       delete(restaurant[food_id]);
     } else {
       restaurant[food_id].num--;
+    }
+    state.cartList = {...cart};
+    localStorage.setItem('cartList', JSON.stringify(state.cartList));
+  },
+  //删除食物
+  [types.DELETE_CART](state, {restaurant_id, food_id}) {
+    let cart = state.cartList;
+    let restaurant = cart[restaurant_id];
+    let num = restaurant[food_id].num;
+    let price = restaurant[food_id].price;
+    restaurant.totalNum -= num;
+    delete(restaurant[food_id]);
+    if (restaurant.totalNum === 0) {
+      delete(cart[restaurant_id]);
+    } else {
+      restaurant.totalPrice = Number((restaurant.totalPrice - price * num).toFixed(2)); //修改价格
     }
     state.cartList = {...cart};
     localStorage.setItem('cartList', JSON.stringify(state.cartList));

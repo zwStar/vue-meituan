@@ -18,6 +18,7 @@ const actions = {
   getRestaurant({commit, state}, restaurant_id) {
     getRestaurant({restaurant_id}).then((response) => {
       let poi_info = response.data.data;
+      console.log('vuex poi_info',poi_info)
       commit('RECORD_RESTAURANT', poi_info)
     })
   }

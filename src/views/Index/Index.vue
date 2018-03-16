@@ -4,10 +4,11 @@
       <v-head title_head="美团外卖+">
       </v-head>
       <div class="guide">
-        <router-link to="/location?fromIndex=true" class="location"><i class="iconfont">&#xe604;</i><span
-          class="address">{{address.address}}</span><i
-          class="iconfont">&#xe6d7;</i></router-link>
-        <router-link to="/search" class="search"><i class="iconfont">&#xe7d1;</i><span>请输入商家 商品名</span></router-link>
+        <router-link to="/location?fromIndex=true" class="location"><i class="iconfont">&#xe604;</i>
+          <span class="address">{{address.address}}</span>
+          <i class="iconfont">&#xe6d7;</i>
+        </router-link>
+        <router-link to="/search" class="search"><i class="iconfont">&#xe7d1;</i><span class="search_text">请输入商家 商品名</span></router-link>
       </div>
       <!--导航轮播部分-->
       <mt-nav></mt-nav>
@@ -17,12 +18,12 @@
         <h2>附近商家</h2>
         <span class="line"></span>
       </div>
-      <nearbyShops :indexScroll="indexScroll" :scrollWrapper="scrollWrapper"></nearbyShops>
+      <nearbyShops :scrollWrapper="scrollWrapper"></nearbyShops>
     </div>
-    <!--购物车-->
+    <!--小购物车-->
     <little-cart>
     </little-cart>
-    <!--底部的主页 订单 我的-->
+    <!--主页底部-->
     <v-bottom></v-bottom>
   </div>
 </template>
@@ -33,13 +34,9 @@
   import mtNav from './nav.vue'
   import {mapGetters} from 'vuex'
 
-  import '@/style/swiper.min.css'
-  import '@/plugins/swiper.min.js'
-
   export default {
     data() {
       return {
-        indexScroll: null,    //首页的better-scroll实例对象 传递给自组件
         scrollWrapper: null,    //存放 scrollWrapper这个DOM元素 用于等附近商家列表加载后 初始化better-scroll
       }
     },
@@ -74,12 +71,10 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../../style/mixin.scss";
-
   .wrapper {
     height: 100%;
     overflow: hidden;
   }
-
   .home {
     padding-bottom: 1rem;
     .guide {
@@ -89,7 +84,6 @@
         align-items: center;
         border-radius: 0.4rem;
         @include px2rem(height, 57);
-
       }
       .location {
         @include px2rem(width, 250);
@@ -145,9 +139,9 @@
         border-bottom: 1px solid #000;
       }
       h2 {
-        font-size: 0.6rem;
+        font-size: 0.5rem;
         display: inline-block;
-        margin: 0 0.2rem;
+        margin: 0.2rem;
       }
     }
   }

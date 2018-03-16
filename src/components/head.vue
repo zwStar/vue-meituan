@@ -1,17 +1,23 @@
 <template>
-  <div id="head" :style="{color:color,background:bgColor}">
-    <span class="goBack" v-if="goBack" @click="fun_goBack()"><i class="iconfont">&#xe61c;</i></span>
+  <header id="head" :style="{color:color,background:bgColor}">
+    <span class="goBack" v-if="goBack" @click="funGoBack()"><i class="iconfont">&#xe61c;</i></span>
     <span class="title">{{title_head}}</span>
     <span class="more" v-if="more"><i class="iconfont">&#xe602;</i></span>
     <slot name="save_address"></slot>
-  </div>
+    <slot name="edit_cart"></slot>
+    <slot name="cancel_edit_cart"></slot>
+  </header>
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
 
   export default {
     data() {
       return {}
+    },
+    computed: {
+      ...mapGetters(['routerPath'])
     },
     props: {
       goBack: {
@@ -28,14 +34,18 @@
       more: {
         default: false
       },
-      bgColor:{
-        type:String,
-        default:'#fff'
+      bgColor: {
+        type: String,
+        default: '#fff'
       }
     },
     methods: {
-      fun_goBack() {
-        window.history.go(-1);
+      funGoBack() {
+        let pathList = this.routerPath;
+        pathList.pop();       //需要pop 2次才取出上一个路由路径
+        let path = pathList.pop();
+        this.$store.dispatch('savePath', pathList);
+        this.$router.push({path});
       }
     }
   }
@@ -44,13 +54,14 @@
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../style/common.scss";
   @import "../style/mixin.scss";
+
   #head {
-    position:relative;
+    position: relative;
     text-align: center;
     @include px2rem(line-height, 80);
-    padding:0 0.2rem;
+    padding: 0 0.2rem;
     .goBack, .more {
-      position:absolute;
+      position: absolute;
       i {
         font-size: 0.7rem;
       }

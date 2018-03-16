@@ -1,7 +1,7 @@
 <template>
   <div id="scan_container">
     <header>
-      <i class="iconfont pay_icon" style="color:#2aaf90;" v-html="payTypeObj[payType]['icon']"></i>
+      <i class="iconfont pay_icon" :style="{color:payTypeObj[payType]['color']}" v-html="payTypeObj[payType]['icon']"></i>
       <span class="pay_way_name">{{payTypeObj[payType]['name']}}</span>
     </header>
     <div class="qrcode_container">
@@ -30,13 +30,16 @@
       return {
         payTypeObj: {
           1: {
-            icon: '&#xe62a;',
-            name: '微信支付'
+            icon: '&#xe60f;',
+            color:'#3d91e4',
+            name: '支付宝支付'
           },
           2: {
-            icon: '&#xe60f;',
-            name: '支付宝支付'
-          }
+            icon: '&#xe62a;',
+            color:'#2aaf90',
+            name: '微信支付'
+          },
+
         },
         qrcode: null,
         timer:null
@@ -49,19 +52,22 @@
       },
       listenStatus(outTradeNo) {
         clearInterval(this.timer);
+        let _this = this;
         this.timer = setInterval(() => {
           listen_status({outTradeNo}).then((response) => {
             console.log('scan', response)
             if(response.data.status === 1){
-
+              clearInterval(this.timer);
+              _this.$router.push({path:'/order_detail',query:{id:_this.orderData.order_id}})
             }
           })
-        }, 5000);
+        }, 10000);
       }
     },
     props: ['payType', 'orderData'],
     watch: {
       orderData(val) {
+        this.orderData = val;
         if (this.qrcode) {
           this.qrcode.makeCode(val.data.qrcode);
         } else {
@@ -89,11 +95,11 @@
       margin: 0.5rem 0;
       padding-left: 1rem;
       .pay_icon {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
       }
       .pay_way_name {
         font-weight: normal;
-        font-size: 0.8rem;
+        font-size: 0.7rem;
       }
     }
     .qrcode_container {

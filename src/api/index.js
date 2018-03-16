@@ -1,5 +1,6 @@
 import config from '../config'
 import router from '@/router'
+
 const baseURL = config.baseURL;
 console.log(baseURL)
 const axios = require('axios').create({
@@ -13,7 +14,7 @@ const axios = require('axios').create({
     } catch (e) {
       data = {};
     }
-    console.log('data',data)
+    console.log('data', data)
     if (data.status === 401) {
       localStorage.removeItem('mt-username');
       router.push('/login');
@@ -50,4 +51,9 @@ export const _post = (req) => {
 //patch
 export const _put = (req) => {
   return axios({method: 'put', url: `/${req.url}`, data: req.data})
+}
+
+//delete
+export const _delete = (req) => {
+  return axios({method: 'delete', url: `/${req.url}`, data: req.data})
 }

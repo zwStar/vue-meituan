@@ -45,23 +45,17 @@
         <div class="comment_main_part">
           <div>
             <span class="user_name">{{item.user_name}}</span>
-            <span class="comment_time">{{item.comment_time.slice(0,10)}}</span>
+            <span class="comment_time">{{item.comment_time.slice(0, 10)}}</span>
           </div>
           <div class="order_comment_score"><span>评分 <Star :score="item.food_score"></Star></span>
           </div>
-          <p class="comment">{{item.commentData}}</p>
+          <p class="comment">{{item.comment_data}}</p>
           <div class="comment_pics">
             <div v-for="pic in  item.pic_url" @click="show_big_pic_event(pic)">
               <img :src="pic">
             </div>
           </div>
-          <!--<div class="praise_food_tip_container">
-            <span class="give_prise"><i class="iconfont">&#xe607;</i></span>
-            <span class="praise_food_tip" v-for="tip in food_tip_arr(list.praise_food_tip)"
-                  v-if="food_tip_arr(list.praise_food_tip).length">{{tip}}</span>
-          </div>-->
           <div class="poi_reply_contents_container" v-if="item.add_comment_list">
-            <!--<p>{{item.add_comment_list[0].desc + item.add_comment_list[0].content}}</p>-->
           </div>
         </div>
       </section>
@@ -75,11 +69,18 @@
         </div>
       </div>
     </transition>
+
+    <!--加载更多-->
+    <div class="loading_wrap" ref="loading">
+      <span class="loading" v-show="loading && !noMore">正在努力加载中…</span>
+      <span class="no_more" v-show="noMore">已经到底了</span>
+    </div>
   </div>
 </template>
 
 <script>
-  import {restaurantComment,getRestaurant} from '@/api/restaurant'
+  import {restaurantComment, getRestaurant} from '@/api/restaurant'
+
   export default {
     data() {
       return {
@@ -87,22 +88,51 @@
         comment_score_type: {0: '全部', 1: '好评', 5: '有图好评'},
         big_pic_url: '',   //大图url
         show_big_pic: false,  //显示大图
-        poi_info:{}
+        poi_info: {},
+        noMore: false,
+        loading: false,
+        offset: 0
       }
     },
     mounted() {
-      let restaurant_id = this.$route.query.id;
-      restaurantComment({restaurant_id}).then((response)=>{
-        console.log('comment',response)
+      let _this = this;
+      this.restaurant_id = this.$route.query.id;
+      let fetching = false;
+      window.onscroll = function (event) {
+        let scrolltop = document.documentElement.scrollTop || document.body.scrollTop;
+        let clientHeight = document.body.clientHeight
+        let height = document.getElementById('store').offsetHeight;
+        if (scrolltop + clientHeight > height - 30) {
+          if (!fetching && !_this.noMore) {
+            fetching = true;
+            _this.loading = true;
+            _this.offset++;
+            _this.fetchComment(function (response) {
+              if (!response.data.data.length)
+                _this.noMore = true;
+              else {
+                _this.commentData = _this.commentData.concat(response.data.data);
+                fetching = false;
+              }
+              _this.loading = false;
+            })
+          }
+        }
+      }
+      this.fetchComment((response) => {
         this.commentData = response.data.data;
       })
       //根据商店id获取店家信息
-      getRestaurant({restaurant_id}).then((response) => {
-        console.log('res',response)
+      getRestaurant({restaurant_id: this.restaurant_id}).then((response) => {
         this.poi_info = response.data.data;
       })
     },
     methods: {
+      fetchComment(callback) {
+        restaurantComment({restaurant_id: this.restaurant_id, offset: this.offset, limit: 5}).then((response) => {
+          callback(response)
+        })
+      },
       date_format(time_stamp) {    //因为后端数据是时间戳 这里需要进行格式化
         let date = new Date(time_stamp * 1000);
         return date.getFullYear() + '.' + date.getMonth() + '.' + date.getDay()
@@ -318,6 +348,10 @@
           height: 100%;
         }
       }
+    }
+    /*loading部分*/
+    .loading_wrap {
+      @include loading;
     }
   }
 </style>

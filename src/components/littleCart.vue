@@ -43,7 +43,7 @@
     }
     .num {
       border-radius: 50%;
-      font-size: 0.3rem;
+      font-size: 0.30rem;
       color: #fff;
       text-align: center;
       position: absolute;

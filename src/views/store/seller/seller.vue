@@ -2,7 +2,7 @@
   <div class="seller-info">
     <div class="position container">
       <span class="location-icon icon"><i class="iconfont">&#xe605;</i></span>
-      <p class="address describe">{{sellerInfo.address}}</p>
+      <p class="address describe">{{poi_info.address}}</p>
       <span class="phone-icon icon"><i class="iconfont">&#xe620;</i></span>
     </div>
     <div class="safe-file container">
@@ -13,16 +13,16 @@
 
     <div class="delivery-info container">
       <span class="icon"><i class="iconfont">&#xe603;</i></span>
-      <span class="describe">配送服务:{{sellerInfo.app_delivery_tip}}</span>
+      <span class="describe">配送服务:由 商家 提供配送服务</span>
     </div>
     <div class="delivery-time container">
       <span class="icon"><i class="iconfont">&#xe62f;</i></span>
-      <span class="describe">配送时间: {{sellerInfo.shipping_time}}</span>
+      <span class="describe">配送时间: {{poi_info.shopping_time_start}} - {{poi_info.shopping_time_end}}</span>
     </div>
 
-    <div class="notification container" v-if="sellerInfo.bulletin">
+    <div class="notification container" v-if="poi_info.bulletin">
       <span class="icon"><i class="iconfont">&#xe6aa;</i></span>
-      <span class="describe">{{sellerInfo.bulletin}}</span>
+      <span class="describe">{{poi_info.bulletin}}</span>
       <span class="entry-icon icon"><i class="iconfont">&#xe63f;</i></span>
     </div>
     <div class="poi_service container">
@@ -32,7 +32,7 @@
     </div>
     <div class="discount">
       <ul>
-        <li v-for="discount in sellerInfo.discounts2">
+        <li v-for="discount in poi_info.discounts2">
           <span class="active-icon" :style="{backgroundImage:'url('+ discount.icon_url +')'}"></span>
           <span>{{discount.info}}</span>
         </li>
@@ -42,13 +42,15 @@
 </template>
 
 <script>
+  import {mapGetters} from 'vuex'
   export default {
     data(){
       return {
         sellerInfo:[]
       }
     },
-    mounted(){
+    computed:{
+      ...mapGetters(['poi_info'])
     }
   }
 </script>

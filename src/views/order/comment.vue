@@ -26,7 +26,8 @@
       </div>
       <Star @makeScore="setFoodScore"></Star>
       <div class="food_comment">
-        <textarea class="comment_data" style="resize:none" placeholder="亲，菜品口味如何，对包装服务等还满意吗？" @input="input($event);"></textarea>
+        <textarea class="comment_data" v-model="commentData" style="resize:none" placeholder="亲，菜品口味如何，对包装服务等还满意吗？"
+                  @input="input($event);"></textarea>
         <span class="tip">至少输入8个字</span>
       </div>
       <div class="upload_picture_container">
@@ -45,7 +46,7 @@
       <span class="selector select" v-else><i class="iconfont" @click="hiddenName = !hiddenName;">&#xe6da;</i></span>
       <h4>匿名评价</h4>
     </div>
-    <div class="submit">
+    <div class="submit" :class="{active:satisfySubmit}" @click="submit()">
       <span>提交</span>
     </div>
   </div>
@@ -53,6 +54,7 @@
 
 <script>
   import Star from './star.vue'
+  import {makeComment} from '@/api/order'
 
   export default {
     data() {
@@ -60,18 +62,29 @@
         deliveryScore: 0,
         foodScore: 0,
         hiddenName: false,
-        commentValueLength:0
+        commentValueLength: 0,
+        satisfySubmit: false,
+        commentData:''
       }
     },
     methods: {
       setDeliveryScore(score) {
-        this.deliveryScore = socre;
+        this.deliveryScore = score;
       },
       setFoodScore(score) {
         this.foodScore = score;
       },
-      input($event){
+      input($event) {
         this.commentValueLength = $event.target.value.length;
+        this.satisfySubmit = this.commentValueLength >= 8 ? true : false
+      },
+      submit() {
+        console.log('配送评分',this.deliveryScore)
+        console.log('食物评分',this.foodScore)
+        console.log('评论内容',this.commentData)
+      /*  makeComment({order_id:1,commentData:this.commentData,foodScore:this.foodScore,deliveryScore:this.deliveryScore}).then((response) => {
+          console.log('comment_result', response)
+        })*/
       }
     },
     components: {
@@ -220,6 +233,9 @@
       background: #cbcbcb;
       @include px2rem(line-height, 95);
       text-align: center;
+      &.active {
+        background: $mtYellow;
+      }
       span {
         color: #fff;
         font-size: 0.5rem;

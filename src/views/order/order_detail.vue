@@ -39,8 +39,8 @@
         </div>
       </div>
       <div class="total_price border_top">
-        <span class="total_price ">总计￥{{orderData.total_price}} </span><span class="discount_price">优惠￥0</span><span
-        class="pay_price"> 实付 <strong>￥{{orderData.total_price}}</strong></span>
+        <span class="total_price ">总计￥{{orderData.total_price.toFixed(2)}} </span><span class="discount_price">优惠￥0</span><span
+        class="pay_price"> 实付 <strong>￥{{orderData.total_price.toFixed(2)}}</strong></span>
       </div>
       <div class="call_seller_wrap border_top">
         <span>联系商家</span>
@@ -95,7 +95,9 @@
         statusDesc: '',
         restaurantInfo: {},
         foods: [],
-        orderData:{}
+        orderData:{
+          total_price:0
+        }
       }
     },
     created() {

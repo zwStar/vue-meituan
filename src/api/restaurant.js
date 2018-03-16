@@ -47,7 +47,8 @@ export const search_restaurant = (data) => {
 //获取评论
 export const restaurantComment = (data) => {
   let req = {
-    url: `v1/comment/${data.restaurant_id}`
+    url: 'v1/comment',
+    data
   };
   return _get(req);
 }

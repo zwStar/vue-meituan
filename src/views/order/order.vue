@@ -10,6 +10,9 @@
         <span class="toLogin">登录/注册</span>
       </router-link>
     </div>
+    <div class="no_order" v-else-if="noOrder">
+      <span>购物车空空如也，快去购物吧！</span>
+    </div>
     <article v-else>
       <router-link v-for="list in ordersList" :key="list.id" tag="section" :to="'/order_detail?id='+ list.id">
         <div class="title">
@@ -49,7 +52,8 @@
     data() {
       return {
         username: null,
-        ordersList: []
+        ordersList: [],
+        noOrder: false
       }
     },
     created() {
@@ -58,6 +62,11 @@
       if (this.username) {
         orders().then((response) => {
           this.ordersList = response.data.data;
+          if (!this.ordersList.length) {
+            this.noOrder = true;
+          } else {
+            this.noOrder = false;
+          }
           console.log('orderList', this.ordersList)
         })
       }
@@ -101,11 +110,24 @@
       }
     }
 
+    .no_order {
+      width:100%;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      text-align: center;
+      transform: translate(-50%, -50%);
+      span{
+        font-size:0.4rem;
+
+      }
+    }
+
     article {
       section {
         background: #fff;
-        margin:0.3rem 0;
-        padding:0.2rem 0;
+        margin: 0.3rem 0;
+        padding: 0.2rem 0;
         .title {
           display: flex;
           align-items: center;
@@ -158,7 +180,7 @@
           }
           .price_wrap {
             margin: 0.3rem;
-              font-size: 0.3rem;
+            font-size: 0.3rem;
             text-align: right;
           }
         }
