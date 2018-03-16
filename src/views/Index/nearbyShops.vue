@@ -153,20 +153,44 @@
             _this.listenScroll();
           })
         })
-      }
-    },
-    mounted() {
-      if (this.$route.path === '/category') {
-        if (this.address.lat && this.address.lng) {
+      },
+      initData(value) {
+        console.log('value', value)
+        let {lat, lng} = value.address;
+        if (lat && lng) {
+          this.shopLists = [];
           this.firstFetch();
         } else {
-          this.$store.dispatch('location');
+//          this.$store.dispatch('location');
         }
       }
     },
+    created() {
+      let {lat, lng} = this.address;
+      if (lat && lng) {
+        this.shopLists = [];
+        this.firstFetch();
+      } else {
+        this.$store.dispatch('location');
+      }
+      /* if (this.$route.path === '/category') {
+         if (this.address.lat && this.address.lng) {
+           this.firstFetch();
+         } else {
+           this.$store.dispatch('location');
+         }
+       }*/
+    },
     watch: {
-      locationReady(boolean) {
+      /*locationReady(boolean) {
         if (boolean) {
+          this.firstFetch();
+        }
+      }*/
+      address(value) {    //地址发生变化，重新获取商家
+        let {lat, lng} = value;
+        if (lat && lng) {
+          this.shopLists = [];
           this.firstFetch();
         }
       }

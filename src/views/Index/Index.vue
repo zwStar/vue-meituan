@@ -18,7 +18,7 @@
         <h2>附近商家</h2>
         <span class="line"></span>
       </div>
-      <nearbyShops :scrollWrapper="scrollWrapper"></nearbyShops>
+      <nearbyShops :scrollWrapper="scrollWrapper" v-if="locationReady"></nearbyShops>
     </div>
     <!--小购物车-->
     <little-cart>
@@ -41,17 +41,24 @@
       }
     },
     computed: {
-      ...mapGetters(['address'])
+      ...mapGetters(['address','locationReady'])
     },
     created() {
-      let address = this.$route.query.address;          //如果query中有定位位置 就不用获取当前定位
+  /*    let address = this.$route.query.address;          //如果query中有定位位置 就不用获取当前定位
       if (address) {
         let lat = this.$route.query.lat;    //获取纬度
         let lng = this.$route.query.lng;    //获取经度
         this.$store.dispatch('recordAddress',{address, lng, lat}); //保存title 和 经纬度到VUEX中
       } else {        //否则定位当前位置
-        this.getLocation();   //定位
-      }
+
+      }*/
+
+     let {lat,lng} =  this.address;
+     if(lat && lng){      //如果没有定位 进行定位
+
+     }else{
+       this.getLocation();   //定位
+     }
     },
     methods: {
       getLocation() { //获取当前定位
@@ -65,6 +72,11 @@
       nearbyShops,
       mtNav,
       littleCart
+    },
+    watch:{
+      locationReady(){
+
+      }
     }
   }
 </script>

@@ -20,15 +20,18 @@ const getters = {
 }
 
 const actions = {
-  location({commit, state}, products) {
+  clearAddress({commit, state}) {
+    commit(types.CLEAR_ADDRESS);
+  },
+  location({commit, state}) {
     location().then((response) => {
       let data = response.data.data;
       commit(types.RECORD_ADDRESS, {address: data.address, ...data.location}) //保存title 和 经纬度到VUEX中
       commit(types.LOCATION_READY, true);    //定位完成 拉取商店
     })
   },
-  recordAddress({commit}, {address, location}) {
-    commit(types.RECORD_ADDRESS, {address, ...location}) //保存title 和 经纬度到VUEX中
+  recordAddress({commit}, address) {
+    commit(types.RECORD_ADDRESS, address) //保存title 和 经纬度到VUEX中
     commit(types.LOCATION_READY, true);    //定位完成 拉取商店
   },
   locationReady({commit}, boolean) {
@@ -40,8 +43,11 @@ const actions = {
 }
 
 const mutations = {
+  [types.CLEAR_ADDRESS](state) {
+    let address = {address: '定位中...', lat: '', lng: ''}
+    state.address = {...address};
+  },
   [types.RECORD_ADDRESS](state, address) {
-    console.log('vuex',address);
     state.address = {...address}
   },
   //定位完成拉取附近餐馆
@@ -50,7 +56,7 @@ const mutations = {
   },
   [types.RECORD_DELIVERY_ADDRESS](state, address) {
     state.deliveryAddress = {...address};
-    console.log('state.deliveryAddress',state.deliveryAddress)
+    console.log('state.deliveryAddress', state.deliveryAddress)
   }
 }
 

@@ -18,7 +18,6 @@
 
 <script>
   import {suggestion} from '@/api/location'
-  import {mapMutations} from 'vuex'
   import Search from '@/components/search.vue'
 
   export default {
@@ -37,26 +36,28 @@
         suggestion({keyword: val}).then((response) => {
           _this.suggestionLists = response.data.data.data;
           //_this.RECORD_SUGGESTION(result.data.data);
-          localStorage.setItem("suggestionLists", JSON.stringify(response.data.data))
+          //localStorage.setItem("suggestionLists", JSON.stringify(response.data.data))
         })
       },
-      locationNow() {
+      locationNow() {     //定位当前位置
+        this.$store.dispatch('clearAddress');
+        this.$store.dispatch('location');
         this.$router.push('/index');
       },
       selectAddress(item) {
         //如果是首页定位
         if (this.fromIndex) {
-          this.RECORD_ADDRESS({address: item.title, ...item.location}); //保存title 和 经纬度到VUEX中
-          this.$router.push({path: '/index', query: {address: item.title, ...item.location}});
+//          this.RECORD_ADDRESS({address: item.title, ...item.location}); //保存title 和 经纬度到VUEX中
+//          this.$router.push({path: '/index', query: {address: item.title, ...item.location}});
+          this.$store.dispatch('clearAddress');
+          this.$store.dispatch('recordAddress', {address: item.title, ...item.location})
+          this.$router.push('/index');
         } else {  //新增收货地址
-          this.RECORD_DELIVERY_ADDRESS(item); //地址信息由vuex管理
+          this.$store.dispatch('recodeDeliveryAddress', item)
+//          this.RECORD_DELIVERY_ADDRESS(item); //地址信息由vuex管理
           this.$router.go(-1);                //返回上一个路由
         }
-      },
-      ...mapMutations([
-        'RECORD_ADDRESS',
-        'RECORD_DELIVERY_ADDRESS'
-      ])
+      }
     },
     mounted() {
       this.fromIndex = this.$route.query.fromIndex ? true : false;
