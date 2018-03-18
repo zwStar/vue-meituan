@@ -4,26 +4,27 @@
     <transition name="fade">
       <article class="cart_list_container" v-show="cartDetail">
         <section class="head">
-          <span>餐盒费3元</span>
+          <span>餐盒费0元</span>
           <span><i class="iconfont">&#xe615;</i><span @click="emptyCart()">清空购物车</span></span>
         </section>
-        <section class="cart_list" v-for="list in  restaurantCartList" :key="list.id">
-          <span>{{list.name}} </span>
-          <span class="price">￥{{ Number((list.price * list.num).toFixed(2))}}</span>
-          <Selector class="seletor" :name="list.name" :food_id="list.id" :price="list.price"></Selector>
+        <section class="cart_list" v-for="item in  restaurantCartList" :key="item.id">
+          <span>{{item.name}} </span>
+          <span class="price">￥{{ Number((item.price * item.num).toFixed(2))}}</span>
+          <Selector :name="item.name" :food_id="item.id" :price="item.price" style="bottom:0.3rem;"></Selector>
         </section>
       </article>
     </transition>
     <!--底部bar-->
     <div class="bottom_bar">
       <div class="left" @click="showCartDetail();">
-        <span class="shopping-cart" :class="{cartActive:totalPrice>0}">
+        <span class="shopping_cart" :class="{cartActive:totalPrice>0,ballInCart:ballInCart}" ref="iconCartContainer">
           <i class="iconfont icon-cart">&#xe66b;</i>
           <span class="food-num" v-if="foodNum">{{foodNum}}</span>
       </span>
         <div class="price-container">
           <span class="totalPrice" v-if="totalPrice">￥{{totalPrice}}</span>
-          <span class="deliver-fee">{{shipping_fee_tip}}</span>
+          <span class="deliver-fee" v-if="!shipping_fee">免配送费</span>
+          <span class="deliver-fee" v-else>另需要配送费￥{{shipping_fee}}</span>
         </div>
       </div>
       <span class="submit" v-if="!totalPrice">{{min_price_tip}}</span>
@@ -38,6 +39,7 @@
 
 <script>
   import {mapGetters} from 'vuex'
+  import Selector from '@/components/selector'
 
   export default {
     data() {
@@ -47,12 +49,12 @@
         shipping_fee: 0,
         shipping_fee_tip: 0,
         min_price: 0,
-        min_price_tip: 0,
+        min_price_tip: '￥0起送',
       }
     },
     computed: {
       ...mapGetters([
-        'poi_info', 'cartList'
+        'poi_info', 'cartList', 'ballInCart'
       ]),
       totalPrice() {  //计算购物车总价格
         return this.cartList[this.restaurant_id] ? this.cartList[this.restaurant_id].totalPrice : 0;
@@ -79,7 +81,7 @@
         if (this.cartDetail)    //如果当前是显示状态 再次点击为隐藏
           this.cartDetail = false;
         else      //如果当前是关闭状态   判断购物车有没有商品 如果有才能显示详情
-          this.cartDetail = this.totalPrice > 0 ? true : false;
+          this.cartDetail = this.totalPrice > 0;
       },
       prepareOrder() {    //准备下订单
         let data = {
@@ -97,10 +99,16 @@
     created() {
       this.restaurant_id = this.$route.query.id;
     },
+    mounted() {
+      let _this = this
+      this.$refs['iconCartContainer'].addEventListener('webkitAnimationEnd', () => {
+        _this.$store.dispatch('ballInCart', false);       //触发底部小车晃动
+      })
+    },
     watch: {
       totalPrice(val) { //watch totalPrice 如果为0 就隐藏购物车底部点击后显示出来的商品
         if (val === 0)
-          this.cart_detail = false;
+          this.cartDetail = false;
       },
       poi_info(val) {  //监听vuex的reataurant_info信息
         this.shipping_fee = val.shipping_fee;   //配送信息
@@ -108,6 +116,9 @@
         this.min_price_tip = val.min_price_tip
         this.shipping_fee_tip = val.shipping_fee_tip;
       }
+    },
+    components: {
+      Selector
     }
   }
 </script>
@@ -155,7 +166,8 @@
           margin: 0 0.5rem;
         }
         span:first-child {
-          width: 65%;
+          @include ellipsis;
+          width: 50%;
         }
       }
     }
@@ -171,11 +183,11 @@
       .left {
         flex: 1;
       }
-      .shopping-cart, .submit {
+      .shopping_cart, .submit {
         color: rgb(165, 165, 165);
         @include px2rem(line-height, 90);
       }
-      .shopping-cart {
+      .shopping_cart {
         position: absolute;
         display: inline-block;
         @include px2rem(width, 110);
@@ -196,6 +208,9 @@
             color: #000;
           }
         }
+        &.ballInCart {
+          animation: move .5s ease-in-out;
+        }
         .food-num {
           position: absolute;
           top: 0;
@@ -208,6 +223,7 @@
           background: #fb4e44;
           text-align: center;
         }
+
       }
       .price-container {
         @include px2rem(width, 400);
@@ -253,11 +269,29 @@
     }
   }
 
-  .fade-entry-active, .fade-leave-active {
-    transition: opacity 0.5s;
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .3s
   }
 
-  .fade-entry, .fade-leave-to {
-    opacity: 0;
+  .fade-enter, .fade-leave-active {
+    opacity: 0
+  }
+
+  @keyframes move {
+    0% {
+      transform: scale(1)
+    }
+    25% {
+      transform: scale(1.1)
+    }
+    50% {
+      transform: scale(1.2)
+    }
+    75% {
+      transform: scale(1.1)
+    }
+    100% {
+      transform: scale(1)
+    }
   }
 </style>

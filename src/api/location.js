@@ -1,8 +1,7 @@
-import {_get,_post,_put} from './index'
+import {_get} from './index'
 
 //定位搜索建议
 export const suggestion = (data) =>{
-  console.log('data',data)
   let req = {
     data:data
   };

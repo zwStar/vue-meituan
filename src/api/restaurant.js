@@ -1,4 +1,4 @@
-import {_get, _post, _put} from './index'
+import {_get, _put} from './index'
 
 //获取一定数量的商家
 export const getRestaurants = (data) => {
@@ -27,28 +27,28 @@ export const getFoods = (data) => {
 }
 
 //从购物车减少商品数量
-export const reduce_shopping_cart = (data) => {
+export const reduceShoppingCart = (data) => {
   let req = {
-    data: {...data},
+    data,
     url: 'v1/cart'
   };
   return _put(req);
 }
 
 //输入关键词搜索餐馆
-export const search_restaurant = (data) => {
+export const searchRestaurant = (data) => {
   let req = {
-    data
+    data,
+    url: 'v1/search/restaurant'
   }
-  req.url = 'v1/search/restaurant'
   return _get(req);
 }
 
 //获取评论
 export const restaurantComment = (data) => {
   let req = {
-    url: 'v1/comment',
-    data
+    data,
+    url: 'v1/comment'
   };
   return _get(req);
 }

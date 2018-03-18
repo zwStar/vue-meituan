@@ -50,8 +50,7 @@
           return;
         }
         login({username: this.username, password: this.password}).then((response) => {
-          console.log('login',response)
-          if (response.data.status == 1) {
+          if (response.data.status === 1) {
             localStorage.setItem('mt-username', this.username);
             this.$router.go(-1);
           }

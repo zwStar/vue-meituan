@@ -14,10 +14,6 @@
         default:0
       }
     },
-    data(){
-      return {
-      }
-    },
     computed:{
       on(){
         return  parseInt(this.score);

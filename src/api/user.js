@@ -1,4 +1,4 @@
-import {_get, _post, _put, _delete} from './index'
+import {_get, _post, _delete} from './index'
 
 //获取用户所有地址
 export const getAllAddress = (data) => {
@@ -10,10 +10,10 @@ export const getAllAddress = (data) => {
 }
 
 //获取指定收货地址
-export const getAddress = (data) =>{
+export const getAddress = (data) => {
   let req = {
     data,
-    url:'admin/address'
+    url: 'admin/address'
   }
   return _get(req)
 }
@@ -44,3 +44,24 @@ export const login = (data) => {
   }
   return _post(req);
 }
+
+//获取用户信息
+export const userInfo = (data) => {
+  let req = {
+    data,
+    url: 'admin/user_info'
+  }
+  return _get(req);
+}
+
+//改变用户头像
+export const changeAvatar = (data) => {
+  let req = {
+    data,
+    url: 'admin/change_avatar'
+  }
+  return _post(req)
+}
+
+
+

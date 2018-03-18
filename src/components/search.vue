@@ -3,31 +3,27 @@
     <div class="search_input">
       <i class="iconfont">&#xe7d1;</i><input type="text" autofocus="autofocus" v-model.trim="search_val" :placeholder="placeholder">
     </div>
-    <span class="btn_search" v-bind:class="{ active: search_active }">搜索</span>
+    <span class="btn_search" v-bind:class="{ active: btnActive }">搜索</span>
   </div>
 </template>
 
 <script>
-  import * as api from '../api'
-
   export default {
     props: ["placeholder", "fun_click"],
     data() {
       return {
         search_val: "",
-        search_active: false
+        btnActive: false
       }
     },
     watch: {
       search_val(data) {
         if (data !== "") {
-          this.search_active = true;
+          this.btnActive = true;
           this.fun_click(data);
         }
-
         else {
           this.search_active = false;
-          return;
         }
       }
     }
@@ -58,20 +54,21 @@
         outline: none;
         background: rgba(237, 237, 237, 0.1);
         &::-webkit-input-placeholder {
-          font-size: 0.2rem;
+          font-size: 0.3rem;
         }
       }
     }
     .btn_search {
+      font-size:0.4rem;
       display: inline-block;
       color: #fff;
       background: rgb(145, 145, 145);
       @include px2rem(width, 145);
       text-align: center;
       border-radius: 0.1rem;
-      margin: 0 10px;
+      margin-right:5px;
       &.active {
-        color: rgb(161, 133, 70);
+        color: $mtYellow;
         background: rgb(242, 242, 242);
       }
     }

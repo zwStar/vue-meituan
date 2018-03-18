@@ -3,19 +3,21 @@ import * as types from '../mutation-types'
 
 const state = {
   cartList: {},      //加入购物车列表
+  ballInCart: false
 }
 
 //getters
 const getters = {
-  cartList: state => state.cartList
+  cartList: state => state.cartList,
+  ballInCart: state => state.ballInCart
 }
 
 //actions
 const actions = {
-  addToCart({commit}, {restaurant_id, restaurant_name, restaurant_pic_url, food_id, price, name, foods_pic}) {
+  addCart({commit}, {restaurant_id, restaurant_name, restaurant_pic_url, food_id, price, name, foods_pic}) {
     commit('ADD_CART', {restaurant_id, restaurant_name, restaurant_pic_url, food_id, price, name, foods_pic})
   },
-  reduceToCart({commit}, {restaurant_id, food_id}) {
+  reduceCart({commit}, {restaurant_id, food_id}) {
     commit('REDUCE_CART', {restaurant_id, food_id})
   },
   deleteFood({commit}, {restaurant_id, food_id}) {
@@ -23,6 +25,9 @@ const actions = {
   },
   emptyCart({commit}, {restaurant_id}) {
     commit('EMPTY_CART', {restaurant_id});
+  },
+  ballInCart({commit}, boolean) {
+    commit(types.BALL_IN_CART, boolean);
   }
 }
 
@@ -103,6 +108,10 @@ const mutations = {
     state.cartList = {...cart};
     localStorage.setItem('cartList', JSON.stringify(state.cartList));
   },
+  //小球进入购物车
+  [types.BALL_IN_CART](state, boolean) {
+    state.ballInCart = boolean;
+  }
 }
 
 export default {

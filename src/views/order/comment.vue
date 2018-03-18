@@ -30,11 +30,21 @@
                   @input="input($event);"></textarea>
         <span class="tip">至少输入8个字</span>
       </div>
+
       <div class="upload_picture_container">
-        <div class="upload">
-          <i class="iconfont upload_icon">&#xe782;</i>
+        <div class="uplist_container" v-for="(item,index) in uploadList">
+          <div class="pic">
+            <img :src="item">
+          </div>
+          <div class="delete" @click="deletePic(index)">
+            <i class="iconfont icon_delete">&#xe60d;</i>
+          </div>
         </div>
-        <div class="upload_description">
+        <label class="upload">
+          <i class="iconfont upload_icon">&#xe782;</i>
+          <input id="file" type="file" @change="fileUpload($event)" style="display: none;">
+        </label>
+        <div class="upload_description" v-show="!uploadList.length">
           <h3>上传图片</h3>
           <p>内容丰富的评论有机会成为优质评价哦</p>
         </div>
@@ -49,12 +59,17 @@
     <div class="submit" :class="{active:satisfySubmit}" @click="submit()">
       <span>提交</span>
     </div>
+
+    <Loading v-show="loading"></Loading>
+    <alertTip :text="alertText" :showTip.sync="showTip"></alertTip>
   </div>
 </template>
 
 <script>
   import Star from './star.vue'
-  import {makeComment} from '@/api/order'
+  import {makeComment, orderInfo} from '@/api/order'
+  import {upload_token, upload} from '@/api/upload'
+  import config from '@/config'
 
   export default {
     data() {
@@ -64,7 +79,11 @@
         hiddenName: false,
         commentValueLength: 0,
         satisfySubmit: false,
-        commentData:''
+        commentData: '',
+        uploadList: ["http://p3d0ne50u.bkt.clouddn.com/FhpqzjdxM_FKKyzXxI8QNpprxUsu"],
+        loading: false,
+        alertText: '',      //提示
+        showTip: false
       }
     },
     methods: {
@@ -76,16 +95,56 @@
       },
       input($event) {
         this.commentValueLength = $event.target.value.length;
-        this.satisfySubmit = this.commentValueLength >= 8 ? true : false
+        this.satisfySubmit = this.commentValueLength >= 8;
+      },
+      deletePic(index) {
+        this.uploadList.splice(index, 1);
+      },
+      fileUpload(event) {
+        if (this.uploadList.length >= 3) {      //最多上传3张图片
+          this.alertText = '最多上传3张图片'
+          this.showTip = true;
+          return;
+        }
+
+        this.loading = true;
+        let file = event.target.files[0];
+        upload_token().then((response) => {   //获取上传凭证
+          if (response.data.status === 1) {
+            let data = {token: response.data.uptoken, file}
+            upload(data).then((upResponse) => {     //上传到七牛云
+              this.uploadList.push(config.domain + upResponse.data.key)
+              this.loading = false;
+
+
+            })
+          } else {
+            this.alertText = response.data.message
+            this.showTip = true;
+          }
+        })
       },
       submit() {
-        console.log('配送评分',this.deliveryScore)
-        console.log('食物评分',this.foodScore)
-        console.log('评论内容',this.commentData)
-      /*  makeComment({order_id:1,commentData:this.commentData,foodScore:this.foodScore,deliveryScore:this.deliveryScore}).then((response) => {
+        console.log('配送评分', this.deliveryScore)
+        console.log('食物评分', this.foodScore)
+        console.log('评论内容', this.commentData)
+        makeComment({
+          order_id: 1,
+          commentData: this.commentData,
+          foodScore: this.foodScore,
+          deliveryScore: this.deliveryScore,
+          pic_url: this.uploadList
+        }).then((response) => {
           console.log('comment_result', response)
-        })*/
+        })
       }
+    },
+    created() {
+      let order_id = this.order_id = this.$route.query.order_id;
+      orderInfo({order_id}).then((response) => {
+        console.log('orderInfo response',response)
+        let data = response.data;
+      })
     },
     components: {
       Star
@@ -119,7 +178,6 @@
     }
 
     .deliver_comment {
-
       background: #fff;
       .deliver_info {
         display: flex;
@@ -180,9 +238,42 @@
 
       .upload_picture_container {
         display: flex;
-        margin: 0.25rem 0;
+        margin: 0.3rem 0;
         align-items: center;
+
+        .uplist_container {
+          position: relative;
+          margin-right: 0.2rem;
+          border: 1px solid $mtGrey;
+          .pic {
+            @include px2rem(width, 140);
+            @include px2rem(height, 140);
+            img {
+              width: 100%;
+              height: 100%;
+            }
+          }
+          .delete {
+            position: absolute;
+            right: -10px;
+            top: -10px;
+            @include px2rem(width, 45);
+            @include px2rem(height, 45);
+            text-align: center;
+            border-radius: 50%;
+            background: rgb(255, 76, 69);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            .icon_delete {
+              font-size: 0.35rem;
+              color: #fff;
+            }
+          }
+        }
+
         .upload {
+          display: inline-block;
           margin-right: 0.2rem;
           text-align: center;
           border: 1px solid $mtGrey;
@@ -204,7 +295,7 @@
     }
 
     .hidden_name_comment {
-      margin: 0.3rem 0.5rem;
+      margin: 0.4rem 0.5rem;
       .selector {
         border-radius: 50%;
         display: inline-block;
@@ -229,7 +320,7 @@
     }
 
     .submit {
-      margin: 0.3rem 0;
+      margin-top: 0.3rem;
       background: #cbcbcb;
       @include px2rem(line-height, 95);
       text-align: center;

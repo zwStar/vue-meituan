@@ -1,8 +1,12 @@
 <template>
   <div id="selector">
-    <span class="reduce" @click="reduceToCart()" v-if="food_num"><i class="iconfont icon-reduce">&#xe60d;</i></span>
+    <div class="ball_container" @click="reduceCart()" v-if="food_num">
+      <span class="reduce"><i class="iconfont icon-reduce">&#xe60d;</i></span>
+    </div>
     <span class="number" v-if="food_num">{{food_num}}</span>
-    <span class="add" @click="addToCart($event)"><i class="iconfont icon-add">&#xe600;</i></span>
+    <div class="ball_container" @click="addCart($event)">
+      <span class="add"><i class="iconfont icon-add">&#xe600;</i></span>
+    </div>
   </div>
 </template>
 <script>
@@ -12,24 +16,23 @@
 //    接收父组件传递进来的货物  和 商店 id 和图片url
     props: ['food_id', 'name', 'price', 'pic'],
     methods: {
-      addToCart(event) {
+      addCart(event) {
         let elRight = event.target.getBoundingClientRect().right; //选择器的右边 离左边页面的位置
         let elBottom = event.target.getBoundingClientRect().bottom;   //选择器的底部  离顶部页面的位置
-        let restaurant_name = this.poi_info.name;   //商店名字
-        let restaurant_pic_url = this.poi_info.pic_url; //保存图片
-        this.$store.dispatch('addToCart', {
-          restaurant_id: this.poi_info.id,
+        let {restaurant_name, restaurant_pic_url} = this.poi_info;   //商店名字 图片
+        this.$store.dispatch('addCart', {
           restaurant_name,
           restaurant_pic_url,
+          name: this.name,
+          price: this.price,
           foods_pic: this.pic,
           food_id: this.food_id,
-          price: this.price,
-          name: this.name
+          restaurant_id: this.poi_info.id,
         })
         this.$emit('showDot', elRight, elBottom);
       },
-      reduceToCart(event) {
-        this.$store.dispatch('reduceToCart',{restaurant_id: this.poi_info.id, food_id: this.food_id})
+      reduceCart(event) {
+        this.$store.dispatch('reduceCart', {restaurant_id: this.poi_info.id, food_id: this.food_id})
       }
     },
     computed: {
@@ -48,11 +51,13 @@
   @import "../style/mixin.scss";
 
   #selector {
+    position: absolute;
+    right: 0.2rem;
+    bottom: 0.2rem;
     display: flex;
     justify-content: space-between;
     align-items: center;
     .reduce, .add {
-      /*display: inline-block;*/
       display: flex;
       align-items: center;
       justify-content: center;
@@ -70,13 +75,18 @@
       margin: 0 0.15rem;
       font-size: 0.3rem;
     }
+    .ball_container {
+      padding: 0.1rem;
+    }
     .add {
+      display: flex;
+      align-items: center;
+      justify-content: center;
       background: $mtYellow;
       margin: 0 0.1rem;
     }
     .icon-reduce, .icon-add {
       font-size: 0.55rem;
-      @include px2rem(line-height, 50);
     }
     .icon-reduce {
       color: $mtGrey;

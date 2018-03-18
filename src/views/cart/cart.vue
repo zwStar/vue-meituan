@@ -1,35 +1,39 @@
 <template>
   <div id="cart">
     <v-head title_head="购物车" goBack="true" bgColor="#f4f4f4">
-      <span slot="edit_cart" :style="editStyle" @click="edit();" v-if="!editStatus">编辑</span>
-      <span slot="cancel_edit_cart" :style="editStyle" @click="cancelEdit()" v-else>取消</span>
+      <span slot="edit_cart" class="edit" @click="edit();" v-if="!editStatus">编辑</span>
+      <span slot="cancel_edit_cart" class="edit" @click="cancelEdit()" v-else>取消</span>
     </v-head>
 
-    <article v-for="(list,key) in cartList" :key="key">
+    <article v-for="(item,restaurant_id) in cartList" :key="restaurant_id">
       <section class="title">
-          <span class="delete_selected selected" v-if="editStatus && deleteSelectFood[key]['allSelect'] === true" @click="isAllSelectDelete(key,false)">
+          <span class="delete_selected selected"
+                v-if="editStatus && deleteSelectFood[restaurant_id]['allSelect'] === true"
+                @click="allSelectDelete(restaurant_id,false)">
           <i class="iconfont">&#xe6da;</i>
         </span>
-        <span class="select" v-else-if="editStatus" @click="isAllSelectDelete(key,true)"></span>
+        <span class="select" v-else-if="editStatus" @click="allSelectDelete(restaurant_id,true)"></span>
 
-        <span class="selected" v-if="!editStatus && selectFood[key]['allSelect'] === true" @click="isAllSelect(key,false)">
+        <span class="selected" v-if="!editStatus && selectFood[restaurant_id]['allSelect'] === true"
+              @click="isAllSelect(restaurant_id,false)">
           <i class="iconfont">&#xe6da;</i>
         </span>
-        <span class="select" v-else-if="!editStatus" @click="isAllSelect(key,true)"></span>
+        <span class="select" v-else-if="!editStatus" @click="allSelect(restaurant_id,true)"></span>
         <span class="restaurant_picture">
-          <img :src="list.restaurant_pic_url">
+          <img :src="item.restaurant_pic_url">
         </span>
-        <span class="restaurant_name">{{list.restaurant_name}}</span>
+        <span class="restaurant_name">{{item.restaurant_name}}</span>
       </section>
-      <section v-for="(food,foodKey) in list" v-if="Number(foodKey)" class="main_wrap" :key="foodKey">
+      <section v-for="(food,foodKey) in item" v-if="Number(foodKey)" class="main_wrap" :key="foodKey">
         <div class="foods">
-           <span class="selected delete_selected" v-if="editStatus && deleteSelectFood[key][foodKey] === true"
-                 @click="noSelectDelete(key,foodKey)"><i
+           <span class="selected delete_selected" v-if="editStatus && deleteSelectFood[restaurant_id][foodKey] === true"
+                 @click="cancelSelectDelete(restaurant_id,foodKey)"><i
              class="iconfont">&#xe6da;</i></span>
-          <span class="select delete_select" v-else-if="editStatus" @click="selectDelete(key,foodKey)"></span>
-          <span class="selected" v-if="!editStatus && selectFood[key][foodKey] === true" @click="noSelect(key,foodKey)"><i
+          <span class="select delete_select" v-else-if="editStatus" @click="selectDelete(restaurant_id,foodKey)"></span>
+          <span class="selected" v-if="!editStatus && selectFood[restaurant_id][foodKey] === true"
+                @click="cancelSelect(restaurant_id,foodKey)"><i
             class="iconfont">&#xe6da;</i></span>
-          <span class="select" v-else-if="!editStatus" @click="select(key,foodKey)"></span>
+          <span class="select" v-else-if="!editStatus" @click="select(restaurant_id,foodKey)"></span>
           <div class="picture_wrap"><img :src="food.foods_pic"></div>
           <div class="info">
             <span class="name">{{food.name}}</span>
@@ -40,9 +44,9 @@
           </div>
         </div>
       </section>
-      <div class="bottom">
-        <span class="submit" @click="submit(key)">去结算</span>
-        <span class="total_price">￥{{selectFood[key]['totalPrice'].toFixed(2)}}</span>
+      <div class="bottom"  v-show="!editStatus">
+          <span class="submit" @click="submit(restaurant_id)">去结算</span>
+          <span class="total_price">￥{{selectFood[restaurant_id]['totalPrice'].toFixed(2)}}</span>
       </div>
     </article>
 
@@ -65,86 +69,84 @@
         selectFood: {},
         deleteSelectFood: {},
         editStatus: false,
-        editStyle: 'position:absolute; right:15px;top:2px;font-size: 0.4rem; font-weight: 600;',
       }
     },
     methods: {
-      noSelect(key, foodKey) {
-        this.selectFood[key][foodKey] = false;
-        this.selectFood[key]['allSelect'] = false;
-        let cartFoodData = this.cartList[key][foodKey];  //购物车中 该商品信息
-        this.selectFood[key]['totalPrice'] -= cartFoodData['num'] * cartFoodData['price'];
+      cancelSelect(restaurant_id, foodKey) {    //取消选中商品
+        this.selectFood[restaurant_id][foodKey] = false;    //该商品取消选中
+        this.selectFood[restaurant_id]['allSelect'] = false;    //全选标志为false
+        let cartFoodData = this.cartList[restaurant_id][foodKey];  //购物车中 该商品信息
+        this.selectFood[restaurant_id]['totalPrice'] -= cartFoodData['num'] * cartFoodData['price'];  //修改价格
         this.selectFood = {...this.selectFood};   //拓展运算符使vue更新视图
       },
-      noSelectDelete(key, foodKey) {
-        this.deleteSelectFood[key][foodKey] = false;
-        this.deleteSelectFood[key]['allSelect'] = false;
+      cancelSelectDelete(restaurant_id, foodKey) {  //取消删除选中
+        this.deleteSelectFood[restaurant_id][foodKey] = false;      //该商品删除选中为false
+        this.deleteSelectFood[restaurant_id]['allSelect'] = false;    //全选标志为false
         this.deleteSelectFood = {...this.deleteSelectFood};   //拓展运算符使vue更新视图
       },
-      select(key, foodKey) {
-        this.selectFood[key][foodKey] = true;
-        let cartFoodData = this.cartList[key][foodKey];  //购物车中 该商品信息
-        this.selectFood[key]['totalPrice'] += cartFoodData['num'] * cartFoodData['price'];
+      select(restaurant_id, foodKey) {      //选中商品
+        this.selectFood[restaurant_id][foodKey] = true;   //该商品选中置true
+        let cartFoodData = this.cartList[restaurant_id][foodKey];  //购物车中 该商品信息
+        this.selectFood[restaurant_id]['totalPrice'] += cartFoodData['num'] * cartFoodData['price'];  //修改价格
 
         //判读是否全选
-        let newObj = {...this.selectFood[key]};
-        delete newObj.allSelect;
-        let values = Object.values(newObj);
-        let noAllSelect = values.some((el) => {
-          if (el === false)
-            return true;
-        })
-        this.selectFood[key]['allSelect'] = noAllSelect === true ? false : true;
+        let newObj = {...this.selectFood[restaurant_id]};
+        let allSelect = this.isAllSelect(this.deleteSelectFood, restaurant_id);
+        this.selectFood[restaurant_id]['allSelect'] = allSelect !== true;
         this.selectFood = {...this.selectFood};   //拓展运算符使vue更新视图
       },
-      selectDelete(key, foodKey) {
-        this.deleteSelectFood[key][foodKey] = true;
+      selectDelete(restaurant_id, foodKey) {  //选中删除商品
+        this.deleteSelectFood[restaurant_id][foodKey] = true; //该商品选中置为true
         //判读是否全选
-        let newObj = {...this.deleteSelectFood[key]};
+        let newObj = {...this.deleteSelectFood[restaurant_id]};
+        let allSelect = this.isAllSelect(this.deleteSelectFood, restaurant_id);
+        this.deleteSelectFood[restaurant_id]['allSelect'] = allSelect !== true;
+        this.deleteSelectFood = {...this.deleteSelectFood};   //拓展运算符使vue更新视图
+      },
+      isAllSelect(newObj, restaurant_id) {      //判断商品是否全选中了 如果全选中那么商家头像左边的按钮对应选中
         delete newObj.allSelect;
         let values = Object.values(newObj);
-        let noAllSelect = values.some((el) => {
+        let allSelect = values.some((el) => {
           if (el === false)
             return true;
         })
-        this.deleteSelectFood[key]['allSelect'] = noAllSelect === true ? false : true;
-        this.deleteSelectFood = {...this.deleteSelectFood};   //拓展运算符使vue更新视图
+        return allSelect;
+
       },
-      isAllSelect(key, boolean) {
-        this.selectFood[key]['allSelect'] = boolean;
-        Object.keys(this.selectFood[key]).forEach(el => {
+      allSelect(restaurant_id, boolean) {     //全选
+        this.selectFood[restaurant_id]['allSelect'] = boolean;  //全选标志
+        Object.keys(this.selectFood[restaurant_id]).forEach(el => { //每个商品都选中
           if (Number(el))
-            this.selectFood[key][el] = boolean;
+            this.selectFood[restaurant_id][el] = boolean;
         })
 
-        if (boolean) {
-          console.log('this.cartList[key]', this.cartList[key])
-          let restaurant = this.cartList[key];
+        if (boolean) {    //如果是选中 计算价格
+          let restaurant = this.cartList[restaurant_id];
           Object.keys(restaurant).forEach(el => {
             if (Number(el)) {
-              this.selectFood[key]['totalPrice'] += restaurant[el]['num'] * restaurant[el]['price'];
+              this.selectFood[restaurant_id]['totalPrice'] += restaurant[el]['num'] * restaurant[el]['price'];
             }
           });
-        } else {
-          this.selectFood[key]['totalPrice'] = 0;
+        } else {    //取消全选
+          this.selectFood[restaurant_id]['totalPrice'] = 0;
         }
         this.selectFood = {...this.selectFood};   //拓展运算符使vue更新视图
       },
-      isAllSelectDelete(key,boolean){
-        this.deleteSelectFood[key]['allSelect'] = boolean;
-        Object.keys(this.deleteSelectFood[key]).forEach(el => {
+      allSelectDelete(restaurant_id, boolean) {   //删除状态下的全选
+        this.deleteSelectFood[restaurant_id]['allSelect'] = boolean;
+        Object.keys(this.deleteSelectFood[restaurant_id]).forEach(el => {
           if (Number(el))
-            this.deleteSelectFood[key][el] = boolean;
+            this.deleteSelectFood[restaurant_id][el] = boolean;
         })
         this.deleteSelectFood = {...this.deleteSelectFood};   //拓展运算符使vue更新视图
       },
-      submit(restaurant_id) {
+      submit(restaurant_id) { //提交订单
         let restaurant = this.selectFood[restaurant_id];    //选中食物的餐馆
         let foods = {
           totalPrice: 0,
           totalNum: 0
         };
-        Object.keys(restaurant).forEach(el => {
+        Object.keys(restaurant).forEach(el => {   //计算价格
           if (Number(el) && restaurant[el]) {
             let food = this.cartList[restaurant_id][el];
             foods[el] = food;
@@ -166,38 +168,36 @@
         this.editStatus = false;
       },
       deleteCart() {       //删除购物车
-        console.log(this.deleteSelectFood);
         Object.keys(this.deleteSelectFood).forEach((restaurant_id) => {
-          let restaurant = this.deleteSelectFood[restaurant_id];
-          Object.keys(restaurant).forEach(food_id => {
-            if (Number(food_id) && restaurant[food_id]) {
+          let restaurant = this.deleteSelectFood[restaurant_id];  //商店
+          Object.keys(restaurant).forEach(food_id => {    //要删除的商品
+            if (Number(food_id) && restaurant[food_id]) {   //删除购物车数据
               this.$store.dispatch('deleteFood', {restaurant_id, food_id})
             }
+            this.allSelect(restaurant_id, false);      //重置选中列表为false
             delete restaurant[food_id];
           })
         })
       }
     },
     created() {
-//      this.$store.dispatch('emptyCart', {restaurant_id: 22});
-      Object.keys(this.cartList).forEach(key => {  //初始化选中列表
-        console.log('cartList', this.cartList)
-        this.selectFood[key] = {
+      console.log('cartList', this.cartList)
+      Object.keys(this.cartList).forEach(restaurant_id => {  //初始化选中列表
+        this.selectFood[restaurant_id] = {
           allSelect: true,
           totalPrice: 0
         };
-        this.deleteSelectFood[key] = {
+        this.deleteSelectFood[restaurant_id] = {
           allSelect: false
         }
-        let restaurant = this.cartList[key];
+        let restaurant = this.cartList[restaurant_id];
         Object.keys(restaurant).forEach(data => {
           if (Number(data)) {
-            this.deleteSelectFood[key][data] = false;
-            this.selectFood[key][data] = true;
-            this.selectFood[key]['totalPrice'] += Number(restaurant[data]['price']) * Number(restaurant[data]['num']);
+            this.deleteSelectFood[restaurant_id][data] = false;
+            this.selectFood[restaurant_id][data] = true;
+            this.selectFood[restaurant_id]['totalPrice'] += Number(restaurant[data]['price']) * Number(restaurant[data]['num']);
           }
         })
-        console.log()
       });
     }
   }
@@ -207,6 +207,13 @@
   @import "../../style/mixin";
 
   #cart {
+    .edit {
+      position: absolute;
+      right: 15px;
+      top: 2px;
+      font-size: 0.4rem;
+      font-weight: 600;
+    }
     .title {
       padding: 0.2rem;
       .restaurant_name {
@@ -317,11 +324,13 @@
       right: 0;
       text-align: center;
       @include px2rem(line-height, 68);
-      background: #333;
+      background: #c54144;
       .delete_text {
         color: #fff;
         font-size: 0.4rem;
       }
     }
   }
+
+
 </style>

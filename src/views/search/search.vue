@@ -4,7 +4,7 @@
     <Search placeholder="请输入商品 店铺名" title_head="选择收货地址" :fun_click="fun_click"></Search>
     <div class="lists">
       <ul>
-        <router-link v-for="item in search_result" :to="{path:'store',query:{id:item.id}}" :key="index" tag="li">
+        <router-link v-for="(item,index) in searchList" :to="{path:'store',query:{id:item.id}}" :key="index" tag="li">
           <span class="avatar"><img :src="item.pic_url"></span>
           <span class="name" v-html="high_light(item.name)"></span>
           <span class="delivery_time">{{item.delivery_time_tip}}送达</span>
@@ -16,7 +16,6 @@
 </template>
 
 <script>
-  import {mapMutations} from 'vuex'
   import {search_restaurant} from '@/api/restaurant'
   import Search from '@/components/search.vue'
 
@@ -26,24 +25,18 @@
     },
     data() {
       return {
-        keyword: "",
-        search_active: false,
-        search_result: []
+        keyword: '',
+        searchList: []
       }
     },
     methods: {
       fun_click(val) {
         this.keyword = val;
         search_restaurant({keyword: val}).then((response) => {
-          this.search_result = response.data.data;
-          console.log('search_result', this.search_result)
+          this.searchList = response.data.data;
         })
       },
-      ...mapMutations([
-        'RECORD_ADDRESS'
-      ]),
       high_light: function (value) {
-        console.log('keyword', this.keyword)
         let a = value.replace(this.keyword, `<span style="color:#ffd161;">${this.keyword}</span>`)
         return a;
       }
@@ -53,7 +46,6 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../../style/mixin";
-
   .search_foods {
     .lists {
       ul {

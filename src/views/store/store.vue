@@ -9,7 +9,7 @@
         <div class="logo">
           <img :src="poi_info.pic_url">
         </div>
-        <div class="deliver-info">
+        <div class="deliver_info">
           <span>{{poi_info.min_price_tip}}  | {{poi_info.shipping_fee_tip}} | {{poi_info.delivery_time_tip}}</span>
           <p><i class="iconfont icon-broadcast">&#xe62d;</i>{{poi_info.bulletin}}</p>
         </div>
@@ -49,8 +49,8 @@
 
   import {getRestaurant, getFoods} from '@/api/restaurant'
   import Bottom from './menu/bottom.vue'
-  import StoreDetail from './store-detail.vue'
-  import {mapGetters, mapMutations} from 'vuex'
+  import StoreDetail from './storeDetail.vue'
+  import {mapGetters} from 'vuex'
 
   export default {
     components: {
@@ -64,9 +64,7 @@
       }
     },
     computed: {
-      ...mapGetters([
-        'cartList', 'poi_info'
-      ]),
+      ...mapGetters(['poi_info']),
       discountsLength() { //打折列表数量
         return this.poi_info.discounts2 ? this.poi_info.discounts2.length : 0;
       }
@@ -81,7 +79,6 @@
       //根据路由query获得商店id
       let restaurant_id = this.$route.query.id;
       this.restaurant_id = restaurant_id;
-      localStorage.setItem('restaurant_id', restaurant_id);
       //根据商店id获取店家信息
       this.$store.dispatch('getRestaurant', restaurant_id);
       //活动列表不停滚动播放
@@ -105,10 +102,10 @@
         background: rgb(51, 51, 51);
       }
       .store-info {
-        padding-bottom: 0.1rem;
-        border-bottom: 1px solid $mtGrey;
         display: flex;
         margin-top: 0.2rem;
+        padding-bottom: 0.2rem;
+        border-bottom: 1px solid $mtGrey;
         .logo {
           @include px2rem(width, 82);
           @include px2rem(height, 82);
@@ -118,15 +115,19 @@
             height: 100%;
           }
         }
-        .deliver-info {
+        .deliver_info {
           flex: 1;
+          display: flex;
+          flex-direction: column;
+          height: 100%;
           span, p {
             color: $mtGrey;
             font-size: 0.35rem;
+            margin-top: 0.1rem;
           }
           p {
             @include px2rem(width, 400);
-            margin-top: 0.1rem;
+
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;

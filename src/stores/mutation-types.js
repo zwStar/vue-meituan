@@ -1,5 +1,6 @@
 export const ADD_CART = 'ADD_CART'    //加入购物车
 export const EMPTY_CART = 'EMPTY_CART'  //清空购物车
+export const BALL_IN_CART = 'BALL_IN_CART'  //小球进入购物车
 export const RECORD_ADDRESS = 'RECORD_ADDRESS'
 export const CLEAR_ADDRESS = 'CLEAR_ADDRESS'    //重新定位时 清空原来定位信息
 export const RECORD_SUGGESTION = 'RECORD_SUGGESTION'

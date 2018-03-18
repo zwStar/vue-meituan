@@ -2,46 +2,47 @@
   <div id="home">
     <v-head title_head="我的" goBack="true"></v-head>
     <div id="userInfo">
-      <div class="avatar">
-        <img src="../../assets/default-avatar.png">
-      </div>
+      <label class="avatar" for="file">
+        <img :src="avatar">
+        <input id="file" type="file" @change="fileUpload($event)" style="display: none;">
+      </label>
       <router-link v-if="!username" class="login" to="/login">登录/注册</router-link>
       <span v-else class="username">{{username}}</span>
     </div>
     <div class="myFunction">
       <ul>
-        <li>
+        <router-link tag="li" to="/home/collection">
           <div class="imgWrap">
             <img src="http://p1.meituan.net/50.0.100/xianfu/9c1388ba5fbb367c1a93996f39c2fba94506.jpg">
           </div>
           <span>我的收藏</span>
-        </li>
-        <li>
+        </router-link>
+        <router-link tag="li" to="/home/footprint">
           <div class="imgWrap">
             <img src="http://p1.meituan.net/50.0.100/xianfu/7ad7da19bfadd5e6081b7606025214254582.jpg">
           </div>
           <span>我的足迹</span>
-        </li>
-        <li>
+        </router-link>
+        <router-link tag="li" to="/home/comment">
           <div class="imgWrap">
             <img src="http://p0.meituan.net/50.0.100/xianfu/5d02f44df0f9f26ea0eca95957824bae4444.jpg">
           </div>
           <span>我的评价</span>
-        </li>
-        <li>
+        </router-link>
+        <router-link tag="li" to="/home/friend">
           <div class="imgWrap">
             <img src="http://p1.meituan.net/50.0.100/xianfu/bbae84a587711ac12badb9453406ad694851.jpg">
           </div>
           <span>我的好友</span>
-        </li>
+        </router-link>
       </ul>
       <ul>
-        <li>
+        <router-link tag="li" to="/home/thank">
           <div class="imgWrap">
             <img src="http://p1.meituan.net/50.0.100/xianfu/5c1bf832376403ca2ab22b8d8748e0fd5479.jpg">
           </div>
           <span>答谢记录</span>
-        </li>
+        </router-link>
         <router-link to="/home/address" tag="li">
           <div class="imgWrap">
             <img src="http://p0.meituan.net/50.0.100/xianfu/a813bff1813024b05ff45422deac24bd4276.jpg">
@@ -110,18 +111,57 @@
     </div>
     <v-bottom></v-bottom>
     <router-view></router-view>
+    <Loading v-show="loading"></Loading>
+    <alertTip :text="alertText" :showTip.sync="showTip"></alertTip>
   </div>
 </template>
 
 <script>
+  import {userInfo, changeAvatar} from '@/api/user'
+  import {upload_token, upload} from '@/api/upload'
+  import config from '@/config'
+
   export default {
     data() {
       return {
-        username: null
+        username: null,
+        avatar: '../../assets/default-avatar.png',
+        loading: false,
+        alertText: '',
+        showTip: false
+      }
+    },
+    methods: {
+      fileUpload(event) {
+        this.loading = true;
+        let file = event.target.files[0];
+        if (file.size > 1024 * 1024 * 3) {    //只能传2M以内照片
+          this.alertText = '上传失败，只能传2M以内图片'
+          this.showTip = true;
+        } else {
+          upload_token().then((response) => {
+            if (response.data.status === 1) {
+              let data = {token: response.data.uptoken, file}
+              upload(data).then((upResponse) => {
+                let pic_url = config.domain + upResponse.data.key
+                this.avatar = pic_url;
+                this.loading = false;
+                changeAvatar({pic_url}).then((updateResponse) => {})     //更新到服务器
+              })
+            } else {
+              this.alertText = response.data.message
+              this.showTip = true;
+            }
+          })
+        }
       }
     },
     mounted() {
       this.username = localStorage.getItem('username');
+      userInfo().then((response) => {
+        console.log('uerInfo', response)
+        this.avatar = response.data.data.avatar;
+      })
     }
   }
 </script>
@@ -147,6 +187,7 @@
       text-align: center;
       margin: 0 0.8rem;
       border-radius: 50%;
+      overflow: hidden;
       border: 1px solid #333;
       img {
         width: 100%;

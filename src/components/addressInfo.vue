@@ -14,7 +14,7 @@
           <i class="circle" v-else></i>
           <span>先生</span>
         </div>
-        <div @click="selectgender('female')">
+        <div @click="selectGender('female')">
           <i class="iconfont" v-if="formData.gender==='female'">&#xe6da;</i>
           <i class="circle" v-else></i>
           <span>女士</span>
@@ -52,8 +52,10 @@
 <script>
 
   export default {
-    data() {
-      return {}
+    methods: {
+      selectGender(sex) {
+        this.formData.gender = sex;
+      }
     },
     props: ['formData'],
     watch: {
@@ -66,7 +68,6 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../style/mixin";
-
   #addressInfo {
     form {
       h3 {

@@ -35,7 +35,7 @@
         <span class="select" v-else></span>
       </li>
     </ul>
-    <div class="submit" @click="payWayShow = true;">确定支付</div>
+    <div class="submit" @click="selectPayType()">确定支付</div>
 
     <transition name="fade">
       <div class="pay_channel" v-show="payWayShow">
@@ -75,6 +75,8 @@
       <input type="hidden" name="timestamp" v-model="form_data.timestamp">
       <input type="hidden" name="version" v-model="form_data.version">
     </form>
+
+    <alertTip :text="alertText" :showTip.sync="showTip"></alertTip>
   </div>
 </template>
 
@@ -99,13 +101,19 @@
         method: 'trpay.trade.create.scan',
         scanShow: false,
         orderData: {},
-        overtime: false    //支付超时
+        overtime: false,    //支付超时
+        alertText: '',      //提示
+        showTip: false
       }
     },
     methods: {
       submit() {
+        console.log('this.overtime', this.overtime)
+        if (this.overtime) {
+          this.showTip = true;
+          return;
+        }
         init_pay({order_id: this.order_id, payType: this.payType, method: this.method}).then((response) => {
-          console.log('支付res', response);
           if (this.method === 'trpay.trade.create.scan') {
             this.orderData = response.data.data;
             this.scanShow = true;
@@ -129,6 +137,14 @@
       },
       close() {
         this.payWayShow = false;
+      },
+      selectPayType() {
+        console.log('this.overtime', this.overtime)
+        if (this.overtime) {
+          this.showTip = true;
+          return;
+        }
+        this.payWayShow = true;
       }
     },
     mounted() {

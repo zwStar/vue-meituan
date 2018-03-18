@@ -11,7 +11,7 @@
       </router-link>
     </div>
     <div class="no_order" v-else-if="noOrder">
-      <span>购物车空空如也，快去购物吧！</span>
+      <span>订单空空如也，快去购物吧！</span>
     </div>
     <article v-else>
       <router-link v-for="list in ordersList" :key="list.id" tag="section" :to="'/order_detail?id='+ list.id">

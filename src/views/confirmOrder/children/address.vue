@@ -1,45 +1,58 @@
 <template>
   <div id="address">
-    <v-head title_head="收货地址" goBack=true   bgColor="#f4f4f4"></v-head>
+    <v-head title_head="收货地址" goBack=true    bgColor="#f4f4f4"></v-head>
     <div class="container">
       <ul>
-        <li v-for="list in addressLists" :key="list.id" @click="selectAddress(list)">
-          <p>{{list.address}} {{list.house_number}}</p>
-          <span class="name">{{list.name}}</span>
-          <span class="sex">{{list.gender === 'female' ? '女士' : '先生'}}</span>
-          <span class="phone">{{list.phone}}</span>
-          <i class="iconfont icon_select" v-if="list.id === selectAddressId">&#xe6da;</i>
+        <li v-for="item in addressLists" :key="item.id" @click="selectAddress(item)">
+          <p>{{item.address}} {{item.house_number}}</p>
+          <span class="name">{{item.name}}</span>
+          <span class="sex">{{item.gender === 'female' ? '女士' : '先生'}}</span>
+          <span class="phone">{{item.phone}}</span>
+          <i class="iconfont icon_select" v-if="item.id === selectAddressId">&#xe6da;</i>
         </li>
       </ul>
     </div>
-    <router-link tag="div" class="add" :to="{name:'Add_Address'}">
+    <router-link tag="div" class="add" :to="{path:'/add_address'}">
       <i class="iconfont icon">&#xe606;</i>
       <span>新增收获地址</span>
     </router-link>
+
+    <div class="empty_address" v-show="emptyAddress">
+      <span>一个地址都没有哦</span>
+    </div>
   </div>
 </template>
 
 <script>
-  import {getAddress} from '@/api/user'
+  import {getAllAddress} from '@/api/user'
 
   export default {
     data() {
       return {
         addressLists: [],
-        selectAddressId: ''
+        selectAddressId: '',
+        emptyAddress: false
       }
     },
     methods: {
-      selectAddress(list) {
-        this.select_address_id = list.id;
-        this.$store.dispatch('recodeDeliveryAddress', list); //地址信息由vuex管理
+      selectAddress(item) {
+        this.select_address_id = item.id;
+        this.$store.dispatch('recodeDeliveryAddress', item); //地址信息由vuex管理
         this.$router.go(-1);                //返回上一个路由
       },
     },
     created() {
-      getAddress().then((response) => {
-        this.addressLists = response.data.address;
-        this.selectAddressId = this.addressLists[0].id;
+      getAllAddress().then((response) => {    //获取用户地址
+        let data = response.data;
+        if (data.status === 1) {
+          if (!data.address.length) {
+            this.emptyAddress = true;
+          } else {
+            this.emptyAddress = false;
+            this.addressLists = response.data.address;
+            this.selectAddressId = this.addressLists[0].id;
+          }
+        }
       })
     }
   }
@@ -85,6 +98,16 @@
         }
       }
     }
+    .empty_address{
+      position:absolute;
+      top:50%;
+      left:50%;
+      transform: translate3D(-50%,-50%,0);
+      span{
+        font-size:0.4rem;
+      }
+    }
+
     .add {
       width: 100%;
       position: fixed;

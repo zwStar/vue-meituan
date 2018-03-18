@@ -8,7 +8,7 @@
           <span class="address">{{address.address}}</span>
           <i class="iconfont">&#xe6d7;</i>
         </router-link>
-        <router-link to="/search" class="search"><i class="iconfont">&#xe7d1;</i><span class="search_text">请输入商家 商品名</span></router-link>
+        <router-link to="/search" class="search"><i class="iconfont">&#xe626;</i><span class="search_text">请输入商家 商品名</span></router-link>
       </div>
       <!--导航轮播部分-->
       <mt-nav></mt-nav>
@@ -128,8 +128,8 @@
         margin-right: 0.2rem;
         .iconfont {
           display: inline-block;
-          padding-left: 10px;
-          font-size: 0.5rem;
+          padding: 5px 0 0 10px;
+          font-size: 0.4rem;
         }
         span {
           font-size: 0.35rem;

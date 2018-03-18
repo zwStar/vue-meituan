@@ -3,22 +3,35 @@
     <v-head title_head="提交订单" goBack="true" bgColor="#f4f4f4"></v-head>
     <div class="delivery_info_container">
       <!--地址信息-->
-      <router-link class="address_info_container" to="/confirmOrder/address">
-        <i class="iconfont icon-location">&#xe604;</i>
-        <div class="main-info">
-          <span class="address">{{defaultAddress.address}}</span>
-          <span class="name">{{defaultAddress.name}}</span>
-          <span class="gender">{{defaultAddress.gender}}</span>
-          <span class="phone">{{defaultAddress.phone}}</span>
+      <router-link class="address_info_container" v-if="emptyAddress" to="/add_address">
+        <div class="address_info">
+          <i class="iconfont icon_add">&#xe600;</i>
+          <span class="add_text">新增收货地址</span>
         </div>
         <i class="iconfont icon-right">&#xe63f;</i>
       </router-link>
+
+      <router-link class="address_info_container" to="/confirmOrder/address" v-else>
+        <div class="address_info">
+          <i class="iconfont icon-location">&#xe604;</i>
+          <div class="main_info">
+            <p class="address">{{defineAddress.address}}</p>
+            <span class="name">{{defineAddress.name}}</span>
+            <span class="gender">{{gender}}</span>
+            <span class="phone">{{defineAddress.phone}}</span>
+          </div>
+        </div>
+        <i class="iconfont icon-right">&#xe63f;</i>
+      </router-link>
+
       <!--送达信息-->
       <div class="expected_arrival_info_container">
-        <i class="iconfont icon-time">&#xe621;</i>
-        <div class="main-info">
-          <span class="date_type_tip">送达时间</span>
-          <span class="select_view_time">10：25分到</span>
+        <div class="arrival_info">
+          <i class="iconfont icon-time">&#xe621;</i>
+          <div class="main_info">
+            <span class="date_type_tip">送达时间</span>
+            <span class="select_view_time">10：25分到</span>
+          </div>
         </div>
         <i class="iconfont icon-right">&#xe63f;</i>
       </div>
@@ -78,7 +91,7 @@
 
 <script>
   import {getRestaurant} from '@/api/restaurant'
-  import {getAddress} from '@/api/user'
+  import {getAllAddress} from '@/api/user'
   import {submit_order} from '@/api/order'
   import {mapGetters} from 'vuex'
 
@@ -86,26 +99,34 @@
     data() {
       return {
         order_data: null,
-        defaultAddress: {},
+        defineAddress: {},
         poi_info: '',
         totalPrice: 0,
         totalNum: 0,
-        restaurant_id: null
+        restaurant_id: null,
+        emptyAddress: true   //还没有收货地址 需要新增
       }
     },
     computed: {
-      ...mapGetters(['deliveryAddress'])
+      ...mapGetters(['deliveryAddress']),
+      gender() {
+        return this.defineAddress.gender === 'male' ? '先生' : '女士'
+      }
     },
     methods: {
       submit() {
+        if (this.emptyAddress) {   //如果没有填收货地址
+          alert('没有收货地址')
+          return;
+        }
         let foods = [];
         let keys = Object.keys(this.order_data);
         keys.forEach((key) => {
           if (Number(key))
             foods.push({skus_id: key, num: this.order_data[key]['num']})
         })
-        submit_order({restaurant_id: this.restaurant_id, foods}).then((response) => {
-          if (response.data.status == 1) {
+        submit_order({restaurant_id: this.restaurant_id, foods, address_id: this.defineAddress.id}).then((response) => {
+          if (response.data.status === 1) {
             this.$router.push({path: '/pay', query: {order_id: response.data.order_id}})
           }
         })
@@ -113,13 +134,18 @@
     },
     created() {
       let confirmOrderData = JSON.parse(localStorage.getItem('confirmOrderData'));    //获取当前准备下单的商品
-
       this.restaurant_id = confirmOrderData.restaurant_id;  //餐馆id
       this.totalNum = confirmOrderData.foods.totalNum;     //总数量
       this.order_data = confirmOrderData.foods;              //食物信息
       //获取用户收货地址
-      getAddress().then((response) => {
-        this.defaultAddress = response.data.address[0];  //默认第一个为默认收获地址
+      getAllAddress().then((response) => {
+        let data = response.data;
+        if (data.address.length) {      //判断该用户有没有收货地址
+          this.emptyAddress = false;
+          this.defineAddress = data.address[0];  //默认第一个为默认收获地址
+        } else {
+          this.emptyAddress = true;
+        }
       })
       //根据商店id获取店家信息
       getRestaurant({restaurant_id: this.restaurant_id}).then((result) => {
@@ -129,7 +155,7 @@
     },
     watch: {
       deliveryAddress(address) {
-        this.defaultAddress = address;
+        this.defineAddress = address;
       }
     }
   }
@@ -146,57 +172,49 @@
     .icon-right {
       font-size: 0.4rem;
     }
-    /*地址信息样式 送达信息样式*/
-    .delivery_info_container {
-      .address_info_container, .expected_arrival_info_container {
-        display: flex;
-        margin-left: 0.2rem;
-        padding: 0.5rem 0.1rem 0.5rem 0;
-        align-items: center;
-        background: #fff;
-        .main-info {
-          flex: 1;
-          font-size: 0;
-        }
-      }
-      /*地址信息样式*/
-      .address_info_container {
-        border-bottom: 1px solid $mtGrey;
-        .icon-location {
-          font-size: 0.6rem;
-          margin: 0.1rem;
-        }
-        .address {
-          display: block;
-          font-size: 0.5rem;
-          font-weight: 500;
-          margin: 0.2rem 0;
-        }
-        .name, .gender, .phone {
-          font-size: 0.2rem;
-          color: $grey;
-        }
-        .phone {
-          margin-left: 0.5rem;
-        }
-      }
-      /*送达信息样式*/
-      .expected_arrival_info_container {
-        .icon-time {
-          font-size: 0.6rem;
-          margin: 0.1rem;
-        }
-        .date_type_tip {
-          font-size: 0.4rem;
-          font-weight: 500;
-        }
-        .select_view_time {
-          font-size: 0.4rem;
-          margin-left: 0.1rem;
-          color: #368ced;
-        }
+
+    .address_info_container, .expected_arrival_info_container {
+      background: #fff;
+      display: flex;
+      align-items: center;
+      padding: 0.3rem;
+      justify-content: space-between;
+      .iconfont {
+        margin: 0.1rem;
+        font-size: 0.5rem;
       }
     }
+    .address_info_container {
+      border-bottom: 1px solid $mtGrey;
+    }
+    .address_info, .arrival_info {
+      display: flex;
+      align-items: center;
+    }
+    .address_info {
+      .address {
+        font-size: 0.4rem;
+      }
+      .name, .gender, .phone {
+        font-size: 0.2rem;
+        color: $grey;
+      }
+      .phone {
+        margin-left: 0.5rem;
+      }
+    }
+    .arrival_info {
+      .date_type_tip {
+        font-size: 0.4rem;
+        font-weight: 500;
+      }
+      .select_view_time {
+        font-size: 0.4rem;
+        margin-left: 0.1rem;
+        color: #368ced;
+      }
+    }
+
     /*商品部分样式*/
     .container {
       margin: 0.21rem 0 0.21rem 0.21rem;

@@ -2,45 +2,41 @@
   <div class="nearbyShops">
     <nav ref="nav">
       <ul>
-        <li @click="scrollTo()">综合排序 <i class="iconfont icon-sort">&#xe601;</i></li>
+        <li>综合排序 <i class="iconfont icon-sort">&#xe601;</i></li>
         <li>销量最高</li>
         <li>距离最近</li>
         <li>筛选</li>
       </ul>
-      <!--选择排序-->
-      <transition name="fade">
-        <Sort v-show="showSort"></Sort>
-      </transition>
     </nav>
     <!--商家列表-->
     <article>
-      <router-link v-for="(list,index) in shopLists" :to="{path:'store',query:{id:list.id}}" :key="list.id"
+      <router-link v-for="(item,index) in shopLists" :to="{path:'store',query:{id:item.id}}" :key="item.id"
                    tag="section">
         <div class="imgShow">
-          <img :src="list.pic_url">
+          <img :src="item.pic_url">
         </div>
         <div class="detail">
-          <h4>{{list.name}}</h4>
+          <h4>{{item.name}}</h4>
           <div class="shopsMessage">
-            <star :score="list.wm_poi_score"></star>
-            <span class="sellNum">{{list.month_sales_tip}}</span>
+            <star :score="item.wm_poi_score"></star>
+            <span class="sellNum">{{item.month_sales_tip}}</span>
             <div class="delivery-info">
-              <span class="deliverTime">{{list.delivery_time_tip}}</span>
-              <span class="distance">{{list.distance}}</span>
+              <span class="deliverTime">{{item.delivery_time_tip}}</span>
+              <span class="distance">{{item.distance}}</span>
             </div>
           </div>
           <div class="priceMessage">
-            <span>{{list.min_price_tip}} |</span>
-            <span>{{list.shipping_fee_tip}} |</span>
-            <span>{{list.average_price_tip}}</span>
+            <span>{{item.min_price_tip}} | </span>
+            <span>{{item.shipping_fee_tip}} | </span>
+            <span>{{item.average_price_tip}}</span>
           </div>
           <div class="activeMeaage">
             <ul>
-              <li v-for="(discount,index) in list.discounts2" v-if="index <= 1">
-                <span class="icon">
-                  <img :src="discount.icon_url">
-                </span>
-                <span class="info">{{discount.info}}</span>
+              <li v-for="(discount,index) in item.discounts2" v-if="index <= 1">
+                <div class="discount_left">
+                  <img :src="discount.icon_url" class="icon">
+                  <span class="info">{{discount.info}}</span>
+                </div>
                 <router-link to="/shops" v-if="index === 0">
                   <i class="iconfont icon-entry">&#xe645;</i>
                 </router-link>
@@ -49,8 +45,6 @@
           </div>
         </div>
       </router-link>
-      <div class="shade" v-show="showSort" @click="closeSelectSort()">
-      </div>
     </article>
 
     <!--加载更多-->
@@ -63,7 +57,6 @@
 
 <script>
   import BScroll from 'better-scroll'
-  import Sort from './sort.vue'
   import {getRestaurants} from '@/api/restaurant'
   import {mapGetters} from 'vuex'
 
@@ -76,33 +69,15 @@
         loading: false,  //加载更多
         page: 1,                    //当前餐馆列表加载到第几页
         limit: 5,    //每次拉去的餐馆数量
-        lat: '',
-        lng: '',
-        noMore: false
+        noMore: false,   //没有更多数据了
+        preventRepeat:false
       }
     },
     computed: {
-      ...mapGetters(['locationReady', 'address'])
+      ...mapGetters(['address'])
     },
-    props: ['scrollWrapper', 'ready'], //进行better-scroll的DOM对象 餐馆类型 是否地位好准备开始拉去餐馆数据
+    props: ['scrollWrapper'], //进行better-scroll的DOM对象 餐馆类型 是否地位好准备开始拉去餐馆数据
     methods: {
-      closeSelectSort() { //关闭选择排序列表
-        this.showSort = false;
-      },
-      scrollTo() {  //点击排序  nav元素滚动到页面的顶部
-        //获取元素离顶部的距离 并滚动到顶部
-        let _this = this;
-        let offsetTop = _this.$refs['nav'].offsetTop;
-        let BScroll = _this.BScrollEvent;
-        if (Math.abs(BScroll.y) !== offsetTop) {
-          _this.BScrollEvent.scrollTo(0, -offsetTop, 500);
-          setTimeout(function () {
-            _this.showSort = true
-          }, 500)
-        } else {
-          this.showSort = true   //如果当前位置是顶部 不需要滚动
-        }
-      },
       //监听better-scroll滚动事件  判断是否滑动到底部 加载更多
       listenScroll() {
         let _this = this;
@@ -127,18 +102,23 @@
           }
         })
       },
-      getRestaurants(page, limit, callback) {
-        let offset = (page - 1) * limit;
-        let lat = this.address.lat;
-        let lng = this.address.lng;
-        getRestaurants({offset, limit, lng, lat}).then((response) => {
-          let data = response.data.data;
-          if (!data.length) {
-            this.noMore = true;
-          } else {
+      getRestaurants(page, limit, callback) { //获取餐馆列表
+
+        if (this.noMore || this.preventRepeat)
+          return;
+        else {
+          this.preventRepeat = true;
+          let offset = (page - 1) * limit;
+          let {lat, lng} = this.address;
+          getRestaurants({offset, limit, lng, lat}).then((response) => {
+            let data = response.data.data;
+            this.preventRepeat = false;
+            console.log('this.noMore',this.noMore)
+            this.noMore = data.length < this.limit;
+            console.log('this.noMore after',this.noMore)
             callback(data);
-          }
-        });
+          });
+        }
       },
       firstFetch() {
         let _this = this;
@@ -153,16 +133,6 @@
             _this.listenScroll();
           })
         })
-      },
-      initData(value) {
-        console.log('value', value)
-        let {lat, lng} = value.address;
-        if (lat && lng) {
-          this.shopLists = [];
-          this.firstFetch();
-        } else {
-//          this.$store.dispatch('location');
-        }
       }
     },
     created() {
@@ -173,30 +143,17 @@
       } else {
         this.$store.dispatch('location');
       }
-      /* if (this.$route.path === '/category') {
-         if (this.address.lat && this.address.lng) {
-           this.firstFetch();
-         } else {
-           this.$store.dispatch('location');
-         }
-       }*/
     },
     watch: {
-      /*locationReady(boolean) {
-        if (boolean) {
-          this.firstFetch();
-        }
-      }*/
       address(value) {    //地址发生变化，重新获取商家
+        this.noMore = false;
+        this.preventRepeat = false;
         let {lat, lng} = value;
         if (lat && lng) {
           this.shopLists = [];
           this.firstFetch();
         }
       }
-    },
-    components: {
-      Sort
     }
   }
 </script>
@@ -269,6 +226,9 @@
             }
           }
           .priceMessage {
+            margin: 0.2rem 0;
+            display: flex;
+            align-items: center;
             span {
               font-size: 0.2rem;
             }
@@ -277,22 +237,27 @@
           .activeMeaage {
             ul {
               li {
-                .info {
-                  font-size: 0.3rem;
-                  display: inline-block;
-                  @include px2rem(width, 260);
-                  overflow: hidden;
-                  text-overflow: ellipsis;
-                  white-space: nowrap;
-                }
-                .icon {
-                  display: inline-block;
-                  vertical-align: top;
-                  @include px2rem(width, 34);
-                  @include px2rem(height, 34);
-                  img {
-                    width: 100%;
-                    height: 100%;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                .discount_left {
+                  display: flex;
+                  margin: 0.1rem 0;
+                  align-items: center;
+                  .info {
+                    color: #777272;
+                    font-size: 0.3rem;
+                    display: inline-block;
+                    @include px2rem(width, 360);
+                    overflow: hidden;
+                    text-overflow: ellipsis;
+                    white-space: nowrap;
+                  }
+                  .icon {
+                    margin-right: 0.15rem;
+                    display: inline-block;
+                    @include px2rem(width, 34);
+                    @include px2rem(height, 34);
                   }
                 }
                 .icon-entry {

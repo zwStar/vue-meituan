@@ -1,8 +1,7 @@
 <template>
   <div id="address">
     <v-head title_head="新增收货地址" goBack=true>
-      <span slot="save_address" style="position:absolute; right:15px;top:2px;font-size: 0.5rem; font-weight: 600;"
-            @click="save();">保存</span>
+      <span slot="save_address" class="save_btn_style" @click="save();">保存</span>
     </v-head>
     <AddressInfo :formData.sync="formData"></AddressInfo>
     <router-view></router-view>
@@ -21,8 +20,10 @@
           name: '',
           phone: null,
           gender: "male",
-          house_number: ''
-        }
+          house_number: '',
+
+        },
+        satisfySubmit: false
       }
     },
     computed: {
@@ -30,19 +31,22 @@
     },
     methods: {
       save() {
-        console.log('formData', this.formData);
-        /* let state = this.delivery_address
-         let address_detail = state.address;
-         let address = state.title;
-         let province = state.province;
-         let city = state.city;
-         this.form = {...this.form,...state.location,address_detail, address,province,city};
-         console.log("this.form", this.form)
-         add_address(this.form).then((response) => {
-           if(response.data.status == 1){
-             this.$router.go(-1);
-           }
-         })*/
+        let dissatisfy = Object.values(this.formData).some((value) => {
+          console.log('value', value)
+          return !value
+        })
+        this.satisfySubmit = !dissatisfy;
+        if (dissatisfy) {
+          alert('信息添加不完整，不满足')
+        } else {
+          let {location, address, province, city} = this.deliveryAddress;
+          let form = {...this.formData, ...location, address, province, city}
+          add_address(form).then((response) => {
+            if (response.data.status === 1) {
+              this.$router.go(-1);
+            }
+          })
+        }
       }
     },
     components: {
@@ -67,6 +71,12 @@
     top: 0;
     bottom: 0;
     background: #f4f4f4;
-
+    .save_btn_style {
+      position: absolute;
+      right: 15px;
+      top: 2px;
+      font-size: 0.5rem;
+      font-weight: 600;
+    }
   }
 </style>

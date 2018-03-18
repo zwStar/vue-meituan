@@ -40,9 +40,11 @@
       }
     },
     methods: {
-      funGoBack() {
+      funGoBack() {   //返回上一页
         let pathList = this.routerPath;
-        pathList.pop();       //需要pop 2次才取出上一个路由路径
+        if (this.$route.fullPath.indexOf('/pay') === -1) {
+          pathList.pop();       //如果不是支付页面 pop 2次才取出上一个路由路径
+        }
         let path = pathList.pop();
         this.$store.dispatch('savePath', pathList);
         this.$router.push({path});

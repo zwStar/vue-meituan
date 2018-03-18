@@ -23,6 +23,12 @@ const Category = r => require.ensure([], () => r(require('@/views/category/categ
 const MyAddress = r => require.ensure([], () => r(require('@/views/home/children/address'), 'MyAddress'))   //我的收货地址
 const EditAddress = r => require.ensure([], () => r(require('@/views/home/children/editAddress'), 'EditAddress'))  //编辑收货地址
 const MakeComment = r => require.ensure([], () => r(require('@/views/order/comment'), 'MakeComment'))   //作评论
+
+const Collection = r => require.ensure([], () => r(require('@/views/home/children/collection'), 'Collection'))   //我的收藏
+const ThankRecord = r => require.ensure([], () => r(require('@/views/home/children/thankRecord'), 'ThankRecord'))   //答谢记录
+const FootPrint = r => require.ensure([], () => r(require('@/views/home/children/footprint'), 'FootPrint'))   //答谢记录
+const Friend = r => require.ensure([], () => r(require('@/views/home/children/friend'), 'Friend'))   //我的好友
+const Error =  r => require.ensure([], () => r(require('@/views/404/error'), 'Error'))   //404
 Vue.use(Router)
 
 export default new Router({
@@ -85,10 +91,30 @@ export default new Router({
           component: MyAddress,
           children: [
             {
-              path:'edit',
-              name:'编辑地址',
-              component:EditAddress
+              path: 'edit',
+              name: '编辑地址',
+              component: EditAddress
             }]
+        },
+        {
+          path: 'collection',
+          name: '我的收藏',
+          component: Collection
+        },
+        {
+          path: 'thank',
+          name: '答谢记录',
+          component: ThankRecord
+        },
+        {
+          path: 'footprint',
+          name: '我的足迹',
+          component: FootPrint
+        },
+        {
+          path: 'friend',
+          name: '我的好友',
+          component: Friend
         }
       ]
     },
@@ -149,8 +175,13 @@ export default new Router({
       component: OrderDetail
     },
     {
+      path:'/error',
+      name:'找不到该页面',
+      component:Error
+    },
+    {
       path: '*',
-      redirect: '/index'
+      redirect: '/error'
     }
   ]
 })

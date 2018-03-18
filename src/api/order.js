@@ -1,7 +1,7 @@
-import {_get, _post, _put} from './index'
+import {_get, _post} from './index'
 
-//获取地址
-export const submit_order = (data) => {
+//提交订单
+export const submitOrder = (data) => {
   let req = {
     data,
     url: 'v1/order'
@@ -10,7 +10,7 @@ export const submit_order = (data) => {
 }
 
 //准备支付
-export const init_pay = (data) => {
+export const initPay = (data) => {
   let req = {
     data,
     url: 'v1/pay'
@@ -19,7 +19,7 @@ export const init_pay = (data) => {
 }
 
 //获取订单信息
-export const order_info = (data) => {
+export const orderInfo = (data) => {
   let req = {
     url: `v1/order/${data.order_id}`
   }
@@ -36,17 +36,17 @@ export const orders = (data) => {
 }
 
 //订单评论
-export const makeComment = (data) =>{
+export const makeComment = (data) => {
   let req = {
     data,
-    url:'v1/comment'
+    url: 'v1/comment'
   }
   return _post(req)
 }
 
 
 //请求支付
-export const request_pay = (data) => {
+export const requestPay = (data) => {
   let req = {
     data,
     url: '/https://pay.ispay.cn/core/api/request/pay/'
@@ -55,10 +55,11 @@ export const request_pay = (data) => {
 }
 
 //监听扫码支付状态
-export const listen_status = (data) =>{
+export const listenStatus = (data) => {
   let req = {
     data,
-    url:'v1/listen_status'
+    url: 'v1/listen_status'
   }
   return _get(req)
 }
+
