@@ -5,6 +5,9 @@
     </v-head>
     <AddressInfo :formData.sync="formData"></AddressInfo>
     <router-view></router-view>
+
+    <Loading v-show="loading"></Loading>
+    <alertTip :text="alertText" :showTip.sync="showTip"></alertTip>
   </div>
 </template>
 
@@ -23,7 +26,10 @@
           house_number: '',
 
         },
-        satisfySubmit: false
+        satisfySubmit: false,
+        alertText: '',      //提示
+        showTip: false,
+        loading: false
       }
     },
     computed: {
@@ -32,12 +38,13 @@
     methods: {
       save() {
         let dissatisfy = Object.values(this.formData).some((value) => {
-          console.log('value', value)
           return !value
         })
         this.satisfySubmit = !dissatisfy;
         if (dissatisfy) {
-          alert('信息添加不完整，不满足')
+          this.alertText = '信息填写不完整'
+          this.showTip = true;
+
         } else {
           let {location, address, province, city} = this.deliveryAddress;
           let form = {...this.formData, ...location, address, province, city}

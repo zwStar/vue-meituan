@@ -13,12 +13,6 @@
   import {mapGetters} from 'vuex'
 
   export default {
-    data() {
-      return {}
-    },
-    computed: {
-      ...mapGetters(['routerPath'])
-    },
     props: {
       goBack: {
         default: false
@@ -41,13 +35,13 @@
     },
     methods: {
       funGoBack() {   //返回上一页
-        let pathList = this.routerPath;
-        if (this.$route.fullPath.indexOf('/pay') === -1) {
-          pathList.pop();       //如果不是支付页面 pop 2次才取出上一个路由路径
+
+        if (this.$route.fullPath.indexOf('/store') !== -1) {
+          this.$router.push({path: '/index'})
+        } else {
+          this.$router.go(-1);
         }
-        let path = pathList.pop();
-        this.$store.dispatch('savePath', pathList);
-        this.$router.push({path});
+
       }
     }
   }

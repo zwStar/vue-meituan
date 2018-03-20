@@ -23,7 +23,7 @@
           this.fun_click(data);
         }
         else {
-          this.search_active = false;
+          this.btnActive = false;
         }
       }
     }

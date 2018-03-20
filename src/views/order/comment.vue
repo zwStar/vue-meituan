@@ -115,8 +115,6 @@
             upload(data).then((upResponse) => {     //上传到七牛云
               this.uploadList.push(config.domain + upResponse.data.key)
               this.loading = false;
-
-
             })
           } else {
             this.alertText = response.data.message
@@ -125,9 +123,6 @@
         })
       },
       submit() {
-        console.log('配送评分', this.deliveryScore)
-        console.log('食物评分', this.foodScore)
-        console.log('评论内容', this.commentData)
         makeComment({
           order_id: 1,
           commentData: this.commentData,

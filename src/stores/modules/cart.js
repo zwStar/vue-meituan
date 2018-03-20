@@ -28,6 +28,9 @@ const actions = {
   },
   ballInCart({commit}, boolean) {
     commit(types.BALL_IN_CART, boolean);
+  },
+  updateCart({commit}, {cartList}) {
+    commit(types.UPDATE_CART, {cartList});
   }
 }
 
@@ -99,7 +102,7 @@ const mutations = {
   },
   //更新购物车记录
   [types.UPDATE_CART](state, {cartList}) {
-    state.cartList = {...JSON.parse(cartList)};
+    state.cartList = {...cartList};
   },
   //清空购物车
   [types.EMPTY_CART](state, {restaurant_id}) {

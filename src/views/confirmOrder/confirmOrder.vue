@@ -3,7 +3,7 @@
     <v-head title_head="提交订单" goBack="true" bgColor="#f4f4f4"></v-head>
     <div class="delivery_info_container">
       <!--地址信息-->
-      <router-link class="address_info_container" v-if="emptyAddress" to="/add_address">
+      <router-link class="info_container address_container" v-if="emptyAddress" to="/add_address">
         <div class="address_info">
           <i class="iconfont icon_add">&#xe600;</i>
           <span class="add_text">新增收货地址</span>
@@ -11,7 +11,7 @@
         <i class="iconfont icon-right">&#xe63f;</i>
       </router-link>
 
-      <router-link class="address_info_container" to="/confirmOrder/address" v-else>
+      <router-link class="info_container address_container" to="/confirmOrder/address" v-else>
         <div class="address_info">
           <i class="iconfont icon-location">&#xe604;</i>
           <div class="main_info">
@@ -25,7 +25,7 @@
       </router-link>
 
       <!--送达信息-->
-      <div class="expected_arrival_info_container">
+      <div class="info_container arrival_container">
         <div class="arrival_info">
           <i class="iconfont icon-time">&#xe621;</i>
           <div class="main_info">
@@ -86,13 +86,14 @@
       <span class="submit" @click="submit()">提交订单</span>
     </div>
     <router-view></router-view>
+    <alertTip :text="alertText" :showTip.sync="showTip"></alertTip>
   </div>
 </template>
 
 <script>
   import {getRestaurant} from '@/api/restaurant'
   import {getAllAddress} from '@/api/user'
-  import {submit_order} from '@/api/order'
+  import {submitOrder} from '@/api/order'
   import {mapGetters} from 'vuex'
 
   export default {
@@ -104,7 +105,10 @@
         totalPrice: 0,
         totalNum: 0,
         restaurant_id: null,
-        emptyAddress: true   //还没有收货地址 需要新增
+        emptyAddress: true,   //还没有收货地址 需要新增
+        alertText:'',
+        showTip:false,
+        preventRepeat:false
       }
     },
     computed: {
@@ -116,16 +120,20 @@
     methods: {
       submit() {
         if (this.emptyAddress) {   //如果没有填收货地址
-          alert('没有收货地址')
+          this.alertText = '请添加收货地址'
+          this.showTip = true;
           return;
         }
+        if(this.preventRepeat)
+          return;
+        this.preventRepeat = true;
         let foods = [];
         let keys = Object.keys(this.order_data);
         keys.forEach((key) => {
           if (Number(key))
             foods.push({skus_id: key, num: this.order_data[key]['num']})
         })
-        submit_order({restaurant_id: this.restaurant_id, foods, address_id: this.defineAddress.id}).then((response) => {
+        submitOrder({restaurant_id: this.restaurant_id, foods, address_id: this.defineAddress.id}).then((response) => {
           if (response.data.status === 1) {
             this.$router.push({path: '/pay', query: {order_id: response.data.order_id}})
           }
@@ -140,6 +148,7 @@
       //获取用户收货地址
       getAllAddress().then((response) => {
         let data = response.data;
+        console.log('address Response', response)
         if (data.address.length) {      //判断该用户有没有收货地址
           this.emptyAddress = false;
           this.defineAddress = data.address[0];  //默认第一个为默认收获地址
@@ -173,7 +182,7 @@
       font-size: 0.4rem;
     }
 
-    .address_info_container, .expected_arrival_info_container {
+    .info_container {
       background: #fff;
       display: flex;
       align-items: center;
@@ -184,7 +193,7 @@
         font-size: 0.5rem;
       }
     }
-    .address_info_container {
+    .address_container {
       border-bottom: 1px solid $mtGrey;
     }
     .address_info, .arrival_info {
@@ -202,6 +211,17 @@
       .phone {
         margin-left: 0.5rem;
       }
+      .add_text {
+        color: $mtYellow;
+        font-size: 0.4rem;
+      }
+      .icon_add {
+        font-size: 0.3rem;
+        padding: 0.05rem;
+        border-radius: 50%;
+        background: $mtYellow;
+        color: #fff;
+      }
     }
     .arrival_info {
       .date_type_tip {
@@ -217,7 +237,7 @@
 
     /*商品部分样式*/
     .container {
-      margin: 0.21rem 0 0.21rem 0.21rem;
+      margin: 0.21rem 0;
       background: #fff;
       padding: 0 0.1rem 1rem;
       .head {
@@ -300,6 +320,7 @@
       }
       /*包装费 配送费 优惠券*/
       .other_fee_container, .coupon_info_list_container {
+        margin-left: 0.26rem;
         li {
           display: flex;
           padding: 0.26rem 0;

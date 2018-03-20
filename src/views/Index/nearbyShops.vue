@@ -21,7 +21,7 @@
             <star :score="item.wm_poi_score"></star>
             <span class="sellNum">{{item.month_sales_tip}}</span>
             <div class="delivery-info">
-              <span class="deliverTime">{{item.delivery_time_tip}}</span>
+              <span class="deliverTime">{{item.delivery_time_tip}}/</span>
               <span class="distance">{{item.distance}}</span>
             </div>
           </div>
@@ -68,7 +68,7 @@
         BScrollEvent: null,   //better-scroll实例
         loading: false,  //加载更多
         page: 1,                    //当前餐馆列表加载到第几页
-        limit: 5,    //每次拉去的餐馆数量
+        limit: 4,    //每次拉去的餐馆数量
         noMore: false,   //没有更多数据了
         preventRepeat:false
       }
@@ -103,7 +103,6 @@
         })
       },
       getRestaurants(page, limit, callback) { //获取餐馆列表
-
         if (this.noMore || this.preventRepeat)
           return;
         else {
@@ -113,9 +112,7 @@
           getRestaurants({offset, limit, lng, lat}).then((response) => {
             let data = response.data.data;
             this.preventRepeat = false;
-            console.log('this.noMore',this.noMore)
             this.noMore = data.length < this.limit;
-            console.log('this.noMore after',this.noMore)
             callback(data);
           });
         }
@@ -125,6 +122,7 @@
         //获取餐馆列表
         this.page = 1;
         this.getRestaurants(this.page, this.limit, function (data) {
+          _this.page++;
           _this.shopLists = data;
           _this.$nextTick(() => {
             //dom渲染完成 初始化better-scroll

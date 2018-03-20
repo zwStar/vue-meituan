@@ -16,7 +16,7 @@
 </template>
 
 <script>
-  import {search_restaurant} from '@/api/restaurant'
+  import {searchRestaurant} from '@/api/restaurant'
   import Search from '@/components/search.vue'
 
   export default {
@@ -31,8 +31,10 @@
     },
     methods: {
       fun_click(val) {
+        if (!val)
+          return;
         this.keyword = val;
-        search_restaurant({keyword: val}).then((response) => {
+        searchRestaurant({keyword: val}).then((response) => {
           this.searchList = response.data.data;
         })
       },
@@ -46,6 +48,7 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../../style/mixin";
+
   .search_foods {
     .lists {
       ul {

@@ -22,7 +22,7 @@
 
     <div class="notification container" v-if="poi_info.bulletin">
       <span class="icon"><i class="iconfont">&#xe6aa;</i></span>
-      <span class="describe">{{poi_info.bulletin}}</span>
+      <span class="describe ellipsis">{{poi_info.bulletin}}</span>
       <span class="entry-icon icon"><i class="iconfont">&#xe63f;</i></span>
     </div>
     <div class="poi_service container">
@@ -85,6 +85,11 @@
     }
     .safe-file,.delivery-info,.delivery-time,.notification,.poi_service{
       @include px2rem(height, 80);
+    }
+    .notification{
+      .ellipsis{
+        @include ellipsis;
+      }
     }
     .poi_service{
       .service{

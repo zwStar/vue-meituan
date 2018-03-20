@@ -1,7 +1,7 @@
 <template>
   <transition name="bounce" @after-enter='afterEnter'>
       <div id="alert_tip"  v-show="showTip">
-        <span class="tip_text">提示框提示内容{{text}}</span>
+        <span class="tip_text">{{text}}</span>
       </div>
   </transition>
 </template>

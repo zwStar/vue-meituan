@@ -82,8 +82,8 @@
 
 <script>
   import Scan from './scan.vue'
-  import {init_pay, order_info} from '@/api/order'
-  import {request_pay} from '@/api/order'
+  import {initPay, orderInfo} from '@/api/order'
+  import {requestPay} from '@/api/order'
 
   export default {
     data() {
@@ -108,12 +108,12 @@
     },
     methods: {
       submit() {
-        console.log('this.overtime', this.overtime)
         if (this.overtime) {
+          this.alertText= '支付超时';
           this.showTip = true;
           return;
         }
-        init_pay({order_id: this.order_id, payType: this.payType, method: this.method}).then((response) => {
+        initPay({order_id: this.order_id, payType: this.payType, method: this.method}).then((response) => {
           if (this.method === 'trpay.trade.create.scan') {
             this.orderData = response.data.data;
             this.scanShow = true;
@@ -139,8 +139,8 @@
         this.payWayShow = false;
       },
       selectPayType() {
-        console.log('this.overtime', this.overtime)
         if (this.overtime) {
+          this.alertText= '支付超时';
           this.showTip = true;
           return;
         }
@@ -150,7 +150,7 @@
     mounted() {
       let _this = this;
       this.order_id = this.$route.query.order_id;
-      order_info({order_id: this.order_id}).then((response) => {
+      orderInfo({order_id: this.order_id}).then((response) => {
         this.order_info = response.data.data;
         let remain_time = response.data.data.pay_remain_time;    //支付剩余时间
         this.restaurant_info = this.order_info.restaurant;   //商家信息

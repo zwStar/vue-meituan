@@ -126,7 +126,7 @@
             margin-top: 0.1rem;
           }
           p {
-            @include px2rem(width, 400);
+            @include px2rem(width, 500);
 
             overflow: hidden;
             text-overflow: ellipsis;

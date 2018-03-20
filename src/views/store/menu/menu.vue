@@ -141,7 +141,7 @@
           display: flex;
           @include px2rem(height, 100);
           padding: 0 0.2rem;
-          justify-content: center;
+          /*justify-content: center;*/
           align-items: center;
           font-size: 0.3rem;
           @include px2rem(line-height, 40);

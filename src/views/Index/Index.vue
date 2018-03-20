@@ -44,19 +44,8 @@
       ...mapGetters(['address','locationReady'])
     },
     created() {
-  /*    let address = this.$route.query.address;          //如果query中有定位位置 就不用获取当前定位
-      if (address) {
-        let lat = this.$route.query.lat;    //获取纬度
-        let lng = this.$route.query.lng;    //获取经度
-        this.$store.dispatch('recordAddress',{address, lng, lat}); //保存title 和 经纬度到VUEX中
-      } else {        //否则定位当前位置
-
-      }*/
-
      let {lat,lng} =  this.address;
-     if(lat && lng){      //如果没有定位 进行定位
-
-     }else{
+     if(!lat || !lng){      //如果没有定位 进行定位
        this.getLocation();   //定位
      }
     },

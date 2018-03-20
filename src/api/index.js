@@ -5,7 +5,7 @@ const baseURL = config.baseURL;
 const axios = require('axios').create({
   baseURL: baseURL,            //api请求的baseURL
   timeout: 0,
-  withCredentials: false, // 允许跨域 cookie
+  withCredentials: true, // 允许跨域 cookie
   headers: {'X-Requested-With': 'XMLHttpRequest'},
   transformResponse: [function (data) {
     try {
@@ -13,6 +13,7 @@ const axios = require('axios').create({
     } catch (e) {
       data = {};
     }
+    console.log('response data', data)
     if (data.status === 401) {
       localStorage.removeItem('mt-username');
       router.push('/login');

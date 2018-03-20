@@ -4,7 +4,7 @@ $mtGrey: rgb(214, 214, 214);
 $storeMainHeight: calc(100vh - 19rem);
 
 $baseFontSize: 75; //基于视觉稿横屏尺寸/100得出的基准font-size
-@mixin px2rem($name, $px) {
+@mixin px2rem($name, $px) {   //用sass计算从px到rem的转换
   #{$name}: $px / $baseFontSize * 1rem;
 }
 

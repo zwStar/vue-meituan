@@ -37,9 +37,6 @@
       </router-link>
 
     </article>
-    <!--<div class="main">-->
-    <!--<span class="tip">最近三个月没有订单哦</span>-->
-    <!--</div>-->
     <v-bottom></v-bottom>
     <router-view></router-view>
   </div>
