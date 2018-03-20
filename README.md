@@ -18,8 +18,8 @@
 
 
 ## 效果演示
-         
-    [主页](https://github.com/zwStar/vue-meituan/blob/master/screenshots/index.gif) 
+>  node-elm 接口文档: [接口文档地址](https://github.com/bailicangdu/node-elm/blob/master/API.md) 
+>   [主页](https://github.com/zwStar/vue-meituan/blob/master/screenshots/index.gif) 
     
     [定位和搜索](https://github.com/zwStar/vue-meituan/blob/master/screenshots/index.gif)
     
