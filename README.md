@@ -1,4 +1,4 @@
-##ABOUT
+## ABOUT
    2019届学生，前段时间一直想真正较为完整的开发一个项目，在众多应用中，考虑之后选择了美团外卖来模仿，这段时间课余时间就进行开发，前端用vue+vuex+vue-router+axios 后端用express(基于nodejs的框架) 数据库用NOSQL的mongodb。
    项目功能设计登录，定位，浏览商品，加购物车，下订单，支付(因为个人无法申请，接入第三方聚合支付，支持微信和支付宝的扫码支付和调起app支付)，评价，个人信息更改，构成一个较为完整的项目。
 
@@ -18,14 +18,17 @@
 
 
 ## 效果演示
-    主页
+    主页      
     <img src="https://github.com/zwStar/vue-meituan/blob/master/screenshots/index.gif" width="365" height="619"/>
+    
     定位和搜索
     <img src="https://github.com/zwStar/vue-meituan/blob/master/screenshots/location.gif" width="365" height="619"/>
+    
     下订单
-     <img src="https://github.com/zwStar/vue-meituan/blob/master/screenshots/makeOrder.gif" width="365" height="619"/>
-     清除购物车
-       <img src="https://github.com/zwStar/vue-meituan/blob/master/screenshots/clearCart.gif" width="365" height="619"/>
+    <img src="https://github.com/zwStar/vue-meituan/blob/master/screenshots/makeOrder.gif" width="365" height="619"/>
+     
+    清除购物车
+     <img src="https://github.com/zwStar/vue-meituan/blob/master/screenshots/clearCart.gif" width="365" height="619"/>
 
 ##说明
     后端接口文档
