@@ -21,11 +21,11 @@
  
 >   [主页](https://github.com/zwStar/vue-meituan/blob/master/screenshots/index.gif) 
     
->   [定位和搜索](https://github.com/zwStar/vue-meituan/blob/master/screenshots/index.gif)
+>   [定位和搜索](https://github.com/zwStar/vue-meituan/blob/master/screenshots/location.gif)
     
->   [下订单](https://github.com/zwStar/vue-meituan/blob/master/screenshots/index.gif) 
+>   [下订单](https://github.com/zwStar/vue-meituan/blob/master/screenshots/makeOrder.gif) 
    
->   [清除购物车](https://github.com/zwStar/vue-meituan/blob/master/screenshots/index.gif) 
+>   [清除购物车](https://github.com/zwStar/vue-meituan/blob/master/screenshots/clearCart.gif) 
     
 ##说明
     后端接口文档
