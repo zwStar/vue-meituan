@@ -1,5 +1,6 @@
 import config from '../config'
 import router from '@/router'
+import {removeInfo} from '@/utils/auth'
 
 const baseURL = config.baseURL;
 const axios = require('axios').create({
@@ -13,9 +14,8 @@ const axios = require('axios').create({
     } catch (e) {
       data = {};
     }
-    console.log('response data', data)
-    if (data.status === 401) {
-      localStorage.removeItem('mt-username');
+    if (data.status === 403) {
+      removeInfo();
       router.push('/login');
     }
 

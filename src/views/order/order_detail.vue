@@ -39,7 +39,8 @@
         </div>
       </div>
       <div class="total_price border_top">
-        <span class="total_price ">总计￥{{orderData.total_price.toFixed(2)}} </span><span class="discount_price">优惠￥0</span><span
+        <span class="total_price ">总计￥{{orderData.total_price.toFixed(2)}} </span><span
+        class="discount_price">优惠￥0</span><span
         class="pay_price"> 实付 <strong>￥{{orderData.total_price.toFixed(2)}}</strong></span>
       </div>
       <div class="call_seller_wrap border_top">
@@ -57,8 +58,8 @@
           <span class="item_value" style="display: block;">&nbsp;</span>
         </div>
         <div class="address_info">
-          <span class="person_info item_value">郭泽伟(先生)15622999040</span>
-          <span class="address item_value">东莞理工学院</span>
+          <span class="person_info item_value">{{address.name}}({{address.gender === 'male'?'先生':'女士'}}){{address.phone}}</span>
+          <span class="address item_value">{{address.address}}</span>
         </div>
       </div>
       <div class="delivery_service">
@@ -82,11 +83,12 @@
         <span class="item_value">在线支付</span>
       </div>
     </section>
+    <alertTip :text="alertText" :showTip.sync="showTip"></alertTip>
   </div>
 </template>
 
 <script>
-  import {order_info} from '@/api/order'
+  import {orderInfo} from '@/api/order'
 
   export default {
     data() {
@@ -95,15 +97,24 @@
         statusDesc: '',
         restaurantInfo: {},
         foods: [],
-        orderData:{
-          total_price:0
-        }
+        orderData: {
+          total_price: 0
+        },
+        address: {},
+        alertText: '',
+        showTip: false
       }
     },
     created() {
       let id = this.$route.query.id;
-      order_info({order_id: id}).then((response) => {
-        let data = this.orderData = response.data.data;
+      orderInfo({order_id: id}).then((response) => {
+        let res = response.data;
+        if (res.status === -1) {
+          this.alertText = '获取订单失败';
+          this.showTip = true;
+          return;
+        }
+        let data = this.orderData = res.data;
         if (data.status === '支付完成') {
           this.orderStatus = '订单已完成'
           this.statusDesc = '感谢您对美团外卖的支持，欢迎再次光临'
@@ -113,6 +124,7 @@
         }
         this.restaurantInfo = data.restaurant;
         this.foods = data.foods;
+        this.address = data.address;
       })
 
     }
@@ -127,7 +139,7 @@
     margin-top: 0.2rem;
     background: #f4f4f4;
     .tip {
-      margin-top:0.4rem;
+      margin-top: 0.4rem;
       text-align: center;
       background: #fff;
       h3 {
@@ -237,8 +249,8 @@
         background: #fff;
         text-align: center;
         @include px2rem(line-height, 95);
-        span{
-          font-size:0.5rem;
+        span {
+          font-size: 0.5rem;
         }
       }
 

@@ -13,6 +13,7 @@
         </li>
       </ul>
     </div>
+    <alertTip :text="alertText" :showTip.sync="showTip"></alertTip>
   </div>
 </template>
 
@@ -27,7 +28,9 @@
     data() {
       return {
         suggestionLists: [],
-        fromIndex: false    //判断当前页面是来自首页还是来自新增收货地址
+        fromIndex: false,    //判断当前页面是来自首页还是来自新增收货地址
+        alertText:'',
+        showTip:false
       }
     },
     methods: {

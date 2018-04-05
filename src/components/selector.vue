@@ -1,11 +1,11 @@
 <template>
   <div id="selector">
     <div class="ball_container" @click="reduceCart()" v-if="food_num">
-      <span class="reduce"><i class="iconfont icon-reduce">&#xe60d;</i></span>
+      <span class="reduce"><i class="iconfont icon-reduce">&#xe613;</i></span>
     </div>
     <span class="number" v-if="food_num">{{food_num}}</span>
     <div class="ball_container" @click="addCart($event)">
-      <span class="add"><i class="iconfont icon-add">&#xe600;</i></span>
+      <span class="add"><i class="iconfont icon-add">&#xe6a9;</i></span>
     </div>
   </div>
 </template>
@@ -19,10 +19,13 @@
       addCart(event) {
         let elRight = event.target.getBoundingClientRect().right; //选择器的右边 离左边页面的位置
         let elBottom = event.target.getBoundingClientRect().bottom;   //选择器的底部  离顶部页面的位置
-        let {restaurant_name, restaurant_pic_url} = this.poi_info;   //商店名字 图片
+        console.log('poi_info', this.poi_info)
+
+        let {pic_url} = this.poi_info;   //商店名字 图片
+        let restaurant_name = this.poi_info.name;
         this.$store.dispatch('addCart', {
           restaurant_name,
-          restaurant_pic_url,
+          pic_url,
           name: this.name,
           price: this.price,
           foods_pic: this.pic,
@@ -79,14 +82,16 @@
       padding: 0.1rem;
     }
     .add {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: $mtYellow;
       margin: 0 0.1rem;
+      background: $mtYellow;
     }
     .icon-reduce, .icon-add {
-      font-size: 0.55rem;
+      display: flex;
+      @include px2rem(width, 50);
+      @include px2rem(height, 50);
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
     }
     .icon-reduce {
       color: $mtGrey;

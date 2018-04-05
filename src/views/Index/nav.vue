@@ -108,17 +108,18 @@
   @import "../../style/mixin";
 
   nav {
-    padding: 0.3rem 0;
-    @include px2rem(height, 390);
+    padding-top: 0.3rem;
+    @include px2rem(height, 370);
     .lists {
       height: 100%;
     }
     .type {
       width: 25%;
       text-align: center;
-      display: inline-block;
       @include px2rem(height, 140);
       margin: 0.2rem 0;
+      display: inline-flex;
+      flex-direction: column;
       .category_img {
         margin: 0 auto;
         @include px2rem(width, 100);
@@ -148,6 +149,8 @@
       }
     }
     .category_name {
+      display: inline-block;
+      margin: 0.2rem 0;
       font-size: 0.3rem;
     }
   }
@@ -155,11 +158,8 @@
   .category {
     margin: 0.5rem 0;
     .slide-box {
-      /*font-size: 0;*/
       .lists {
-
         ul {
-          /*font-size: 0;*/
           li {
             width: 25%;
             display: inline-block;

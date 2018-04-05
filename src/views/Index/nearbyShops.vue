@@ -105,7 +105,6 @@
       getRestaurants(page, limit, callback) { //获取餐馆列表
         if (this.noMore || this.preventRepeat)
           return;
-        else {
           this.preventRepeat = true;
           let offset = (page - 1) * limit;
           let {lat, lng} = this.address;
@@ -115,7 +114,6 @@
             this.noMore = data.length < this.limit;
             callback(data);
           });
-        }
       },
       firstFetch() {
         let _this = this;

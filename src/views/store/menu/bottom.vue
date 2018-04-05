@@ -39,6 +39,7 @@
 
 <script>
   import {mapGetters} from 'vuex'
+  import {getInfo} from '@/utils/auth'
   import Selector from '@/components/selector'
 
   export default {
@@ -88,8 +89,14 @@
           restaurant_id: this.restaurant_id,
           foods: this.cartList[this.restaurant_id]
         };
-        localStorage.setItem('confirmOrderData', JSON.stringify(data));
-        this.$router.push({name: 'ConfirmOrder'})
+
+        if(getInfo){
+          localStorage.setItem('confirmOrderData', JSON.stringify(data));
+          this.$router.push({path: '/confirmOrder'})
+        }else{
+          this.$router.push({path:'/login'})
+        }
+
       },
       emptyCart() {
         this.$store.dispatch('emptyCart', {restaurant_id: this.restaurant_id});

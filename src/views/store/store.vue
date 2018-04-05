@@ -3,7 +3,7 @@
     <!--头部商家信息-->
     <div class="head-wrapper">
       <!--头部-->
-      <v-head :title_head="poi_info.name" goBack=true  color="#fff" bgColor="#333" more="true"></v-head>
+      <v-head :title_head="poi_info.name" goBack=true   color="#fff" bgColor="#333" more="true"></v-head>
       <!--商家信息-->
       <div class="store-info">
         <div class="logo">
@@ -36,8 +36,10 @@
       </router-link>
     </div>
     <!--商家所有详细信息 当点击活动列表右侧的 > 箭头时显示 -->
-    <StoreDetail class="store-detail" v-show="showDetatil" :showFlag.sync="showDetatil"
-                 :poi_info="poi_info"></StoreDetail>
+    <transition name="fade">
+      <StoreDetail class="store-detail" v-show="showDetatil" :showFlag.sync="showDetatil"
+                   :poi_info="poi_info"></StoreDetail>
+    </transition>
     <!--点菜 评价 和商家-->
     <keep-alive>
       <router-view></router-view>
@@ -93,9 +95,10 @@
   @import "../../style/mixin.scss";
 
   #store {
-    height:100%;
+    height: 100%;
     display: flex;
     flex-direction: column;
+
     .head-wrapper {
       background: rgb(51, 51, 51);
       #head {
@@ -198,6 +201,15 @@
       }
     }
   }
+
+  .fade-enter-active, .fade-leave-active {
+    transition: opacity .4s
+  }
+
+  .fade-enter, .fade-leave-active {
+    opacity: 0
+  }
+
 
   @keyframes load {
     0% {

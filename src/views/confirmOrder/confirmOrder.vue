@@ -10,7 +10,6 @@
         </div>
         <i class="iconfont icon-right">&#xe63f;</i>
       </router-link>
-
       <router-link class="info_container address_container" to="/confirmOrder/address" v-else>
         <div class="address_info">
           <i class="iconfont icon-location">&#xe604;</i>
@@ -106,9 +105,9 @@
         totalNum: 0,
         restaurant_id: null,
         emptyAddress: true,   //还没有收货地址 需要新增
-        alertText:'',
-        showTip:false,
-        preventRepeat:false
+        alertText: '',
+        showTip: false,
+        preventRepeat: false
       }
     },
     computed: {
@@ -124,7 +123,7 @@
           this.showTip = true;
           return;
         }
-        if(this.preventRepeat)
+        if (this.preventRepeat)
           return;
         this.preventRepeat = true;
         let foods = [];
@@ -134,7 +133,7 @@
             foods.push({skus_id: key, num: this.order_data[key]['num']})
         })
         submitOrder({restaurant_id: this.restaurant_id, foods, address_id: this.defineAddress.id}).then((response) => {
-          if (response.data.status === 1) {
+          if (response.data.status === 200) {
             this.$router.push({path: '/pay', query: {order_id: response.data.order_id}})
           }
         })
@@ -148,7 +147,6 @@
       //获取用户收货地址
       getAllAddress().then((response) => {
         let data = response.data;
-        console.log('address Response', response)
         if (data.address.length) {      //判断该用户有没有收货地址
           this.emptyAddress = false;
           this.defineAddress = data.address[0];  //默认第一个为默认收获地址

@@ -118,6 +118,7 @@
 
 <script>
   import {userInfo, changeAvatar} from '@/api/user'
+  import {getInfo} from '@/utils/auth'
   import {upload_token, upload} from '@/api/upload'
   import config from '@/config'
 
@@ -146,7 +147,8 @@
                 let pic_url = config.domain + upResponse.data.key
                 this.avatar = pic_url;
                 this.loading = false;
-                changeAvatar({pic_url}).then((updateResponse) => {})     //更新到服务器
+                changeAvatar({pic_url}).then((updateResponse) => {
+                })     //更新到服务器
               })
             } else {
               this.alertText = response.data.message
@@ -157,7 +159,7 @@
       }
     },
     mounted() {
-      this.username = localStorage.getItem('username');
+      this.username = getInfo();
       userInfo().then((response) => {
         console.log('uerInfo', response)
         this.avatar = response.data.data.avatar;
@@ -259,5 +261,8 @@
         }
       }
     }
+  }
+  .intro{
+    padding-bottom: 1rem;
   }
 </style>

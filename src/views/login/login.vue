@@ -1,18 +1,16 @@
 <template>
   <div id="login">
     <v-head goBack="true" title_head="登录">
-
     </v-head>
     <form action="" class="login_form">
-      <div class="userName">
-        <label for="userName">账号</label>
-        <input id="userName" type="text" placeholder="请输入手机号" v-model="username">
+      <div class="username">
+        <label for="username">账号</label>
+        <input id="username" type="text" placeholder="请输入手机号" v-model="username">
       </div>
-      <div class="passWord">
-        <label for="passWord">密码</label>
-        <input id="passWord" type="password" placeholder="请输入密码" v-model="password" v-if="!passwordVisible"
+      <div class="password">
+        <label for="password">密码</label>
+        <input id="password" :type="passwordVisible?'text':'password'" placeholder="请输入密码" v-model="password"
                @keyup.enter="login()">
-        <input id="passWord" type="text" placeholder="请输入密码" v-model="password" v-else @keyup.enter="login()">
         <span @click="changeVisible()">
           <i class="iconfont icon" v-if="!passwordVisible">&#xe60a;</i>
           <i class="iconfont icon" v-else>&#xe6d0;</i>
@@ -23,18 +21,22 @@
       </div>
       <span class="tip">未注册直接输入账号密码，自动注册！</span>
     </form>
+    <alertTip :text="alertText" :showTip.sync="showTip"></alertTip>
   </div>
 </template>
 
 <script>
   import {login} from '@/api/user'
+  import {setInfo} from '@/utils/auth'
 
   export default {
     data() {
       return {
         username: null,
         password: null,
-        passwordVisible: false
+        passwordVisible: false,
+        alertText: '',
+        showTip: false
       }
     },
     methods: {
@@ -43,15 +45,17 @@
       },
       login() {
         if (!this.username) {
-          console.log("用户名输入不合法")
+          this.alertText = '用户名输入不合法';
+          this.showTip = true;
           return;
         } else if (!this.password) {
-          console.log("密码输入不合法");
+          this.alertText = '密码不能为空';
+          this.showTip = true;
           return;
         }
         login({username: this.username, password: this.password}).then((response) => {
-          if (response.data.status === 1) {
-            localStorage.setItem('mt-username', this.username);
+          if (response.data.status === 200) {
+            setInfo(this.username);
             this.$router.go(-1);
           }
         });
@@ -74,7 +78,7 @@
         @include px2rem(line-height, 85);
         font-weight: bold;
       }
-      .userName, .passWord {
+      .username, .password {
         margin: 0.4rem 0.6rem;
         border-bottom: 1px solid $bottomLine;
         label, ::-webkit-input-placeholder {
@@ -92,7 +96,7 @@
           outline: none;
         }
       }
-      .passWord {
+      .password {
         span {
           .icon {
             font-size: 0.5rem;

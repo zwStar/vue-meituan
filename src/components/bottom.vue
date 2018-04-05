@@ -1,3 +1,4 @@
+<!--首页底部-->
 <template>
   <div id="bottom">
     <ul>

@@ -14,8 +14,8 @@ const getters = {
 
 //actions
 const actions = {
-  addCart({commit}, {restaurant_id, restaurant_name, restaurant_pic_url, food_id, price, name, foods_pic}) {
-    commit('ADD_CART', {restaurant_id, restaurant_name, restaurant_pic_url, food_id, price, name, foods_pic})
+  addCart({commit}, {restaurant_id, restaurant_name, pic_url, food_id, price, name, foods_pic}) {
+    commit('ADD_CART', {restaurant_id, restaurant_name, pic_url, food_id, price, name, foods_pic})
   },
   reduceCart({commit}, {restaurant_id, food_id}) {
     commit('REDUCE_CART', {restaurant_id, food_id})
@@ -36,7 +36,7 @@ const actions = {
 
 //mutations
 const mutations = {
-  [types.ADD_CART](state, {restaurant_id, restaurant_name, restaurant_pic_url, food_id, price, name, foods_pic}) {
+  [types.ADD_CART](state, {restaurant_id, restaurant_name, pic_url, food_id, price, name, foods_pic}) {
     let cart = state.cartList;
     let restaurant;
     if (!cart[restaurant_id]) { //如果该商店还没有添加任何商品 进行初始化
@@ -44,11 +44,10 @@ const mutations = {
         totalPrice: 0,   //总价格
         totalNum: 0,      //总数量
         restaurant_name,   //餐馆名
-        restaurant_pic_url  //餐馆图片
+        pic_url  //餐馆图片
       };
     } else {
       restaurant = cart[restaurant_id];
-      // restaurant.name = restaurant_name;
     }
     restaurant.totalPrice = (Number(restaurant.totalPrice) + Number(price)).toFixed(2);   //计算总价格
     restaurant.totalNum++;    //数量加一

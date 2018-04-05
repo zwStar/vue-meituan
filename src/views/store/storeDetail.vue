@@ -128,7 +128,7 @@
         }
       }
       .announcement {
-        margin-top: 1rem;
+        margin-top: 0.5rem;
         color: #fff;
         h2{
           text-align: center;
@@ -137,7 +137,6 @@
         p {
           font-size: 0.3rem;
           margin: 0.3rem;
-          line-height: 0.1rem;
         }
       }
     }

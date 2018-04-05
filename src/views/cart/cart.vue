@@ -15,12 +15,12 @@
         <span class="select" v-else-if="editStatus" @click="allSelectDelete(restaurant_id,true)"></span>
 
         <span class="selected" v-if="!editStatus && selectFood[restaurant_id]['allSelect'] === true"
-              @click="isAllSelect(restaurant_id,false)">
+              @click="allSelect(restaurant_id,false)">
           <i class="iconfont">&#xe6da;</i>
         </span>
         <span class="select" v-else-if="!editStatus" @click="allSelect(restaurant_id,true)"></span>
         <span class="restaurant_picture">
-          <img :src="item.restaurant_pic_url">
+          <img :src="item.pic_url">
         </span>
         <span class="restaurant_name">{{item.restaurant_name}}</span>
       </section>
@@ -44,9 +44,9 @@
           </div>
         </div>
       </section>
-      <div class="bottom"  v-show="!editStatus">
-          <span class="submit" @click="submit(restaurant_id)">去结算</span>
-          <span class="total_price">￥{{selectFood[restaurant_id]['totalPrice'].toFixed(2)}}</span>
+      <div class="bottom" v-show="!editStatus">
+        <span class="submit" @click="submit(restaurant_id)">去结算</span>
+        <span class="total_price">￥{{selectFood[restaurant_id]['totalPrice'].toFixed(2)}}</span>
       </div>
     </article>
 
@@ -91,29 +91,29 @@
 
         //判读是否全选
         let newObj = {...this.selectFood[restaurant_id]};
-        let allSelect = this.isAllSelect(this.deleteSelectFood, restaurant_id);
-        this.selectFood[restaurant_id]['allSelect'] = allSelect !== true;
+        let allSelect = this.isAllSelect(newObj, restaurant_id);
+        this.selectFood[restaurant_id]['allSelect'] = allSelect;
         this.selectFood = {...this.selectFood};   //拓展运算符使vue更新视图
       },
       selectDelete(restaurant_id, foodKey) {  //选中删除商品
         this.deleteSelectFood[restaurant_id][foodKey] = true; //该商品选中置为true
         //判读是否全选
         let newObj = {...this.deleteSelectFood[restaurant_id]};
-        let allSelect = this.isAllSelect(this.deleteSelectFood, restaurant_id);
-        this.deleteSelectFood[restaurant_id]['allSelect'] = allSelect !== true;
+        let allSelect = this.isAllSelect(newObj, restaurant_id);
+        this.deleteSelectFood[restaurant_id]['allSelect'] = allSelect;
         this.deleteSelectFood = {...this.deleteSelectFood};   //拓展运算符使vue更新视图
       },
       isAllSelect(newObj, restaurant_id) {      //判断商品是否全选中了 如果全选中那么商家头像左边的按钮对应选中
         delete newObj.allSelect;
         let values = Object.values(newObj);
-        let allSelect = values.some((el) => {
+        let noAllSelect = values.some((el) => {
           if (el === false)
             return true;
-        })
-        return allSelect;
-
+        });
+        return !noAllSelect;
       },
       allSelect(restaurant_id, boolean) {     //全选
+        console.log('boolean',boolean)
         this.selectFood[restaurant_id]['allSelect'] = boolean;  //全选标志
         Object.keys(this.selectFood[restaurant_id]).forEach(el => { //每个商品都选中
           if (Number(el))
@@ -216,19 +216,18 @@
     }
     .title {
       padding: 0.2rem;
+      display: flex;
+      align-items: center;
       .restaurant_name {
         font-size: 0.4rem;
         vertical-align: middle;
       }
       .restaurant_picture {
         display: inline-block;
-        @include px2rem(width, 42);
-        @include px2rem(height, 42);
-        vertical-align: middle;
-        margin: 0 0.05rem;
+        margin: 0 0.2rem;
         img {
-          width: 100%;
-          height: 100%;
+          @include px2rem(width, 42);
+          @include px2rem(height, 42);
         }
       }
     }
@@ -239,7 +238,6 @@
       border-radius: 50%;
     }
     .select {
-      @include px2rem(height, 30);
       border: 1px solid #e9e8ea;
       vertical-align: middle;
     }
@@ -247,6 +245,9 @@
       text-align: center;
       background: $mtYellow;
       @include px2rem(line-height, 35);
+      display: inline-flex;
+      justify-content: center;
+      align-items: center;
       .iconfont {
         font-size: 0.5rem;
       }
@@ -271,21 +272,25 @@
         }
         .info {
           flex: 1;
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
           background: #f7f7f7;
-          padding-left: 0.3rem;
+          padding: 0.1rem 0 0.1rem 0.3rem;
           @include px2rem(height, 150);
           .name {
             font-size: 0.4rem;
             font-weight: 600;
           }
           div {
-            padding-top: 0.6rem;
+            display: flex;
+            justify-content: space-between;
+            @include px2rem(padding-top, 50);
             .num {
               font-size: 0.4rem;
             }
             .price {
               font-size: 0.4rem;
-              float: right;
               padding-right: 0.2rem;
             }
           }

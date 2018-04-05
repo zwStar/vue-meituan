@@ -12,6 +12,7 @@
         </router-link>
       </ul>
     </div>
+    <alertTip :text="alertText" :showTip.sync="showTip"></alertTip>
   </div>
 </template>
 
@@ -26,7 +27,9 @@
     data() {
       return {
         keyword: '',
-        searchList: []
+        searchList: [],
+        alertText: '',
+        showTip: false
       }
     },
     methods: {
@@ -35,12 +38,22 @@
           return;
         this.keyword = val;
         searchRestaurant({keyword: val}).then((response) => {
-          this.searchList = response.data.data;
+          let res = response.data;
+          if (res.status === 200) {
+            if(res.data.length){
+              this.searchList = res.data;
+            }else{
+              this.alertText = '找不到该餐馆，输入汉堡试试';
+              this.showTip = true;
+            }
+          } else {
+            this.alertText = res.message;
+            this.showTip = true;
+          }
         })
       },
       high_light: function (value) {
-        let a = value.replace(this.keyword, `<span style="color:#ffd161;">${this.keyword}</span>`)
-        return a;
+        return value.replace(this.keyword, `<span style="color:#ffd161;">${this.keyword}</span>`);
       }
     }
   }

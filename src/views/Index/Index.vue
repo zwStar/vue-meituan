@@ -115,9 +115,12 @@
         flex: 1;
         background: rgb(237, 237, 237);
         margin-right: 0.2rem;
+        display: flex;
+        align-items: center;
         .iconfont {
           display: inline-block;
-          padding: 5px 0 0 10px;
+          padding-left:10px;
+          padding-top:2px;
           font-size: 0.4rem;
         }
         span {

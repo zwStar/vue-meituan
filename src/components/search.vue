@@ -53,6 +53,7 @@
         text-indent: 20px;
         outline: none;
         background: rgba(237, 237, 237, 0.1);
+        line-height: normal;
         &::-webkit-input-placeholder {
           font-size: 0.3rem;
         }

@@ -1,5 +1,9 @@
 <template>
   <div id="menu">
+    <!--skeleton-loading-->
+    <div class="skeleton_loading" v-if="!getInfoReady">
+      <img src="../../../assets/restaurant.jpg">
+    </div>
     <div class="left" ref="left">
       <ul>
         <li v-for="(category,index) in foodsData" :key="category.id" @click="mappingScroll(index)"
@@ -36,7 +40,7 @@
         <span class="ball"></span>
       </div>
     </transition>
-    <Bottom></Bottom>
+    <Bottom v-if="getInfoReady"></Bottom>
   </div>
 </template>
 
@@ -55,7 +59,8 @@
         elRight: 0, //当前点击加按钮在网页中的绝对top值
         elBottom: 0, //当前点击加按钮在网页中的绝对left值
         fontSize: 0,      //用来获取当前1rem等于多少px 因为小球用transition运动 需要用到px 而左下角购物车的位置是rem为单位 需要转换成px 才能让小球找到落地点
-        foodsData: []       //食物数据
+        foodsData: [],       //食物数据
+        getInfoReady:false
       }
     },
     methods: {
@@ -103,6 +108,7 @@
       //根据餐馆id获取食物
       getFoods({restaurant_id}).then((response) => {
         this.foodsData = response.data.data;
+        this.getInfoReady = true;
         this.$nextTick(() => {       //初始化better-scroll
           this.leftScroll = new BScroll(this.$refs.left, {click: true});
           this.rightScroll = new BScroll(this.$refs.right, {click: true, probeType: 3,});
@@ -129,6 +135,14 @@
     display: flex;
     flex: 1;
     padding-bottom: 1.368rem;
+    .skeleton_loading{
+      position:fixed;
+      top:0;
+      left:0;
+      right:0;
+      bottom:0;
+      z-index: 999;
+    }
     .left, .right {
       overflow: hidden;
     }

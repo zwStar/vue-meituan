@@ -124,12 +124,12 @@ export default new Router({
     },
     {
       path: '/login',
-      name: 'Login',
+      name: '登录',
       component: Login
     },
     {
       path: '/confirmOrder',
-      name: 'ConfirmOrder',
+      name: '确认订单',
       component: ConfirmOrder,
       children: [{
         path: 'address',

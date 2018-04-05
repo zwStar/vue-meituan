@@ -44,6 +44,7 @@
 
 <script>
   import {orders} from '@/api/order'
+  import {getInfo} from '@/utils/auth'
 
   export default {
     data() {
@@ -54,17 +55,11 @@
       }
     },
     created() {
-      this.username = localStorage.getItem('username')
-      console.log(this.username)
+      this.username = getInfo()
       if (this.username) {
         orders().then((response) => {
           this.ordersList = response.data.data;
-          if (!this.ordersList.length) {
-            this.noOrder = true;
-          } else {
-            this.noOrder = false;
-          }
-          console.log('orderList', this.ordersList)
+          this.noOrder = !this.ordersList.length;
         })
       }
     }
@@ -108,14 +103,14 @@
     }
 
     .no_order {
-      width:100%;
+      width: 100%;
       position: absolute;
       top: 50%;
       left: 50%;
       text-align: center;
       transform: translate(-50%, -50%);
-      span{
-        font-size:0.4rem;
+      span {
+        font-size: 0.4rem;
 
       }
     }

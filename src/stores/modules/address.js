@@ -56,7 +56,6 @@ const mutations = {
   },
   [types.RECORD_DELIVERY_ADDRESS](state, address) {
     state.deliveryAddress = {...address};
-    console.log('state.deliveryAddress', state.deliveryAddress)
   }
 }
 

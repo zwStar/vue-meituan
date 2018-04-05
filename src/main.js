@@ -12,11 +12,6 @@ import Star from '@/components/star'
 import AlertTip from '@/components/alertTip'
 import Loading from '@/components/loading'
 
-import {Swipe, SwipeItem} from 'mint-ui';
-
-Vue.component(Swipe.name, Swipe);
-Vue.component(SwipeItem.name, SwipeItem);
-
 Vue.component('v-head', Head);
 Vue.component('v-bottom', Bottom);
 Vue.component('Star', Star);

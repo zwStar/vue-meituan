@@ -56,7 +56,7 @@
         this.timer = setInterval(() => {
           listen_status({outTradeNo}).then((response) => {
             console.log('scan', response)
-            if(response.data.status === 1){
+            if(response.data.status === 200){
               clearInterval(this.timer);
               _this.$router.push({path:'/order_detail',query:{id:_this.orderData.order_id}})
             }

@@ -73,7 +73,7 @@
       h3 {
         font-size: 0.3rem;
         font-weight: 600;
-        margin: 0.4rem;
+        margin: 0.4rem 0.2rem;
       }
       .name, .phone, .location, .house_number {
         background: #fff;
@@ -100,7 +100,6 @@
         &::-webkit-input-placeholder {
           font-size: 0.4rem;
           color: #9d9d9d;
-          font-weight: 600;
         }
       }
       /*定位*/
