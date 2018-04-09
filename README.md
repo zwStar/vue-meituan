@@ -36,23 +36,23 @@
 
 
 ## 效果演示
-# 主界面 #
+### 主界面 ###
 ![主界面](screenshots/index3.gif)
-# 定位和搜索 #
+### 定位和搜索 ###
 ![定位](screenshots/location.gif)
-# 扫码支付 #
+### 扫码支付 ###
 ![扫码支付](screenshots/scan_pay.gif)
-# APP支付 #
+### APP支付 ###
 ![调用APP支付](screenshots/app_pay.gif)
-# 我的购物车 #
+### 我的购物车 ###
 ![购物车](screenshots/cart.gif)
-# 清除购物车 #
+### 清除购物车 ###
 ![清除购物车](screenshots/clearCart.gif)
-# 评论 #
+### 评论 ###
 ![评论](screenshots/comment.gif)
-# 其它 #
+### 其它 ###
 ![其它](screenshots/other.gif)
-# 还有一些其它功能就不放图了哈 #
+### 还有一些其它功能就不放图了哈 ###
  
 ## 线上地址 ##
     http://39.108.3.12
