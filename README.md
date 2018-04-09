@@ -7,9 +7,7 @@
 求广深实习，现在可以开始上班(要求暑假上班也可以)，每周保证4天以上的上班时间
 
 ## 社区地址
-   掘金地址：>[GitHub：https://github.com/zwStar/meituan-backend](https://github.com/zwStar/meituan-backend)
-   
-   思否地址：>[GitHub：https://github.com/zwStar/meituan-backend](https://github.com/zwStar/meituan-backend)
+   掘金地址：>[https://juejin.im/post/5aca46e2f265da238c3af4ca](https://juejin.im/post/5aca46e2f265da238c3af4ca)
 ## 功能 ##
 - 登录/注销
 - IP定位
