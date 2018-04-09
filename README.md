@@ -8,6 +8,7 @@
 
 ## 社区地址
    掘金地址：>[https://juejin.im/post/5aca46e2f265da238c3af4ca](https://juejin.im/post/5aca46e2f265da238c3af4ca)
+   思否地址：>[https://segmentfault.com/a/1190000014267516?utm_source=index-hottest](https://segmentfault.com/a/1190000014267516?utm_source=index-hottest)
 ## 功能 ##
 - 登录/注销
 - IP定位
