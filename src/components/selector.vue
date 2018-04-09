@@ -19,8 +19,6 @@
       addCart(event) {
         let elRight = event.target.getBoundingClientRect().right; //选择器的右边 离左边页面的位置
         let elBottom = event.target.getBoundingClientRect().bottom;   //选择器的底部  离顶部页面的位置
-        console.log('poi_info', this.poi_info)
-
         let {pic_url} = this.poi_info;   //商店名字 图片
         let restaurant_name = this.poi_info.name;
         this.$store.dispatch('addCart', {

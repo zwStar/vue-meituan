@@ -13,7 +13,6 @@
     computed: {
       ...mapGetters(['cartList']),
       num() {
-        console.log('cartList',this.cartList)
         let totalNum = 0;
         Object.values(this.cartList).forEach(value=>{
           totalNum += value.totalNum;

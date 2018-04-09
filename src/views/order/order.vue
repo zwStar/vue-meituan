@@ -66,7 +66,6 @@
       this.username = getInfo()
       if (this.username) {
         orders().then((response) => {
-          console.log('response', response)
           if (response.data.status === 200) {
             this.ordersList = response.data.data;
             this.noOrder = !this.ordersList.length;

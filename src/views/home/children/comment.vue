@@ -78,7 +78,6 @@
             this.showTip = true;
           }
         })
-        console.log('id', id)
       }
     },
     created() {
@@ -89,7 +88,6 @@
         }
       })
       comment().then((response) => {
-        console.log('response', response)
         let res = response.data;
         if (res.status === 200) {
           this.commentList = res.data;

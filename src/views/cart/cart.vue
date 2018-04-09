@@ -149,7 +149,6 @@
         this.deleteSelectFood = {...this.deleteSelectFood};   //拓展运算符使vue更新视图
       },
       submit(restaurant_id) { //提交订单
-        console.log('selectFood',this.selectFood)
         if (!this.selectFood[restaurant_id].totalPrice)   //如果没有选中食物 不能提交订单
           return;
         let restaurant = this.selectFood[restaurant_id];    //选中食物的餐馆

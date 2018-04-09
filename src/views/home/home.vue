@@ -171,7 +171,6 @@
       if (this.username) {
         userInfo().then((response) => {
           this.avatar = response.data.data.avatar;
-          console.log('resss', response.data.data)
         })
       }
     }
