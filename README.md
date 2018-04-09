@@ -5,7 +5,10 @@
 
 ## 重要事情先讲一遍 ##
 求广深实习，现在可以开始上班(要求暑假上班也可以)，每周保证4天以上的上班时间
-    
+
+## 论坛地址
+   掘金地址：>[GitHub：https://github.com/zwStar/meituan-backend](https://github.com/zwStar/meituan-backend)
+   思否地址：>[GitHub：https://github.com/zwStar/meituan-backend](https://github.com/zwStar/meituan-backend)
 ## 功能 ##
 - 登录/注销
 - IP定位
@@ -33,27 +36,40 @@
 
 
 ## 效果演示
+# 主界面 #
+![主界面](screenshots/index3.gif)
+# 定位和搜索 #
+![定位](screenshots/location.gif)
+# 扫码支付 #
+![扫码支付](screenshots/scan_pay.gif)
+# APP支付 #
+![调用APP支付](screenshots/app_pay.gif)
+# 我的购物车 #
+![购物车](screenshots/cart.gif)
+# 清除购物车 #
+![清除购物车](screenshots/clearCart.gif)
+# 评论 #
+![评论](screenshots/comment.gif)
+# 其它 #
+![其它](screenshots/other.gif)
+
+## 线上地址 ##
+    http://39.108.3.12
+    请用谷歌浏览器然后开启移动端浏览，如果要调用APP支付就需要用手机自带浏览器打开，然后支付时选择调起APP支付
+
+
+## 说明  
+    后端项目地址：>[GitHub：https://github.com/zwStar/meituan-backend](https://github.com/zwStar/meituan-backend)
+## 项目部署
+
+阿里云 CentOS 7.4 64位
  
-![主界面](screenshots/index.gif)
-    
->   [定位和搜索](https://github.com/zwStar/vue-meituan/blob/master/screenshots/location.gif)
-    
->   [下订单](https://github.com/zwStar/vue-meituan/blob/master/screenshots/makeOrder.gif) 
-   
->   [清除购物车](https://github.com/zwStar/vue-meituan/blob/master/screenshots/clearCart.gif) 
-    
-## 说明
-    后端接口文档
-    项目地址：
-    项目线上地址：服务器部署和域名备案中，稍后更新上
-
-
 ## 项目运行
 
 ```
 项目运行之前，请确保系统已经安装以下应用
 1、node
-2、mongodb (开启状态)
+2、mongodb (开机状态)
 ```
 
 ```
@@ -73,13 +89,7 @@ npm run dev
 
 ```
 .
-├── api                        后端接口
-│   ├── index.js                    axios配置
-│   ├── location.js                 定位
-│   ├── order.js                    订单
-│   ├── restaurant.js               餐馆
-│   ├── uoload.js                   七牛云上传
-│   ├── user.js                     用户信息
+├── api                             后端接口
 ├── config.js                       运行配置
 ├── assets                          静态资源
 ├── components                      全局组件
@@ -98,11 +108,12 @@ npm run dev
 
 ```
 
-## 最后
-    如果有问题，可以在 Issues 中提问。
-    如果您对这个项目感兴趣，请Star支持下，谢谢！
 
+## 写在最后 ##
+因为还是学生，平时最多也是和同学一起开发，并没有参与过真正的企业团队开发，所以应该有很多地方做的不是很好，欢迎各位大佬们给我提一些意见，最后再问一句哈，求广深实习，现在可以开始上班(要求暑假上班也可以)，每周保证4天以上的上班时间。如果没有，我等下再来问哈。。。
 
+ 如果有问题，您可以在 Issues 中提问哈。
+ 如果您对这个项目感兴趣，请Star支持下，谢谢！
 # License
     MIT
 
