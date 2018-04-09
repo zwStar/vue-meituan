@@ -6,7 +6,7 @@
 ## 重要事情先讲一遍 ##
 求广深实习，现在可以开始上班(要求暑假上班也可以)，每周保证4天以上的上班时间
 
-## 论坛地址
+## 社区地址
    掘金地址：>[GitHub：https://github.com/zwStar/meituan-backend](https://github.com/zwStar/meituan-backend)
    
    思否地址：>[GitHub：https://github.com/zwStar/meituan-backend](https://github.com/zwStar/meituan-backend)
