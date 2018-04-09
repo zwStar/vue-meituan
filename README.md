@@ -58,10 +58,13 @@
 ## 线上地址 ##
     http://39.108.3.12
     请用谷歌浏览器然后开启移动端浏览，如果要调用APP支付就需要用手机自带浏览器打开，然后支付时选择调起APP支付
-
-
+    
 ## 说明  
     后端项目地址：>[GitHub：https://github.com/zwStar/meituan-backend](https://github.com/zwStar/meituan-backend)
+    
+## 未完待续 ##
+    还有商家管理PC端还没写完，等写完再开源出来
+
 ## 项目部署
 
 阿里云 CentOS 7.4 64位
@@ -71,7 +74,7 @@
 ```
 项目运行之前，请确保系统已经安装以下应用
 1、node
-2、mongodb (开机状态)
+2、mongodb 
 ```
 
 ```
