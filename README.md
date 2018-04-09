@@ -1,15 +1,15 @@
 ## 关于 ##
-2019届大三学生，前段时间一直想一个人单独开发一个较为完整的项目，在众多应用中，考虑之后选择了美团外卖来模仿，这段时间就利用课余时间进行开发，前端用vue+vuex+vue-router+axios，因为需要用到定位和支付等功能，需要后端配合，而且不想一直用mock假数据，所以用express(基于nodejs的框架)做后台，数据库用NOSQL的mongodb。 前端项目包含20多个路由，涉及到vue文件有40个，功能设计登录，定位，浏览商品，加购物车，下订单，支付(支持微信和支付宝的扫码支付和调起app支付)，评价，个人信息更改，是一个较为完整的项目。
+2019届大三学生，前段时间一直想一个人单独开发一个较为完整的项目，在众多应用中，考虑之后选择了美团外卖来模仿，这段时间就利用课余时间进行开发，前端用vue+vuex+vue-router+axios，因为需要用到定位和支付等功能，需要后端配合，而且想要做真正数据交互，所以用express(基于nodejs的框架)做后台，数据库用NOSQL的mongodb。 前端项目包含20多个路由，涉及到vue文件有40个，功能设计登录，定位，浏览商品，加购物车，下订单，支付(支持微信和支付宝的扫码支付和调起app支付)，评价，个人信息更改，是一个较为完整的项目。
 
 ### 注意：此项目为个人开发实践练习，不作为任何商业用途
 
 ## 重要事情先讲一遍 ##
 求广深实习，现在可以开始上班(要求暑假上班也可以)，每周保证4天以上的上班时间
 
-## 论坛地址
-   掘金地址：>[GitHub：https://github.com/zwStar/meituan-backend](https://github.com/zwStar/meituan-backend)
+## 社区地址
+   掘金地址：>[https://juejin.im/post/5aca46e2f265da238c3af4ca](https://juejin.im/post/5aca46e2f265da238c3af4ca)
    
-   思否地址：>[GitHub：https://github.com/zwStar/meituan-backend](https://github.com/zwStar/meituan-backend)
+   思否地址：>[https://segmentfault.com/a/1190000014267516?utm_source=index-hottest](https://segmentfault.com/a/1190000014267516?utm_source=index-hottest)
 ## 功能 ##
 - 登录/注销
 - IP定位
@@ -58,10 +58,13 @@
 ## 线上地址 ##
     http://39.108.3.12
     请用谷歌浏览器然后开启移动端浏览，如果要调用APP支付就需要用手机自带浏览器打开，然后支付时选择调起APP支付
-
-
+    
 ## 说明  
     后端项目地址：>[GitHub：https://github.com/zwStar/meituan-backend](https://github.com/zwStar/meituan-backend)
+    
+## 未完待续 ##
+    还有商家管理PC端还没写完，等写完再开源出来
+
 ## 项目部署
 
 阿里云 CentOS 7.4 64位
@@ -71,7 +74,7 @@
 ```
 项目运行之前，请确保系统已经安装以下应用
 1、node
-2、mongodb (开机状态)
+2、mongodb 
 ```
 
 ```
