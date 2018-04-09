@@ -5,7 +5,10 @@
 
 ## 重要事情先讲一遍 ##
 求广深实习，现在可以开始上班(要求暑假上班也可以)，每周保证4天以上的上班时间
-    
+
+## 论坛地址
+   掘金地址：>[GitHub：https://github.com/zwStar/meituan-backend](https://github.com/zwStar/meituan-backend)
+   思否地址：>[GitHub：https://github.com/zwStar/meituan-backend](https://github.com/zwStar/meituan-backend)
 ## 功能 ##
 - 登录/注销
 - IP定位
@@ -35,19 +38,19 @@
 ## 效果演示
 # 主界面 #
 ![主界面](screenshots/index3.gif)
-
+# 定位和搜索 #
 ![定位](screenshots/location.gif)
-
+# 扫码支付 #
 ![扫码支付](screenshots/scan_pay.gif)
-
+# APP支付 #
 ![调用APP支付](screenshots/app_pay.gif)
-
+# 我的购物车 #
 ![购物车](screenshots/cart.gif)
-    
+# 清除购物车 #
 ![清除购物车](screenshots/clearCart.gif)
- 
+# 评论 #
 ![评论](screenshots/comment.gif)
-
+# 其它 #
 ![其它](screenshots/other.gif)
 
 ## 线上地址 ##
@@ -55,12 +58,12 @@
     请用谷歌浏览器然后开启移动端浏览，如果要调用APP支付就需要用手机自带浏览器打开，然后支付时选择调起APP支付
 
 
-## 说明
-    后端接口文档
-    项目地址：
-    项目线上地址：服务器部署和域名备案中，稍后更新上
+## 说明  
+    后端项目地址：>[GitHub：https://github.com/zwStar/meituan-backend](https://github.com/zwStar/meituan-backend)
+## 项目部署
 
-
+阿里云 CentOS 7.4 64位
+ 
 ## 项目运行
 
 ```
