@@ -34,6 +34,7 @@
     border: 1px solid $mtGrey;
     text-align: center;
     border-radius: 50%;
+    background: #fff;
     @include px2rem(width, 96);
     @include px2rem(line-height, 91);
     .iconfont {

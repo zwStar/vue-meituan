@@ -1,3 +1,4 @@
+<!--登录页-->
 <template>
   <div id="login">
     <v-head goBack="true" title_head="登录">
@@ -5,7 +6,7 @@
     <form action="" class="login_form">
       <div class="username">
         <label for="username">账号</label>
-        <input id="username" type="text" placeholder="请输入手机号" v-model="username">
+        <input id="username" type="text" placeholder="请输入用户名" v-model="username">
       </div>
       <div class="password">
         <label for="password">密码</label>
@@ -21,7 +22,7 @@
       </div>
       <span class="tip">未注册直接输入账号密码，自动注册！</span>
     </form>
-    <alertTip :text="alertText" :showTip.sync="showTip"></alertTip>
+    <alert-tip :text="alertText" :showTip.sync="showTip"></alert-tip>
   </div>
 </template>
 
@@ -32,9 +33,9 @@
   export default {
     data() {
       return {
-        username: null,
-        password: null,
-        passwordVisible: false,
+        username: null,       //用户名
+        password: null,       //密码
+        passwordVisible: false, //显示密码
         alertText: '',
         showTip: false
       }
@@ -98,6 +99,7 @@
       }
       .password {
         span {
+          float: right;
           .icon {
             font-size: 0.5rem;
           }

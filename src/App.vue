@@ -8,21 +8,10 @@
 </template>
 
 <script>
-  import {mapGetters} from 'vuex'
-  import BScroll from 'better-scroll'
-
   export default {
     name: 'app',
-    data() {
-      return {
-        keepAlive: false
-      }
-    },
-    computed: {
-      ...mapGetters(['routerPath'])
-    },
     mounted() {
-      let cartList = localStorage.getItem('cartList');
+      let cartList = localStorage.getItem('cartList'); //获取购物车信息 因为加购物车可以不用登录 所以用localStorage保存着 页面加载时更新到vuex中
       cartList = JSON.parse(cartList)
       if (cartList)
         this.$store.dispatch('updateCart', {cartList})

@@ -1,3 +1,4 @@
+<!--我的收获地址-->
 <template>
   <div id="address">
     <v-head title_head="我的收货地址" goBack=true></v-head>
@@ -8,19 +9,18 @@
     </nav>
     <div class="container">
       <ul>
-        <li v-for="(list,index) in addressLists" :key="list.id">
+        <li v-for="(item,index) in addressLists" :key="item.id">
           <div>
-            <p>{{list.address}} {{list.house_number}}</p>
-            <span class="name">{{list.name}}</span>
-            <span class="sex">{{list.gender === 'female' ? '女士' : '先生'}}</span>
-            <span class="phone">{{list.phone}}</span>
+            <p>{{item.address}} {{item.house_number}}</p>
+            <span class="name">{{item.name}}</span>
+            <span class="sex">{{item.gender === 'female' ? '女士' : '先生'}}</span>
+            <span class="phone">{{item.phone}}</span>
           </div>
-          <i class="iconfont edit" v-show="status" @click="editAddress(list.id)">&#xe60b;</i>
-          <i class="iconfont delete" v-show="status" @click="deleteAddress(list.id,index)">&#xe615;</i>
+          <i class="iconfont delete" v-show="status" @click="deleteAddress(item.id,index)">&#xe615;</i>
         </li>
       </ul>
     </div>
-    <router-link tag="div" class="add" :to="{name:'Add_Address'}">
+    <router-link tag="div" class="add" :to="{path:'/add_address'}">
       <i class="iconfont icon">&#xe606;</i>
       <span>新增收获地址</span>
     </router-link>
@@ -48,14 +48,10 @@
       },
       deleteAddress(id, index) {
         deleteAddress({address_id: id}).then((response) => {
-          console.log('delete response', response)
-          if (response.data.status === 1) {
+          if (response.data.status === 200) {
             this.addressLists.splice(index, 1); //通过splice 删除数据
           }
         })
-      },
-      editAddress(id) {
-        this.$router.push({path: '/home/address/edit', query: {address_id: id}});
       }
     },
     created() {

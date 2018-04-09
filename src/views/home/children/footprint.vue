@@ -1,3 +1,4 @@
+<!--足迹-->
 <template>
   <div class="footprint">
     <v-head title_head="我的足迹" goBack="true" bgColor="#f4f4f4"></v-head>

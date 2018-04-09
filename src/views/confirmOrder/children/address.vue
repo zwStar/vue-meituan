@@ -1,6 +1,7 @@
+<!--订单收货地址-->
 <template>
   <div id="address">
-    <v-head title_head="收货地址" goBack=true    bgColor="#f4f4f4"></v-head>
+    <v-head title_head="收货地址" goBack=true     bgColor="#f4f4f4"></v-head>
     <div class="container">
       <ul>
         <li v-for="item in addressLists" :key="item.id" @click="selectAddress(item)">
@@ -44,7 +45,7 @@
     created() {
       getAllAddress().then((response) => {    //获取用户地址
         let data = response.data;
-        if (data.status === 1) {
+        if (data.status === 200) {
           if (!data.address.length) {
             this.emptyAddress = true;
           } else {
@@ -98,13 +99,13 @@
         }
       }
     }
-    .empty_address{
-      position:absolute;
-      top:50%;
-      left:50%;
-      transform: translate3D(-50%,-50%,0);
-      span{
-        font-size:0.4rem;
+    .empty_address {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate3D(-50%, -50%, 0);
+      span {
+        font-size: 0.4rem;
       }
     }
 
@@ -113,6 +114,7 @@
       position: fixed;
       bottom: 0;
       text-align: center;
+      background: #fff;
       @include px2rem(line-height, 100);
       border-top: 1px solid $mtGrey;
       border-bottom: 1px solid $mtGrey;

@@ -1,3 +1,4 @@
+<!--提交订单-->
 <template>
   <div id="confirmOrder">
     <v-head title_head="提交订单" goBack="true" bgColor="#f4f4f4"></v-head>
@@ -39,7 +40,7 @@
 
     <div class="container">
       <!--商家信息-->
-      <div class="head">
+      <div class="head" v-if="poi_info">
         <i class="poi_icon" :style="{backgroundImage:'url('+poi_info.pic_url +')'}"></i>
         <span class="poi_name">{{poi_info.name}}</span>
         <span class="delivery_type_icon"
@@ -69,7 +70,7 @@
         </li>
         <li>
           <span>配送费</span>
-          <span>￥{{poi_info.shipping_fee}}</span>
+          <span>￥0</span>
         </li>
       </ul>
       <div class="totalPrice_wrap">
@@ -85,7 +86,7 @@
       <span class="submit" @click="submit()">提交订单</span>
     </div>
     <router-view></router-view>
-    <alertTip :text="alertText" :showTip.sync="showTip"></alertTip>
+    <alert-tip :text="alertText" :showTip.sync="showTip"></alert-tip>
   </div>
 </template>
 
@@ -100,7 +101,7 @@
       return {
         order_data: null,
         defineAddress: {},
-        poi_info: '',
+        poi_info: null,
         totalPrice: 0,
         totalNum: 0,
         restaurant_id: null,
@@ -155,9 +156,9 @@
         }
       })
       //根据商店id获取店家信息
-      getRestaurant({restaurant_id: this.restaurant_id}).then((result) => {
-        this.poi_info = result.data.data;
-        this.totalPrice = Number(confirmOrderData.foods.totalPrice + this.poi_info.shipping_fee).toFixed(2); //总价格
+      getRestaurant({restaurant_id: this.restaurant_id}).then((response) => {
+        this.poi_info = response.data.data;
+        this.totalPrice = Number(confirmOrderData.foods.totalPrice).toFixed(2); //总价格
       })
     },
     watch: {
@@ -187,7 +188,7 @@
       padding: 0.3rem;
       justify-content: space-between;
       .iconfont {
-        margin: 0.1rem;
+        margin: 0 0.1rem;
         font-size: 0.5rem;
       }
     }
@@ -222,6 +223,11 @@
       }
     }
     .arrival_info {
+      display: flex;
+      align-items: center;
+      .main_info {
+        display: flex;
+      }
       .date_type_tip {
         font-size: 0.4rem;
         font-weight: 500;

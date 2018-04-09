@@ -1,21 +1,24 @@
+<!--我的好友-->
 <template>
   <div class="friend">
-    <v-head title_head="我的好友" goBack="true" bgColor="#f4f4f4"></v-head>
-    <h3 class="title">和好友一起玩转“全新”外卖</h3>
-    <div class="img_container">
-      <img src="../../../assets/friend_img.png" class="img">
-    </div>
-    <div class="main_info">
-      <h3>绑定即可与好友共享</h3>
-      <p>好友头条 | 偷好友红包 | 好友评价</p>
-      <div class="bind">
-        <i class="iconfont icon_weChart">&#xe630;</i>
-        <span>绑定微信 寻找好友</span>
+    <div class="container">
+      <v-head title_head="我的好友" goBack="true" bgColor="#f4f4f4"></v-head>
+      <h3 class="title">和好友一起玩转“全新”外卖</h3>
+      <div class="img_container">
+        <img src="../../../assets/friend_img.png" class="img">
       </div>
-      <div class="allow_item">
-        <span class="selected" v-if="allowItem" @click="allowItem=false;"><i class="iconfont">&#xe6da;</i></span>
-        <span class="select" v-else @click="allowItem=true;"></span>
-        <span class="text">同意 <<strong>信息授权使用协议</strong>> </span>
+      <div class="main_info">
+        <h3>绑定即可与好友共享</h3>
+        <p>好友头条 | 偷好友红包 | 好友评价</p>
+        <div class="bind">
+          <i class="iconfont icon_weChart">&#xe630;</i>
+          <span>绑定微信 寻找好友</span>
+        </div>
+        <div class="allow_item">
+          <span class="selected" v-if="allowItem" @click="allowItem=false;"><i class="iconfont">&#xe6da;</i></span>
+          <span class="select" v-else @click="allowItem=true;"></span>
+          <span class="text">同意 <<strong>信息授权使用协议</strong>> </span>
+        </div>
       </div>
     </div>
   </div>
@@ -39,12 +42,13 @@
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
+    bottom:0;
     background: #fff;
+    overflow-y: auto;
     .title {
       font-weight: 600;
       font-size: 0.5rem;
-      margin-top: 2rem;
+      margin-top: 1.5rem;
       text-align: center;
     }
     .img_container {
@@ -86,6 +90,7 @@
 
     .allow_item {
       text-align: center;
+      padding-bottom: 2rem;
       .text {
         color:#b3b3b3;
         font-size: 0.4rem;

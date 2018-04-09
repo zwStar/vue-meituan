@@ -1,10 +1,10 @@
+<!--商店评论-->
 <template>
   <div id="comment">
-    <!--评分大小部分-->
+    <!--评分部分-->
     <div ref="comment" class="scroll_container">
       <article>
         <div class="comment_score_container">
-
           <div>
             <span class="comment_score">{{poi_info.wm_poi_score}}</span>
             <h3>商家评分</h3>
@@ -12,12 +12,12 @@
           <div>
             <div>
               <span>口味</span>
-              <Star :score="poi_info.food_score"></Star>
+              <v-star :score="poi_info.food_score"></v-star>
               <span class="food_score">{{poi_info.food_score}}</span>
             </div>
             <div>
               <span>包装</span>
-              <Star :score="poi_info.pack_score"></Star>
+              <v-star :score="poi_info.pack_score"></v-star>
               <span class="pack_score">{{poi_info.pack_score}}</span>
             </div>
           </div>
@@ -26,8 +26,6 @@
             <h3>配送评分</h3>
           </div>
         </div>
-
-
         <!--评分类型部分-->
         <ul class="comment_score_type_infos">
           <li class="active">全部</li>
@@ -44,7 +42,7 @@
 
         <!--评价部分-->
         <article class="comments_container">
-          <section v-for="item in commentData">
+          <section v-for="item in commentData" :key="item.id">
             <div class="user_pic_url">
               <img :src="item.avatar">
             </div>
@@ -53,11 +51,11 @@
                 <span class="user_name">{{item.user_name}}</span>
                 <span class="comment_time">{{item.comment_time.slice(0, 10)}}</span>
               </div>
-              <div class="order_comment_score"><span>评分 <Star :score="item.food_score"></Star></span>
+              <div class="order_comment_score"><span>评分 <v-star :score="item.food_score"></v-star></span>
               </div>
               <p class="comment">{{item.comment_data}}</p>
               <div class="comment_pics">
-                <div v-for="pic in  item.pic_url" @click="show_big_pic_event(pic)">
+                <div v-for="(pic,index) in  item.pic_url" @click="show_big_pic_event(pic)" :key="index">
                   <img :src="pic">
                 </div>
               </div>
@@ -66,16 +64,6 @@
             </div>
           </section>
         </article>
-
-        <!--图片大图-->
-        <transition>
-          <div class="show_big_pic" v-show="show_big_pic" @click="show_big_pic = false;">
-            <div>
-              <img :src="big_pic_url">
-            </div>
-          </div>
-        </transition>
-
         <!--加载更多-->
         <div class="loading_wrap" ref="loading">
           <span class="loading" v-show="loading && !noMore">正在努力加载中…</span>
@@ -83,6 +71,14 @@
         </div>
       </article>
     </div>
+    <!--图片大图-->
+    <transition>
+      <div class="show_big_pic" v-show="show_big_pic" @click="show_big_pic = false;">
+        <div>
+          <img :src="big_pic_url">
+        </div>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -97,10 +93,10 @@
         comment_score_type: {0: '全部', 1: '好评', 5: '有图好评'},
         big_pic_url: '',   //大图url
         show_big_pic: false,  //显示大图
-        poi_info: {},
-        noMore: false,
+        poi_info: {},            //商店信息
+        noMore: false,          //没有更多
         loading: false,
-        offset: 0,
+        offset: 0,              //跳过几页
         BScrollEvent: null,   //better-scroll实例
       }
     },
@@ -122,7 +118,7 @@
       })
     },
     methods: {
-      fetchComment(callback) {
+      fetchComment(callback) {   //获取评论
         restaurantComment({restaurant_id: this.restaurant_id, offset: this.offset, limit: 5}).then((response) => {
           callback(response)
         })
@@ -131,17 +127,11 @@
         let date = new Date(time_stamp * 1000);
         return date.getFullYear() + '.' + date.getMonth() + '.' + date.getDay()
       },
-      food_tip_arr(food_tip) {   //因为 后端food_tip是字符串 这里需要切割为数组
-        let arr = []
-        if (food_tip !== '')
-          arr = food_tip.split(',')
-        return arr;
-      },
       show_big_pic_event(url) {     //显示大图
         this.big_pic_url = url;
         this.show_big_pic = true;
       },
-      match_topic(string) {
+      match_topic(string) {         //匹配tag
         let re = /(#[^#]*#)(.+)/g
         let match = re.exec(string);
         return !match ? string : `<strong style="color:#576b95; font-weight: normal">${match[1]}</strong>${match[2]}`
@@ -183,7 +173,9 @@
     display: flex;
     flex: 1;
     background: grey;
+    overflow: hidden;
     .scroll_container {
+      width: 100%;
       overflow: hidden;
     }
     .comment_score_container {
@@ -353,9 +345,9 @@
     .show_big_pic {
       position: fixed;
       top: 0;
-      bottom: 0;
       left: 0;
       right: 0;
+      bottom: 0;
       background: #000;
       z-index: 999;
       div {

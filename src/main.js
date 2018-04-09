@@ -11,30 +11,23 @@ import Bottom from '@/components/Bottom'
 import Star from '@/components/star'
 import AlertTip from '@/components/alertTip'
 import Loading from '@/components/loading'
+import FastClick from 'fastclick'
 
+//全局注册组件
 Vue.component('v-head', Head);
 Vue.component('v-bottom', Bottom);
-Vue.component('Star', Star);
-Vue.component('AlertTip', AlertTip);
-Vue.component('Loading',Loading);
+Vue.component('v-star', Star);
+Vue.component('alert-tip', AlertTip);
+Vue.component('v-loading',Loading);
 
 Vue.config.productionTip = false
 
+if ('addEventListener' in document) {
+  document.addEventListener('DOMContentLoaded', function() {
+    FastClick.attach(document.body);
+  }, false);
+}
 
-router.beforeEach((to, from, next) => {
-  next();
-  // let email = localStorage("email");
-  // if (email === "") {
-  //   push("/");
-  // }
-  // else {
-  //   next();
-  // }
-})
-
-router.afterEach(() => {
-  // NProgress.done(); // 结束Progress
-});
 
 /* eslint-disable no-new */
 new Vue({

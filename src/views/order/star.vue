@@ -1,3 +1,4 @@
+<!--选择评分-->
 <template>
   <div class="star_container">
     <i class="iconfont star active" v-for="item in score" @click="makeScore(item)">&#xe70a;</i>
@@ -9,7 +10,7 @@
   export default {
     data(){
       return {
-        score:4
+        score:1   //默认1分
       }
     },
     methods:{

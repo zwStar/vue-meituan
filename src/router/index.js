@@ -1,9 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-// const _import = require('./_import_' + process.env.NODE_ENV);
-// const User = _import('@/views/user/user');
 
-const Index = r => require.ensure([], () => r(require('@/views/Index/Index')), 'Index')       //主页
+const Index = r => require.ensure([], () => r(require('@/views/Index/Index')), 'Index')     //主页
 const Search = r => require.ensure([], () => r(require('@/views/search/search')), 'Search')     //查找组件
 const Location = r => require.ensure([], () => r(require('@/views/location/location'), 'Location'))   //定位
 const Home = r => require.ensure([], () => r(require('@/views/home/home'), 'Home'))         //我的
@@ -21,38 +19,37 @@ const Cart = r => require.ensure([], () => r(require('@/views/cart/cart'), 'CART
 const OrderDetail = r => require.ensure([], () => r(require('@/views/order/order_detail'), 'ORDERDETAIL'))   //订单详情
 const Category = r => require.ensure([], () => r(require('@/views/category/category'), 'CATEGORY'))   //食物分类
 const MyAddress = r => require.ensure([], () => r(require('@/views/home/children/address'), 'MyAddress'))   //我的收货地址
-const EditAddress = r => require.ensure([], () => r(require('@/views/home/children/editAddress'), 'EditAddress'))  //编辑收货地址
 const MakeComment = r => require.ensure([], () => r(require('@/views/order/comment'), 'MakeComment'))   //作评论
 
 const Collection = r => require.ensure([], () => r(require('@/views/home/children/collection'), 'Collection'))   //我的收藏
 const ThankRecord = r => require.ensure([], () => r(require('@/views/home/children/thankRecord'), 'ThankRecord'))   //答谢记录
 const FootPrint = r => require.ensure([], () => r(require('@/views/home/children/footprint'), 'FootPrint'))   //答谢记录
 const Friend = r => require.ensure([], () => r(require('@/views/home/children/friend'), 'Friend'))   //我的好友
-const Error =  r => require.ensure([], () => r(require('@/views/404/error'), 'Error'))   //404
+const MyComment = r => require.ensure([], () => r(require('@/views/home/children/comment'), 'MyComment'))   //我的评论
+const Error = r => require.ensure([], () => r(require('@/views/404/error'), 'Error'))   //404
 Vue.use(Router)
 
 export default new Router({
   routes: [
     {
-      path:'/',
-      redirect:'/index'
+      path: '/',
+      redirect: '/index'
     },
     {
       path: '/index',
-      name: 'Index',
+      name: '首页',
       component: Index,
       meta: {keepAlive: true},
     },
     {
       path: '/category',
-      name: 'Category',
+      name: '分类',
       component: Category
     },
     {
       path: '/order',
-      name: 'Order',
+      name: '我的订单',
       component: Order,
-      meta: {keepAlive: true},
       children: [
         {
           path: 'comment',
@@ -63,42 +60,36 @@ export default new Router({
     },
     {
       path: '/search',
-      name: 'Search',
+      name: '搜索商家',
       component: Search
     },
     {
       path: '/location',
-      name: 'Location',
+      name: '定位',
       component: Location
     },
     {
       path: '/add_address',
-      name: 'Add_Address',
+      name: '添加地址',
       component: Add_Address,
       children: [
         {
           path: 'location',
-          name: 'Location',
+          name: '地址定位',
           component: Location
         }
       ]
     },
     {
       path: '/home',
-      name: 'Home',
+      name: '我的',
       component: Home,
       keepAlive: true,
       children: [
         {
           path: 'address',
           name: '我的收获地址',
-          component: MyAddress,
-          children: [
-            {
-              path: 'edit',
-              name: '编辑地址',
-              component: EditAddress
-            }]
+          component: MyAddress
         },
         {
           path: 'collection',
@@ -119,6 +110,11 @@ export default new Router({
           path: 'friend',
           name: '我的好友',
           component: Friend
+        },
+        {
+          path: 'comment',
+          name: '我的评论',
+          component: MyComment
         }
       ]
     },
@@ -133,9 +129,8 @@ export default new Router({
       component: ConfirmOrder,
       children: [{
         path: 'address',
-        name: 'Address',
-        component: Address,
-        children: []
+        name: '订单收货地址',
+        component: Address
       }]
     },
     {
@@ -144,17 +139,17 @@ export default new Router({
       children: [
         {
           path: 'menu',
-          name: 'Menu',
+          name: '菜单',
           component: Menu
         },
         {
           path: 'comment',
-          name: 'Comment',
+          name: '评论',
           component: Comment
         },
         {
           path: 'seller',
-          name: 'Seller',
+          name: '商家信息中心',
           component: Seller
         },
         {
@@ -175,13 +170,13 @@ export default new Router({
     },
     {
       path: '/order_detail',
-      name: 'order_detail',
+      name: '订单详情',
       component: OrderDetail
     },
     {
-      path:'/error',
-      name:'找不到该页面',
-      component:Error
+      path: '/error',
+      name: '找不到该页面',
+      component: Error
     },
     {
       path: '*',

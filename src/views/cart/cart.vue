@@ -5,6 +5,14 @@
       <span slot="cancel_edit_cart" class="edit" @click="cancelEdit()" v-else>取消</span>
     </v-head>
 
+    <div class="empty_cart" v-if="emptyCart">
+      <div class="info_container">
+        <img src="../../assets/nothing.png">
+        <span class="text">购物车空空如也，快去逛逛吧</span>
+        <router-link class="redirect_index" to="/index"><span>去逛逛</span></router-link>
+      </div>
+    </div>
+
     <article v-for="(item,restaurant_id) in cartList" :key="restaurant_id">
       <section class="title">
           <span class="delete_selected selected"
@@ -45,7 +53,7 @@
         </div>
       </section>
       <div class="bottom" v-show="!editStatus">
-        <span class="submit" @click="submit(restaurant_id)">去结算</span>
+        <span class="submit" @click="submit(restaurant_id)" :class="{active:!selectFood[restaurant_id]['totalPrice']}">去结算</span>
         <span class="total_price">￥{{selectFood[restaurant_id]['totalPrice'].toFixed(2)}}</span>
       </div>
     </article>
@@ -66,9 +74,10 @@
     data() {
       return {
         totalPrice: 0,
-        selectFood: {},
-        deleteSelectFood: {},
-        editStatus: false,
+        selectFood: {},   //选中列表
+        deleteSelectFood: {},   //选中删除列表
+        editStatus: false,      //编辑状态
+        emptyCart: true          //购物车为空
       }
     },
     methods: {
@@ -113,7 +122,6 @@
         return !noAllSelect;
       },
       allSelect(restaurant_id, boolean) {     //全选
-        console.log('boolean',boolean)
         this.selectFood[restaurant_id]['allSelect'] = boolean;  //全选标志
         Object.keys(this.selectFood[restaurant_id]).forEach(el => { //每个商品都选中
           if (Number(el))
@@ -141,6 +149,9 @@
         this.deleteSelectFood = {...this.deleteSelectFood};   //拓展运算符使vue更新视图
       },
       submit(restaurant_id) { //提交订单
+        console.log('selectFood',this.selectFood)
+        if (!this.selectFood[restaurant_id].totalPrice)   //如果没有选中食物 不能提交订单
+          return;
         let restaurant = this.selectFood[restaurant_id];    //选中食物的餐馆
         let foods = {
           totalPrice: 0,
@@ -158,7 +169,7 @@
           restaurant_id,
           foods
         };
-        localStorage.setItem('comfirmOrderData', JSON.stringify(data));
+        localStorage.setItem('confirmOrderData', JSON.stringify(data));
         this.$router.push({path: '/confirmOrder'});
       },
       edit() {
@@ -173,15 +184,18 @@
           Object.keys(restaurant).forEach(food_id => {    //要删除的商品
             if (Number(food_id) && restaurant[food_id]) {   //删除购物车数据
               this.$store.dispatch('deleteFood', {restaurant_id, food_id})
+              delete this.selectFood[restaurant_id][food_id];
             }
             this.allSelect(restaurant_id, false);      //重置选中列表为false
             delete restaurant[food_id];
           })
         })
+        this.editStatus = false;
+        this.emptyCart = !Object.keys(this.cartList).length;
       }
     },
     created() {
-      console.log('cartList', this.cartList)
+      this.emptyCart = !Object.keys(this.cartList).length
       Object.keys(this.cartList).forEach(restaurant_id => {  //初始化选中列表
         this.selectFood[restaurant_id] = {
           allSelect: true,
@@ -207,6 +221,33 @@
   @import "../../style/mixin";
 
   #cart {
+    .info_container {
+      text-align: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      img {
+        width: 3rem;
+        height: 3rem;
+      }
+      .text {
+        display: block;
+        font-size: 0.35rem;
+      }
+      .redirect_index {
+        display: flex;
+        width: 3rem;
+        height: 1rem;
+        margin: 0.3rem auto;
+        justify-content: center;
+        align-items: center;
+        background: $mtYellow;
+        span {
+          font-size: 0.3rem;
+        }
+      }
+    }
     .edit {
       position: absolute;
       right: 15px;
@@ -319,6 +360,9 @@
         display: inline-block;
         @include px2rem(width, 186);
         @include px2rem(line-height, 68);
+        &.active {
+          background: $mtGrey;
+        }
       }
     }
 

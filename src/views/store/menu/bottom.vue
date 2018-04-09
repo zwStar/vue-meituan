@@ -1,3 +1,4 @@
+<!--商店底部购物栏-->
 <template>
   <div id="bottom">
     <!--购物车详细列表-->
@@ -10,7 +11,7 @@
         <section class="cart_list" v-for="item in  restaurantCartList" :key="item.id">
           <span>{{item.name}} </span>
           <span class="price">￥{{ Number((item.price * item.num).toFixed(2))}}</span>
-          <Selector :name="item.name" :food_id="item.id" :price="item.price" style="bottom:0.3rem;"></Selector>
+          <selector :name="item.name" :food_id="item.id" :price="item.price" style="bottom:0.3rem;"></selector>
         </section>
       </article>
     </transition>
@@ -40,7 +41,7 @@
 <script>
   import {mapGetters} from 'vuex'
   import {getInfo} from '@/utils/auth'
-  import Selector from '@/components/selector'
+  import selector from '@/components/selector'
 
   export default {
     data() {
@@ -125,7 +126,7 @@
       }
     },
     components: {
-      Selector
+      selector
     }
   }
 </script>
@@ -236,8 +237,6 @@
         @include px2rem(width, 400);
         height: 100%;
         padding-left: 2rem;
-
-        /*padding-top:1rem;*/
         display: inline-flex;
         flex-direction: column;
         justify-content: center;
@@ -271,7 +270,6 @@
       left: 0;
       right: 0;
       z-index: 100;
-      /*background: rgb(51, 51, 51);*/
       background: rgba(51, 51, 51, 0.4);
     }
   }

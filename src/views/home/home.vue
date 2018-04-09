@@ -1,3 +1,4 @@
+<!--我的页面-->
 <template>
   <div id="home">
     <v-head title_head="我的" goBack="true"></v-head>
@@ -11,44 +12,44 @@
     </div>
     <div class="myFunction">
       <ul>
-        <router-link tag="li" to="/home/collection">
+        <li @click="routerChange('/home/collection')">
           <div class="imgWrap">
             <img src="http://p1.meituan.net/50.0.100/xianfu/9c1388ba5fbb367c1a93996f39c2fba94506.jpg">
           </div>
           <span>我的收藏</span>
-        </router-link>
-        <router-link tag="li" to="/home/footprint">
+        </li>
+        <li @click="routerChange('/home/footprint')">
           <div class="imgWrap">
             <img src="http://p1.meituan.net/50.0.100/xianfu/7ad7da19bfadd5e6081b7606025214254582.jpg">
           </div>
           <span>我的足迹</span>
-        </router-link>
-        <router-link tag="li" to="/home/comment">
+        </li>
+        <li @click="routerChange('/home/comment')">
           <div class="imgWrap">
             <img src="http://p0.meituan.net/50.0.100/xianfu/5d02f44df0f9f26ea0eca95957824bae4444.jpg">
           </div>
           <span>我的评价</span>
-        </router-link>
-        <router-link tag="li" to="/home/friend">
+        </li>
+        <li @click="routerChange('/home/friend')">
           <div class="imgWrap">
             <img src="http://p1.meituan.net/50.0.100/xianfu/bbae84a587711ac12badb9453406ad694851.jpg">
           </div>
           <span>我的好友</span>
-        </router-link>
+        </li>
       </ul>
       <ul>
-        <router-link tag="li" to="/home/thank">
+        <li tag="li" to="/home/thank">
           <div class="imgWrap">
             <img src="http://p1.meituan.net/50.0.100/xianfu/5c1bf832376403ca2ab22b8d8748e0fd5479.jpg">
           </div>
           <span>答谢记录</span>
-        </router-link>
-        <router-link to="/home/address" tag="li">
+        </li>
+        <li to="/home/address" tag="li">
           <div class="imgWrap">
             <img src="http://p0.meituan.net/50.0.100/xianfu/a813bff1813024b05ff45422deac24bd4276.jpg">
           </div>
           <span>我的地址</span>
-        </router-link>
+        </li>
       </ul>
     </div>
     <div class="assets">
@@ -111,22 +112,22 @@
     </div>
     <v-bottom></v-bottom>
     <router-view></router-view>
-    <Loading v-show="loading"></Loading>
-    <alertTip :text="alertText" :showTip.sync="showTip"></alertTip>
+    <v-loading v-show="loading"></v-loading>
+    <alert-tip :text="alertText" :showTip.sync="showTip"></alert-tip>
   </div>
 </template>
 
 <script>
   import {userInfo, changeAvatar} from '@/api/user'
   import {getInfo} from '@/utils/auth'
-  import {upload_token, upload} from '@/api/upload'
+  import {uploadToken, upload} from '@/api/upload'
   import config from '@/config'
 
   export default {
     data() {
       return {
         username: null,
-        avatar: '../../assets/default-avatar.png',
+        avatar: 'http://i.waimai.meituan.com/static/img/default-avatar.png',
         loading: false,
         alertText: '',
         showTip: false
@@ -140,15 +141,15 @@
           this.alertText = '上传失败，只能传2M以内图片'
           this.showTip = true;
         } else {
-          upload_token().then((response) => {
-            if (response.data.status === 1) {
+          uploadToken().then((response) => {
+            if (response.data.status === 200) {
               let data = {token: response.data.uptoken, file}
               upload(data).then((upResponse) => {
                 let pic_url = config.domain + upResponse.data.key
                 this.avatar = pic_url;
                 this.loading = false;
                 changeAvatar({pic_url}).then((updateResponse) => {
-                })     //更新到服务器
+                })     //更新到数据库
               })
             } else {
               this.alertText = response.data.message
@@ -156,14 +157,23 @@
             }
           })
         }
+      },
+      routerChange(url) {
+        if (this.username) {
+          this.$router.push(url);
+        } else {
+          this.$router.push('/login');
+        }
       }
     },
     mounted() {
       this.username = getInfo();
-      userInfo().then((response) => {
-        console.log('uerInfo', response)
-        this.avatar = response.data.data.avatar;
-      })
+      if (this.username) {
+        userInfo().then((response) => {
+          this.avatar = response.data.data.avatar;
+          console.log('resss', response.data.data)
+        })
+      }
     }
   }
 </script>
@@ -262,7 +272,8 @@
       }
     }
   }
-  .intro{
+
+  .intro {
     padding-bottom: 1rem;
   }
 </style>

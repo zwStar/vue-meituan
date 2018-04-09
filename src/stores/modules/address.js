@@ -25,9 +25,14 @@ const actions = {
   },
   location({commit, state}) {
     location().then((response) => {
-      let data = response.data.data;
-      commit(types.RECORD_ADDRESS, {address: data.address, ...data.location}) //保存title 和 经纬度到VUEX中
-      commit(types.LOCATION_READY, true);    //定位完成 拉取商店
+      if (response.data.status === 200) {
+        let data = response.data.data;
+        commit(types.RECORD_ADDRESS, {address: data.address, ...data.location}) //保存title 和 经纬度到VUEX中
+        commit(types.LOCATION_READY, true);    //定位完成 拉取商店
+      } else {
+
+      }
+
     })
   },
   recordAddress({commit}, address) {
@@ -39,6 +44,9 @@ const actions = {
   },
   recodeDeliveryAddress({commit}, address) {
     commit(types.RECORD_DELIVERY_ADDRESS, address);    //定位完成 拉取商店
+  },
+  failLocation({commit}) {      //定位失败
+    commit(types.FAIL_LOCATION);
   }
 }
 
@@ -56,6 +64,10 @@ const mutations = {
   },
   [types.RECORD_DELIVERY_ADDRESS](state, address) {
     state.deliveryAddress = {...address};
+  },
+  [types.FAIL_LOCATION](state) {
+    let address = {address: '定位失败...', lat: '', lng: ''}
+    state.address = {...address};
   }
 }
 

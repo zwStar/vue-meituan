@@ -8,6 +8,7 @@ const axios = require('axios').create({
   timeout: 0,
   withCredentials: true, // 允许跨域 cookie
   headers: {'X-Requested-With': 'XMLHttpRequest'},
+  maxContentLength: 2000,
   transformResponse: [function (data) {
     try {
       data = JSON.parse(data);
@@ -22,6 +23,7 @@ const axios = require('axios').create({
     return data;
   }]
 })
+
 
 // get
 export const _get = (req) => {
@@ -41,4 +43,9 @@ export const _put = (req) => {
 //delete
 export const _delete = (req) => {
   return axios({method: 'delete', url: `/${req.url}`, data: req.data})
+}
+
+//post and no withCredentials
+export const _postNoWithCredentials = (req) => {
+  return axios({method: 'post', url: `/${req.url}`, data: req.data,withCredentials:false})
 }

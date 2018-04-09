@@ -1,3 +1,4 @@
+<!--首页nav组件-->
 <template>
   <nav>
     <mt-swipe :auto="0" :show-indicators="false">

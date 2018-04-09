@@ -19,7 +19,7 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   #alert_tip {
-    width: 4.5rem;
+    width: 5.5rem;
     height: 1.5rem;
     position: absolute;
     text-align: center;
@@ -31,7 +31,7 @@
     border-radius: 10px;
     .tip_text {
       color: #fff;
-      font-size: 0.4rem;
+      font-size: 0.35rem;
       line-height: 1.5rem;
     }
   }

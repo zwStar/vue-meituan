@@ -62,12 +62,7 @@
     align-items: center;
     .reduce, .add {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      @include px2rem(width, 50);
-      @include px2rem(height, 50);
       border-radius: 50%;
-      text-align: center;
     }
     .reduce {
       border: 1px solid $mtGrey;
@@ -87,6 +82,7 @@
     }
     .icon-reduce, .icon-add {
       display: flex;
+      font-size:0.4rem;
       @include px2rem(width, 50);
       @include px2rem(height, 50);
       align-items: center;

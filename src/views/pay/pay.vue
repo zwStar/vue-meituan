@@ -1,9 +1,11 @@
+<!--支付页面-->
 <template>
   <div id="pay">
     <v-head title_head="支付订单" goBack="true" bgColor="#f4f4f4"></v-head>
     <div class="img_wrap">
       <img src="../../assets/pay_adv.png">
     </div>
+    <!--支付剩余时间-->
     <div class="remain_time_wrap">
       <h3>支付剩余时间</h3>
       <div class="remain_time" v-if="!overtime">
@@ -20,8 +22,8 @@
         <p>{{restaurant_info.name}} -{{order_id}}</p>
       </div>
     </div>
+    <!--支付方式-->
     <ul class="pay_way">
-
       <li @click="payType = '1'">
         <span class="pay_icon"><i class="iconfont" style="color:#3d91e4;">&#xe60f;</i></span>
         <span class="pay_way_name">支付宝</span>
@@ -36,7 +38,6 @@
       </li>
     </ul>
     <div class="submit" @click="selectPayType()">确定支付</div>
-
     <transition name="fade">
       <div class="pay_channel" v-show="payWayShow">
         <div class="channel_select_container">
@@ -50,17 +51,16 @@
             <i class="select" v-else></i>
             <span>调起app支付</span>
           </div>
-          <div class="submit" @click="submit()">确定支付</div>
+          <div class="submit" :class="{disabled:preventRepeat}" @click="submit()">确定支付</div>
         </div>
-
         <div class="close" @click="close();">
           <i class="iconfont icon_close">&#xe625;</i>
         </div>
       </div>
     </transition>
-
-    <Scan :payType="payType" :orderData="orderData" @close="scanShow = false;" v-show="scanShow"></Scan>
-
+    <!--扫码支付-->
+    <scan :payType="payType" :orderData="orderData" @close="scanShow = false;" v-show="scanShow"></scan>
+    <!--调用app支付-->
     <form action="http://pay.trsoft.xin/order/trpayGetWay" method="post" id="form" ref="form">
       <input type="hidden" name="amount" v-model=form_data.amount>
       <input type="hidden" name="outTradeNo" v-model="form_data.outTradeNo">
@@ -75,13 +75,12 @@
       <input type="hidden" name="timestamp" v-model="form_data.timestamp">
       <input type="hidden" name="version" v-model="form_data.version">
     </form>
-
-    <alertTip :text="alertText" :showTip.sync="showTip"></alertTip>
+    <alert-tip :text="alertText" :showTip.sync="showTip"></alert-tip>
   </div>
 </template>
 
 <script>
-  import Scan from './scan.vue'
+  import scan from './scan.vue'
   import {initPay, orderInfo} from '@/api/order'
   import {requestPay} from '@/api/order'
 
@@ -93,12 +92,13 @@
         },
         order_info: null,
         order_id: null,
-        payType: '1',
+        payType: '1',  //支付渠道
         form_data: {},
         seconds: '',  //倒计时秒
         minutes: '',   //倒计时分
         payWayShow: false,
-        method: 'trpay.trade.create.scan',
+        preventRepeat: false,  //阻止多次点击
+        method: 'trpay.trade.create.scan',  //支付方式
         scanShow: false,
         orderData: {},
         overtime: false,    //支付超时
@@ -107,22 +107,44 @@
       }
     },
     methods: {
-      submit() {
+      submit() {              //提交支付
+        if (this.preventRepeat) {
+          return;
+        }
         if (this.overtime) {
-          this.alertText= '支付超时';
+          this.alertText = '支付超时';
           this.showTip = true;
           return;
         }
+        this.preventRepeat = true;    //防止多次点击
         initPay({order_id: this.order_id, payType: this.payType, method: this.method}).then((response) => {
-          if (this.method === 'trpay.trade.create.scan') {
+          let res = response.data;
+          this.preventRepeat = false;
+          if (res.status === -1) {                //支付接口出错
+            this.alertText = res.message;      //提示
+            this.showTip = true;
+            return;
+          }
+          if (res.status === 302) {   //判断该订单是否已经支付完成
+            let _this = this;
+            this.alertText = res.message;      //提示
+            this.showTip = true;
+            setTimeout(() => {
+              _this.$router.push('/order');
+            }, 1000)
+            return;
+          }
+
+          if (this.method === 'trpay.trade.create.scan') {  //扫码支付方式
             this.orderData = response.data.data;
             this.scanShow = true;
-          } else {
+          } else {            //调起APP支付
             this.form_data = response.data.data
             this.$nextTick(() => {
               this.$refs['form'].submit();
             })
           }
+
         })
       },
       calc_remain_time(remain_time) {   //倒计时
@@ -140,7 +162,7 @@
       },
       selectPayType() {
         if (this.overtime) {
-          this.alertText= '支付超时';
+          this.alertText = '支付超时';
           this.showTip = true;
           return;
         }
@@ -165,7 +187,7 @@
       })
     },
     components: {
-      Scan
+      scan
     }
   }
 </script>
@@ -294,6 +316,9 @@
       @include px2rem(width, 675);
       @include px2rem(line-height, 100);
       margin: 1rem auto;
+      &.disabled {
+        background: #999;
+      }
     }
     .pay_channel {
       position: fixed;
@@ -312,6 +337,9 @@
           align-items: center;
           justify-content: center;
           margin: 0.5rem 0;
+          .iconfont {
+            font-size: 0.4rem;
+          }
         }
         span {
           color: #fff;

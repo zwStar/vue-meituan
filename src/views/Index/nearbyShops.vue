@@ -1,3 +1,4 @@
+<!--附近商家组件-->
 <template>
   <div class="nearbyShops">
     <nav ref="nav">
@@ -18,7 +19,7 @@
         <div class="detail">
           <h4>{{item.name}}</h4>
           <div class="shopsMessage">
-            <star :score="item.wm_poi_score"></star>
+            <v-star :score="item.wm_poi_score"></v-star>
             <span class="sellNum">{{item.month_sales_tip}}</span>
             <div class="delivery-info">
               <span class="deliverTime">{{item.delivery_time_tip}}/</span>
@@ -63,14 +64,14 @@
   export default {
     data() {
       return {
-        shopLists: [],      //商家列表
-        showSort: false,  //显示选择排序列表
+        shopLists: [],         //商家列表
+        showSort: false,      //显示选择排序列表
         BScrollEvent: null,   //better-scroll实例
-        loading: false,  //加载更多
-        page: 1,                    //当前餐馆列表加载到第几页
-        limit: 4,    //每次拉去的餐馆数量
-        noMore: false,   //没有更多数据了
-        preventRepeat:false
+        loading: false,       //加载更多
+        page: 1,               //当前餐馆列表加载到第几页
+        limit: 4,              //每次拉去的餐馆数量
+        noMore: false,        //没有更多数据了
+        preventRepeat: false   //避免重复请求
       }
     },
     computed: {
@@ -105,15 +106,15 @@
       getRestaurants(page, limit, callback) { //获取餐馆列表
         if (this.noMore || this.preventRepeat)
           return;
-          this.preventRepeat = true;
-          let offset = (page - 1) * limit;
-          let {lat, lng} = this.address;
-          getRestaurants({offset, limit, lng, lat}).then((response) => {
-            let data = response.data.data;
-            this.preventRepeat = false;
-            this.noMore = data.length < this.limit;
-            callback(data);
-          });
+        this.preventRepeat = true;
+        let offset = (page - 1) * limit;
+        let {lat, lng} = this.address;
+        getRestaurants({offset, limit, lng, lat}).then((response) => {
+          let data = response.data.data;
+          this.preventRepeat = false;
+          this.noMore = data.length < this.limit;
+          callback(data);
+        });
       },
       firstFetch() {
         let _this = this;
@@ -150,7 +151,7 @@
           this.firstFetch();
         }
       }
-    }
+    },
   }
 </script>
 

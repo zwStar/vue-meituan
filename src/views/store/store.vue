@@ -1,9 +1,14 @@
+<!--商店主页-->
 <template>
   <div id="store">
+    <!--skeleton-screen-loading-->
+    <div class="skeleton_loading" v-if="!poi_info.name">
+      <img src="../../assets/restaurant.jpg">
+    </div>
     <!--头部商家信息-->
     <div class="head-wrapper">
       <!--头部-->
-      <v-head :title_head="poi_info.name" goBack=true   color="#fff" bgColor="#333" more="true"></v-head>
+      <v-head :title_head="poi_info.name" goBack=true     color="#fff" bgColor="#333" more="true"></v-head>
       <!--商家信息-->
       <div class="store-info">
         <div class="logo">
@@ -28,17 +33,19 @@
     </div>
     <!--导航 有3个路由  点菜 评价 和商家-->
     <div class="nav">
-      <router-link :to="{name:'Menu',query:{id:restaurant_id}}" class="menu" active-class="active"><span class="active">点菜</span>
+      <router-link :to="{path:'/store/menu',query:{id:restaurant_id}}" class="menu" active-class="active"><span
+        class="active">点菜</span>
       </router-link>
-      <router-link :to="{name:'Comment',query:{id:restaurant_id}}" class="comment" active-class="active">
+      <router-link :to="{path:'/store/comment',query:{id:restaurant_id}}" class="comment" active-class="active">
         <span>评价</span></router-link>
-      <router-link :to="{name:'Seller',query:{id:restaurant_id}}" class="seller" active-class="active"><span>商家</span>
+      <router-link :to="{path:'/store/seller',query:{id:restaurant_id}}" class="seller" active-class="active">
+        <span>商家</span>
       </router-link>
     </div>
-    <!--商家所有详细信息 当点击活动列表右侧的 > 箭头时显示 -->
+    <!--商家详细信息 当点击活动列表右侧的 > 箭头时显示 -->
     <transition name="fade">
-      <StoreDetail class="store-detail" v-show="showDetatil" :showFlag.sync="showDetatil"
-                   :poi_info="poi_info"></StoreDetail>
+      <store-detail class="store-detail" v-show="showDetail" :showFlag.sync="showDetail"
+                    :poi_info="poi_info"></store-detail>
     </transition>
     <!--点菜 评价 和商家-->
     <keep-alive>
@@ -50,17 +57,13 @@
 <script>
 
   import {getRestaurant, getFoods} from '@/api/restaurant'
-  import Bottom from './menu/bottom.vue'
   import StoreDetail from './storeDetail.vue'
   import {mapGetters} from 'vuex'
 
   export default {
-    components: {
-      StoreDetail
-    },
     data() {
       return {
-        showDetatil: false, //商家详情显示
+        showDetail: false, //商家详情显示
         restaurant_id: 0,   //商店id
         positionY: 0,         //活动滚动
       }
@@ -74,19 +77,21 @@
     methods: {
       //商家详情显示
       showStoreDetail() {
-        this.showDetatil = true;
+        this.showDetail = true;
       }
     },
     created() {
       //根据路由query获得商店id
-      let restaurant_id = this.$route.query.id;
-      this.restaurant_id = restaurant_id;
+      this.restaurant_id = this.$route.query.id;
       //根据商店id获取店家信息
-      this.$store.dispatch('getRestaurant', restaurant_id);
+      this.$store.dispatch('getRestaurant', this.restaurant_id);
       //活动列表不停滚动播放
       this.timer = setInterval(() => {
         this.positionY++;
       }, 4000);
+    },
+    components: {
+      'store-detail': StoreDetail
     }
   }
 </script>
@@ -98,7 +103,19 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-
+    /* skeleton-sreen-loading样式*/
+    .skeleton_loading {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 1001;
+      img {
+        width: 100%;
+        height: 100%;
+      }
+    }
     .head-wrapper {
       background: rgb(51, 51, 51);
       #head {
@@ -180,6 +197,7 @@
         }
       }
     }
+    /* nav样式*/
     .nav {
       display: flex;
       flex-shrink: 0;
@@ -201,7 +219,7 @@
       }
     }
   }
-
+  /* 详情框显示动画 */
   .fade-enter-active, .fade-leave-active {
     transition: opacity .4s
   }
@@ -209,7 +227,6 @@
   .fade-enter, .fade-leave-active {
     opacity: 0
   }
-
 
   @keyframes load {
     0% {

@@ -1,10 +1,11 @@
+<!--订单详情-->
 <template>
   <div id="order_detail">
     <v-head goBack="true" title_head="订单详情"></v-head>
     <section class="tip">
       <h3>{{orderStatus}}</h3>
       <h4>{{statusDesc}}</h4>
-      <span class="buy_again">再来一单</span>
+      <router-link class="buy_again" :to="{path:'/store',query:{id:restaurantInfo.id}}" tag="span">再来一单</router-link>
     </section>
     <section class="foods_info_wrap">
       <div class="title">
@@ -15,17 +16,17 @@
         <span class="icon"><i class="iconfont"></i></span>
       </div>
       {{restaurantInfo.foods}}
-      <div class="foods_wrap" v-for="(list,index) in foods" :key="index">
+      <div class="foods_wrap" v-for="(item,index) in foods" :key="index">
         <span class="foods_picture">
-          <img :src="list.pic_url">
+          <img :src="item.pic_url">
         </span>
         <div class="main_wrap">
           <div>
-            <span class="foods_name">{{list.name}}</span>
-            <span class="price">￥{{list.price * list.num}}</span>
+            <span class="foods_name">{{item.name}}</span>
+            <span class="price">￥{{Number(item.price * item.num).toFixed(2)}}</span>
           </div>
           <!--<span>正常</span>-->
-          <span class="num">x{{list.num}}</span>
+          <span class="num">x{{item.num}}</span>
         </div>
       </div>
       <div class="other_fee">
@@ -58,7 +59,8 @@
           <span class="item_value" style="display: block;">&nbsp;</span>
         </div>
         <div class="address_info">
-          <span class="person_info item_value">{{address.name}}({{address.gender === 'male'?'先生':'女士'}}){{address.phone}}</span>
+          <span
+            class="person_info item_value">{{address.name}}({{address.gender === 'male' ? '先生' : '女士'}}){{address.phone}}</span>
           <span class="address item_value">{{address.address}}</span>
         </div>
       </div>
@@ -83,7 +85,7 @@
         <span class="item_value">在线支付</span>
       </div>
     </section>
-    <alertTip :text="alertText" :showTip.sync="showTip"></alertTip>
+    <alert-tip :text="alertText" :showTip.sync="showTip"></alert-tip>
   </div>
 </template>
 
@@ -93,14 +95,14 @@
   export default {
     data() {
       return {
-        orderStatus: '',
-        statusDesc: '',
-        restaurantInfo: {},
-        foods: [],
-        orderData: {
+        orderStatus: '',  //订单状态
+        statusDesc: '',   //状态描述
+        restaurantInfo: {}, //餐馆信息
+        foods: [],           //食物列表
+        orderData: {         //订单数据
           total_price: 0
         },
-        address: {},
+        address: {},        //地址信息
         alertText: '',
         showTip: false
       }
@@ -115,7 +117,7 @@
           return;
         }
         let data = this.orderData = res.data;
-        if (data.status === '支付完成') {
+        if (data.code === 200) {
           this.orderStatus = '订单已完成'
           this.statusDesc = '感谢您对美团外卖的支持，欢迎再次光临'
         } else {
@@ -126,7 +128,6 @@
         this.foods = data.foods;
         this.address = data.address;
       })
-
     }
   }
 </script>

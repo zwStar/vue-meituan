@@ -27,6 +27,14 @@ export const add_address = (data) => {
   return _post(req);
 }
 
+export const updateAddress = (data) =>{
+  let req = {
+    data,
+    url: 'admin/update_address'
+  }
+  return _post(req)
+}
+
 //删除收货地址
 export const deleteAddress = (data) => {
   let req = {
@@ -63,5 +71,20 @@ export const changeAvatar = (data) => {
   return _post(req)
 }
 
+//获取我的评论
+export const comment = (data) => {
+  let req = {
+    data,
+    url: 'v1/my_comment'
+  }
+  return _get(req);
+}
 
+export const deleteComment = (data) => {
+  let req = {
+    data,
+    url: 'v1/comment'
+  }
+  return _delete(req);
+}
 

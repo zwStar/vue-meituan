@@ -1,35 +1,37 @@
+<!--增加收货地址-->
 <template>
   <div id="address">
     <v-head title_head="新增收货地址" goBack=true>
       <span slot="save_address" class="save_btn_style" @click="save();">保存</span>
     </v-head>
-    <AddressInfo :formData.sync="formData"></AddressInfo>
+    <address-info :formData.sync="formData"></address-info>
     <router-view></router-view>
 
-    <Loading v-show="loading"></Loading>
-    <alertTip :text="alertText" :showTip.sync="showTip"></alertTip>
+    <v-loading v-show="loading"></v-loading>
+    <alert-tip :text="alertText" :showTip.sync="showTip"></alert-tip>
   </div>
 </template>
 
 <script>
   import {add_address} from '@/api/user'
   import {mapGetters} from 'vuex'
-  import AddressInfo from '@/components/addressInfo'
+  import addressInfo from '@/components/addressInfo'
 
   export default {
     data() {
       return {
         formData: {
-          name: '',
-          phone: null,
+          name: '测试',
+          phone: 12345678910,
           gender: "male",
-          house_number: '',
-          title:''
+          house_number: '16号楼427',
+          title: ''
         },
         satisfySubmit: false,
         alertText: '',      //提示
         showTip: false,
-        loading: false
+        loading: false,
+        preventRepeat: false   //阻止重复提交
       }
     },
     computed: {
@@ -37,6 +39,8 @@
     },
     methods: {
       save() {
+        if (this.preventRepeat)
+          return
         let dissatisfy = Object.values(this.formData).some((value) => {
           return !value
         })
@@ -44,20 +48,21 @@
         if (dissatisfy) {
           this.alertText = '信息填写不完整'
           this.showTip = true;
-
         } else {
-          let {location, address, province, city} = this.deliveryAddress;
-          let form = {...this.formData, ...location, address, province, city}
+          this.preventRepeat = true;
+          let {location, address, province, city, title} = this.deliveryAddress;
+          let form = {...this.formData, ...location, address, province, city, title};
           add_address(form).then((response) => {
-            if (response.data.status === 1) {
+            if (response.data.status === 200) {
               this.$router.go(-1);
             }
+            this.preventRepeat = false;
           })
         }
       }
     },
     components: {
-      AddressInfo
+      'address-info': addressInfo
     },
     watch: {
       deliveryAddress(val) {

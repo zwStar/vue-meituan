@@ -1,7 +1,9 @@
+<!--扫码支付-->
 <template>
   <div id="scan_container">
     <header>
-      <i class="iconfont pay_icon" :style="{color:payTypeObj[payType]['color']}" v-html="payTypeObj[payType]['icon']"></i>
+      <i class="iconfont pay_icon" :style="{color:payTypeObj[payType]['color']}"
+         v-html="payTypeObj[payType]['icon']"></i>
       <span class="pay_way_name">{{payTypeObj[payType]['name']}}</span>
     </header>
     <div class="qrcode_container">
@@ -18,12 +20,13 @@
     <div class="close" @click="close();">
       <i class="iconfont icon_close">&#xe625;</i>
     </div>
+    <alert-tip :text="alertText" :showTip.sync="showTip"></alert-tip>
   </div>
 </template>
 
 <script>
   import QRCode from '@/plugins/qrcode'
-  import {listen_status} from '@/api/order'
+  import {listenStatus} from '@/api/order'
 
   export default {
     data() {
@@ -31,18 +34,20 @@
         payTypeObj: {
           1: {
             icon: '&#xe60f;',
-            color:'#3d91e4',
+            color: '#3d91e4',
             name: '支付宝支付'
           },
           2: {
             icon: '&#xe62a;',
-            color:'#2aaf90',
+            color: '#2aaf90',
             name: '微信支付'
           },
 
         },
         qrcode: null,
-        timer:null
+        timer: null,
+        alertText: '',
+        showTip: ''
       }
     },
     methods: {
@@ -54,14 +59,17 @@
         clearInterval(this.timer);
         let _this = this;
         this.timer = setInterval(() => {
-          listen_status({outTradeNo}).then((response) => {
-            console.log('scan', response)
-            if(response.data.status === 200){
+          listenStatus({outTradeNo}).then((response) => {
+            if (response.data.status === 200) {
               clearInterval(this.timer);
-              _this.$router.push({path:'/order_detail',query:{id:_this.orderData.order_id}})
+              this.alertText = '支付成功，准备跳转';
+              this.showTip = true;
+              setTimeout(()=>{
+                _this.$router.push({path: '/order_detail', query: {id: _this.orderData.order_id}})
+              },1000);
             }
           })
-        }, 10000);
+        }, 3000);
       }
     },
     props: ['payType', 'orderData'],

@@ -1,3 +1,4 @@
+<!--我的收藏-->
 <template>
   <div class="collection">
     <v-head title_head="我的收藏" goBack="true" bgColor="#f4f4f4"></v-head>
@@ -5,7 +6,6 @@
       <img src="../../../assets/nothing.png">
       <span class="text">没有收藏的你一定是个假吃货</span>
     </div>
-
   </div>
 </template>
 

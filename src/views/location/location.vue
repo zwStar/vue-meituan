@@ -1,7 +1,8 @@
+<!--选择收货地址-->
 <template>
   <div class="location">
     <v-head goBack="true" title_head="选择收货地址"></v-head>
-    <Search placeholder="请输入收货地址" :fun_click="fun_click"></Search>
+    <search placeholder="请输入收货地址" :fun_click="fun_click"></search>
     <div class="location_now" v-if="fromIndex && !suggestionLists.length" @click="locationNow()">
       <i class="iconfont">&#xe793;</i><span>点击定位当前位置</span>
     </div>
@@ -13,24 +14,21 @@
         </li>
       </ul>
     </div>
-    <alertTip :text="alertText" :showTip.sync="showTip"></alertTip>
+    <alert-tip :text="alertText" :showTip.sync="showTip"></alert-tip>
   </div>
 </template>
 
 <script>
   import {suggestion} from '@/api/location'
-  import Search from '@/components/search.vue'
+  import search from '@/components/search.vue'
 
   export default {
-    components: {
-      Search
-    },
     data() {
       return {
         suggestionLists: [],
         fromIndex: false,    //判断当前页面是来自首页还是来自新增收货地址
-        alertText:'',
-        showTip:false
+        alertText: '',
+        showTip: false
       }
     },
     methods: {
@@ -59,18 +57,22 @@
     },
     mounted() {
       this.fromIndex = !!this.$route.query.fromIndex;
+    },
+    components: {
+      search
     }
   }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../../style/mixin";
+
   .location {
-    position:fixed;
-    left:0;
-    right:0;
-    top:0;
-    bottom:0;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
     overflow-y: auto;
     background: rgb(244, 244, 244);
     .location_now {

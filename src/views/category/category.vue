@@ -2,7 +2,7 @@
   <div class="wrapper" ref="scrollWrapper">
     <div id="food_type">
       <v-head :title_head="type" goBack="true" bgColor="#f4f4f4"></v-head>
-      <nearbyShops :ready="'true'" :scrollWrapper="scrollWrapper"></nearbyShops>
+      <nearby-shops :ready="'true'" :scrollWrapper="scrollWrapper"></nearby-shops>
     </div>
   </div>
 </template>
@@ -14,16 +14,16 @@
     data() {
       return {
         scrollWrapper: null,
-        type:''
+        type: ''
       }
     },
     mounted() {
-      this.type = this.$route.query.type;
-      this.scrollWrapper = this.$refs.scrollWrapper;  //把DOM元素赋值 用于传递给子组件nearbyShops
+      this.type = this.$route.query.type || '美食';
+      this.scrollWrapper = this.$refs.scrollWrapper;  //保存DOM元素 用于传递给子组件nearbyShops初始化better-scroll
       this.$store.dispatch('locationReady', true);
     },
     components: {
-      nearbyShops
+      'nearby-shops': nearbyShops
     }
   }
 </script>

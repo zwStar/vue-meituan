@@ -1,3 +1,4 @@
+<!--答谢记录-->
 <template>
   <div class="thank">
     <v-head title_head="答谢记录" goBack="true" bgColor="#f4f4f4"></v-head>

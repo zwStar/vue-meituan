@@ -1,3 +1,4 @@
+<!--主页-->
 <template>
   <div class="wrapper" ref="scrollWrapper">
     <div class="home" ref="home">
@@ -8,17 +9,18 @@
           <span class="address">{{address.address}}</span>
           <i class="iconfont">&#xe6d7;</i>
         </router-link>
-        <router-link to="/search" class="search"><i class="iconfont">&#xe626;</i><span class="search_text">请输入商家 商品名</span></router-link>
+        <router-link to="/search" class="search"><i class="iconfont">&#xe626;</i><span
+          class="search_text">请输入商家 商品名</span></router-link>
       </div>
       <!--导航轮播部分-->
-      <mt-nav></mt-nav>
+      <v-nav></v-nav>
       <!--附近商家-->
       <div class="head">
         <span class="line"></span>
         <h2>附近商家</h2>
         <span class="line"></span>
       </div>
-      <nearbyShops :scrollWrapper="scrollWrapper" v-if="locationReady"></nearbyShops>
+      <nearby-shops :scrollWrapper="scrollWrapper" v-if="locationReady"></nearby-shops>
     </div>
     <!--小购物车-->
     <little-cart>
@@ -31,7 +33,7 @@
 <script>
   import littleCart from '../../components/littleCart.vue'
   import nearbyShops from './nearbyShops.vue'
-  import mtNav from './nav.vue'
+  import vNav from './nav.vue'
   import {mapGetters} from 'vuex'
 
   export default {
@@ -41,41 +43,38 @@
       }
     },
     computed: {
-      ...mapGetters(['address','locationReady'])
+      ...mapGetters(['address', 'locationReady'])
     },
     created() {
-     let {lat,lng} =  this.address;
-     if(!lat || !lng){      //如果没有定位 进行定位
-       this.getLocation();   //定位
-     }
+      let {lat, lng} = this.address;
+      if (!lat || !lng) {      //如果没有定位 进行定位
+        this.getLocation();   //定位
+      }
     },
     methods: {
       getLocation() { //获取当前定位
         this.$store.dispatch('location');
       }
     },
-    mounted(){
+    mounted() {
       this.scrollWrapper = this.$refs.scrollWrapper;  //把DOM元素赋值 用于传递给子组件nearbyShops
     },
     components: {
-      nearbyShops,
-      mtNav,
-      littleCart
-    },
-    watch:{
-      locationReady(){
-
-      }
+      'nearby-shops': nearbyShops,
+      'v-nav': vNav,
+      'little-cart': littleCart
     }
   }
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../../style/mixin.scss";
+
   .wrapper {
     height: 100%;
     overflow: hidden;
   }
+
   .home {
     padding-bottom: 1rem;
     .guide {
@@ -119,8 +118,8 @@
         align-items: center;
         .iconfont {
           display: inline-block;
-          padding-left:10px;
-          padding-top:2px;
+          padding-left: 10px;
+          padding-top: 2px;
           font-size: 0.4rem;
         }
         span {

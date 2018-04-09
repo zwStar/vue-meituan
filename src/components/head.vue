@@ -35,7 +35,6 @@
     },
     methods: {
       funGoBack() {   //返回上一页
-
         if (this.$route.fullPath.indexOf('/store') !== -1) {
           this.$router.push({path: '/index'})
         } else {

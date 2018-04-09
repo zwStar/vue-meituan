@@ -1,6 +1,8 @@
+<!--我的订单-->
 <template>
   <div id="order">
     <v-head goBack="true" title_head="订单"></v-head>
+    <!--没有登录-->
     <div class="toLogin-wrap" v-if="!username">
       <div class="avatar">
         <i class="iconfont icon">&#xe623;</i>
@@ -13,29 +15,34 @@
     <div class="no_order" v-else-if="noOrder">
       <span>订单空空如也，快去购物吧！</span>
     </div>
-    <article v-else>
-      <router-link v-for="list in ordersList" :key="list.id" tag="section" :to="'/order_detail?id='+ list.id">
-        <div class="title">
+    <!--登录后-->
+    <article v-else ref="orderWrapper">
+      <div class="container">
+        <router-link v-for="item in ordersList" :key="item.id" tag="section" :to="'/order_detail?id='+ item.id">
+          <div class="title">
           <span class="restaurant_picture">
-            <img :src="list.restaurant.pic_url">
+            <img :src="item.restaurant.pic_url">
           </span>
-          <router-link :to="'/store/menu?id='+ list.restaurant.id" class="restaurant_name">
-            {{list.restaurant.name}} <strong> > </strong>
-          </router-link>
-          <span class="order_status">订单已完成</span>
-        </div>
-        <div class="info_wrap" v-for="food in list.foods" :key="food._id">
-          <div>
-            <span class="foods_name">{{food.name}}</span>
-            <span class="num">x{{food.num}}</span>
+            <router-link :to="'/store/menu?id='+ item.restaurant.id" class="restaurant_name">
+              {{item.restaurant.name}} <strong> > </strong>
+            </router-link>
+            <span class="order_status">订单已完成</span>
           </div>
-          <div class="price_wrap"><span>共{{food.num}}件商品，实付</span><span>￥{{list.total_price}}</span></div>
-        </div>
-        <div class="buy_again">
-          <span>再来一单</span>
-        </div>
-      </router-link>
-
+          <div class="info_wrap" v-for="food in item.foods" :key="food._id">
+            <div>
+              <span class="foods_name">{{food.name}}</span>
+              <span class="num">x{{food.num}}</span>
+            </div>
+          </div>
+          <div class="price_wrap"><span>共{{item.foods.length}}件商品，实付</span><span>￥{{item.total_price}}</span></div>
+          <div class="footer">
+            <router-link :to="{path:'/store',query:{id:item.restaurant.id}}" tag="span">再来一单</router-link>
+            <router-link v-if="!item.has_comment" class="make_comment"
+                         :to="{path:'/order/comment',query:{order_id:item.id}}">评价
+            </router-link>
+          </div>
+        </router-link>
+      </div>
     </article>
     <v-bottom></v-bottom>
     <router-view></router-view>
@@ -45,21 +52,28 @@
 <script>
   import {orders} from '@/api/order'
   import {getInfo} from '@/utils/auth'
+  import BScroll from 'better-scroll'
 
   export default {
     data() {
       return {
-        username: null,
-        ordersList: [],
-        noOrder: false
+        username: null,   //用户名 判断是否登录
+        ordersList: [],   //订单列表
+        noOrder: false    //没有订单
       }
     },
     created() {
       this.username = getInfo()
       if (this.username) {
         orders().then((response) => {
-          this.ordersList = response.data.data;
-          this.noOrder = !this.ordersList.length;
+          console.log('response', response)
+          if (response.data.status === 200) {
+            this.ordersList = response.data.data;
+            this.noOrder = !this.ordersList.length;
+            this.$nextTick(() => {
+              new BScroll(this.$refs.orderWrapper, {click: true, probeType: 3,});
+            })
+          }
         })
       }
     }
@@ -70,7 +84,8 @@
   @import "../../style/mixin.scss";
 
   #order {
-    min-height: 100vh;
+    height: 100%;
+    overflow: hidden;
     background: #f4f4f4;
     .toLogin-wrap {
       width: 100%;
@@ -111,11 +126,13 @@
       transform: translate(-50%, -50%);
       span {
         font-size: 0.4rem;
-
       }
     }
-
     article {
+      height: calc(100% - 1.2rem);
+      .container {
+        padding-bottom: 2rem;
+      }
       section {
         background: #fff;
         margin: 0.3rem 0;
@@ -125,6 +142,7 @@
           align-items: center;
           margin-right: 0.3rem;
           @include px2rem(height, 100);
+          border-bottom: 1px solid #e4e4e4;
           .restaurant_picture {
             margin: 0 0.25rem;
             display: inline-block;
@@ -152,8 +170,6 @@
         }
         .info_wrap {
           margin: 0.3rem;
-          border-top: 1px solid #e4e4e4;
-          border-bottom: 1px solid #e4e4e4;
           div:first-child {
             display: flex;
             align-items: center;
@@ -170,22 +186,28 @@
           .num {
             font-size: 0.3rem;
           }
-          .price_wrap {
-            margin: 0.3rem;
-            font-size: 0.3rem;
-            text-align: right;
-          }
         }
-        .buy_again {
+        .price_wrap {
+          margin: 0.3rem;
+          font-size: 0.3rem;
+          text-align: right;
+          padding-top: 0.2rem;
+          border-top: 1px solid #e4e4e4;
+        }
+        .footer {
           margin: 0.3rem;
           text-align: right;
-          span {
+          span, .make_comment {
             text-align: center;
             font-size: 0.4rem;
             display: inline-block;
             @include px2rem(width, 170);
             @include px2rem(line-height, 70);
             border: 1px solid #e4e4e4;
+          }
+          .make_comment {
+            background: $mtYellow;
+            border: none;
           }
         }
       }

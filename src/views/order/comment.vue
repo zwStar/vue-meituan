@@ -1,3 +1,4 @@
+<!--对订单进行评论页面-->
 <template>
   <div id="comment">
     <v-head title_head="评论" goBack="true" bgColor="#f4f4f4"></v-head>
@@ -10,25 +11,25 @@
           <span class="deliver_type">美团快送</span>
           <div class="deliver_time">
             <span>今天19：10左右送达</span>
-            <a class="time_error" href="#">时间不准 <i class="iconfont">&#xe6d7;</i></a>
+            <span class="time_error" href="#">时间不准 <i class="iconfont">&#xe6d7;</i></span>
           </div>
         </div>
       </div>
-      <Star @makeScore="setDeliveryScore"></Star>
+      <star @makeScore="setDeliveryScore"></star>
     </div>
 
     <div class="main_container">
       <div class="restaurant_info">
         <span class="avatar">
-          <img src="http://img.go007.com/2016/05/21/c48d2b4e639e5255_1.jpg">
+          <img :src="restaurant_info.pic_url">
         </span>
-        <span class="restaurant_name">Ceechok至悼</span>
+        <span class="restaurant_name">{{restaurant_info.name}}</span>
       </div>
-      <Star @makeScore="setFoodScore"></Star>
+      <star @makeScore="setFoodScore"></star>
       <div class="food_comment">
         <textarea class="comment_data" v-model="commentData" style="resize:none" placeholder="亲，菜品口味如何，对包装服务等还满意吗？"
                   @input="input($event);"></textarea>
-        <span class="tip">至少输入8个字</span>
+        <span class="tip">至少输入2个字</span>
       </div>
 
       <div class="upload_picture_container">
@@ -59,28 +60,28 @@
     <div class="submit" :class="{active:satisfySubmit}" @click="submit()">
       <span>提交</span>
     </div>
-
-    <Loading v-show="loading"></Loading>
-    <alertTip :text="alertText" :showTip.sync="showTip"></alertTip>
+    <v-loading v-show="loading"></v-loading>
+    <alert-tip :text="alertText" :showTip.sync="showTip"></alert-tip>
   </div>
 </template>
 
 <script>
-  import Star from './star.vue'
+  import star from './star.vue'
   import {makeComment, orderInfo} from '@/api/order'
-  import {upload_token, upload} from '@/api/upload'
+  import {uploadToken, upload} from '@/api/upload'
   import config from '@/config'
 
   export default {
     data() {
       return {
-        deliveryScore: 0,
-        foodScore: 0,
+        restaurant_info: {},  //商店信息
+        deliveryScore: 1,   //配送评分
+        foodScore: 1,       //食物评分
         hiddenName: false,
         commentValueLength: 0,
         satisfySubmit: false,
         commentData: '',
-        uploadList: ["http://p3d0ne50u.bkt.clouddn.com/FhpqzjdxM_FKKyzXxI8QNpprxUsu"],
+        uploadList: [],
         loading: false,
         alertText: '',      //提示
         showTip: false
@@ -95,7 +96,7 @@
       },
       input($event) {
         this.commentValueLength = $event.target.value.length;
-        this.satisfySubmit = this.commentValueLength >= 8;
+        this.satisfySubmit = this.commentValueLength >= 2;
       },
       deletePic(index) {
         this.uploadList.splice(index, 1);
@@ -106,11 +107,10 @@
           this.showTip = true;
           return;
         }
-
         this.loading = true;
         let file = event.target.files[0];
-        upload_token().then((response) => {   //获取上传凭证
-          if (response.data.status === 1) {
+        uploadToken().then((response) => {   //获取上传凭证
+          if (response.data.status === 200) {
             let data = {token: response.data.uptoken, file}
             upload(data).then((upResponse) => {     //上传到七牛云
               this.uploadList.push(config.domain + upResponse.data.key)
@@ -123,26 +123,53 @@
         })
       },
       submit() {
+        if (!this.satisfySubmit)
+          return;
         makeComment({
-          order_id: 1,
-          commentData: this.commentData,
-          foodScore: this.foodScore,
-          deliveryScore: this.deliveryScore,
+          hidden_name: this.hiddenName,
+          order_id: this.order_id,
+          comment_data: this.commentData,
+          food_score: this.foodScore,
+          delivery_score: this.deliveryScore,
           pic_url: this.uploadList
         }).then((response) => {
-          console.log('comment_result', response)
+          let res = response.data;
+          let _this = this;
+          this.alertText = res.message;
+          this.showTip = true;
+          if (res.status === 200) {
+            setTimeout(() => {
+              _this.$router.push('/index')
+            }, 1000);
+          }
         })
-      }
+      },
     },
     created() {
       let order_id = this.order_id = this.$route.query.order_id;
+      if (!order_id) {
+        this.alertText = '参数有误';
+        this.showTip = true;
+        setTimeout(() => {
+          this.$router.push('/index');
+        }, 1000);
+        return;
+      }
       orderInfo({order_id}).then((response) => {
-        console.log('orderInfo response',response)
-        let data = response.data;
+        let res = response.data;
+        if (res.status === 200) {
+          this.restaurant_info = res.data.restaurant;
+        } else {
+          this.alertText = res.message;
+          this.showTip = true;
+          setTimeout(() => {
+            this.$router.go(-1)
+          }, 500)
+        }
       })
     },
     components: {
-      Star
+      star
     }
   }
 </script>
@@ -151,11 +178,11 @@
   @import "../../style/mixin.scss";
 
   #comment {
-    position: fixed;
+    min-height: 100vh;
+    position: absolute;
     top: 0;
     left: 0;
     right: 0;
-    bottom: 0;
     z-index: 1000;
     background: #f4f4f4;
     .avatar {
@@ -307,6 +334,9 @@
         @include px2rem(line-height, 35);
         color: #fff;
         background: $mtYellow;
+        .iconfont {
+          font-size: 0.5rem;
+        }
       }
       h4 {
         display: inline-block;
@@ -319,6 +349,10 @@
       background: #cbcbcb;
       @include px2rem(line-height, 95);
       text-align: center;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
       &.active {
         background: $mtYellow;
       }
