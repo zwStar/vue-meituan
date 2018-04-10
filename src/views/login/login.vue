@@ -58,6 +58,9 @@
           if (response.data.status === 200) {
             setInfo(this.username);
             this.$router.go(-1);
+          }else{
+            this.alertText = response.data.message;
+            this.showTip = true;
           }
         });
       }
