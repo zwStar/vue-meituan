@@ -4,7 +4,6 @@ import Vue from 'vue'
 import App from './App'
 import router from './router'
 import store from './stores'
-import './utils/rem.min'
 
 import Head from '@/components/head'
 import Bottom from '@/components/Bottom'
@@ -37,3 +36,4 @@ new Vue({
   template: '<App/>',
   components: {App}
 })
+

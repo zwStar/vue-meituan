@@ -19,7 +19,6 @@ const axios = require('axios').create({
       removeInfo();
       router.push('/login');
     }
-
     return data;
   }]
 })
