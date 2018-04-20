@@ -70,7 +70,6 @@
   .seller-info {
     flex: 1;
     background: $mtGrey;
-    height: $storeMainHeight;
     padding-top: 0.1rem;
     .container {
       display: flex;

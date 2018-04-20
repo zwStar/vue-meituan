@@ -1,8 +1,8 @@
 <template>
   <div id="cart">
     <v-head title_head="购物车" goBack="true" bgColor="#f4f4f4">
-      <span slot="edit_cart" class="edit" @click="edit();" v-if="!editStatus">编辑</span>
-      <span slot="cancel_edit_cart" class="edit" @click="cancelEdit()" v-else>取消</span>
+      <span slot="edit_cart" class="edit" @click="editStatus = true;" v-if="!editStatus">编辑</span>
+      <span slot="cancel_edit_cart" class="edit" @click="editStatus = false;" v-else>取消</span>
     </v-head>
 
     <div class="empty_cart" v-if="emptyCart">
@@ -15,34 +15,62 @@
 
     <article v-for="(item,restaurant_id) in cartList" :key="restaurant_id">
       <section class="title">
-          <span class="delete_selected selected"
-                v-if="editStatus && deleteSelectFood[restaurant_id]['allSelect'] === true"
-                @click="allSelectDelete(restaurant_id,false)">
+        <span
+          class="delete_selected selected"
+          v-if="editStatus && deleteSelectFood[restaurant_id]['allSelect'] === true"
+          @click="allSelectDelete(restaurant_id,false)">
+            <i class="iconfont">&#xe6da;</i>
+        </span>
+        <span
+          class="select"
+          v-else-if="editStatus"
+          @click="allSelectDelete(restaurant_id,true)">
+        </span>
+        <span
+          class="selected"
+          v-if="!editStatus && selectFood[restaurant_id]['allSelect'] === true"
+          @click="allSelect(restaurant_id,false)">
           <i class="iconfont">&#xe6da;</i>
         </span>
-        <span class="select" v-else-if="editStatus" @click="allSelectDelete(restaurant_id,true)"></span>
-
-        <span class="selected" v-if="!editStatus && selectFood[restaurant_id]['allSelect'] === true"
-              @click="allSelect(restaurant_id,false)">
-          <i class="iconfont">&#xe6da;</i>
+        <span
+          class="select"
+          v-else-if="!editStatus"
+          @click="allSelect(restaurant_id,true)">
         </span>
-        <span class="select" v-else-if="!editStatus" @click="allSelect(restaurant_id,true)"></span>
         <span class="restaurant_picture">
           <img :src="item.pic_url">
         </span>
         <span class="restaurant_name">{{item.restaurant_name}}</span>
       </section>
-      <section v-for="(food,foodKey) in item" v-if="Number(foodKey)" class="main_wrap" :key="foodKey">
+      <section
+        v-for="(food,foodKey) in item"
+        v-if="Number(foodKey)"
+        class="main_wrap"
+        :key="foodKey">
         <div class="foods">
-           <span class="selected delete_selected" v-if="editStatus && deleteSelectFood[restaurant_id][foodKey] === true"
-                 @click="cancelSelectDelete(restaurant_id,foodKey)"><i
-             class="iconfont">&#xe6da;</i></span>
-          <span class="select delete_select" v-else-if="editStatus" @click="selectDelete(restaurant_id,foodKey)"></span>
-          <span class="selected" v-if="!editStatus && selectFood[restaurant_id][foodKey] === true"
-                @click="cancelSelect(restaurant_id,foodKey)"><i
-            class="iconfont">&#xe6da;</i></span>
-          <span class="select" v-else-if="!editStatus" @click="select(restaurant_id,foodKey)"></span>
-          <div class="picture_wrap"><img :src="food.foods_pic"></div>
+           <span class="selected delete_selected"
+                 v-if="editStatus && deleteSelectFood[restaurant_id][foodKey] === true"
+                 @click="cancelSelectDelete(restaurant_id,foodKey)">
+             <i class="iconfont">&#xe6da;</i>
+           </span>
+          <span class="select delete_select"
+                v-else-if="editStatus"
+                @click="selectDelete(restaurant_id,foodKey)">
+          </span>
+          <span
+            class="selected"
+            v-if="!editStatus && selectFood[restaurant_id][foodKey] === true"
+            @click="cancelSelect(restaurant_id,foodKey)">
+            <i class="iconfont">&#xe6da;</i>
+          </span>
+          <span
+            class="select"
+            v-else-if="!editStatus"
+            @click="select(restaurant_id,foodKey)">
+          </span>
+          <div class="picture_wrap">
+            <img :src="food.foods_pic">
+          </div>
           <div class="info">
             <span class="name">{{food.name}}</span>
             <div>
@@ -53,7 +81,10 @@
         </div>
       </section>
       <div class="bottom" v-show="!editStatus">
-        <span class="submit" @click="submit(restaurant_id)" :class="{active:!selectFood[restaurant_id]['totalPrice']}">去结算</span>
+        <span class="submit"
+              @click="submit(restaurant_id)"
+              :class="{active:!selectFood[restaurant_id]['totalPrice']}">去结算
+        </span>
         <span class="total_price">￥{{selectFood[restaurant_id]['totalPrice'].toFixed(2)}}</span>
       </div>
     </article>
@@ -170,12 +201,6 @@
         };
         localStorage.setItem('confirmOrderData', JSON.stringify(data));
         this.$router.push({path: '/confirmOrder'});
-      },
-      edit() {
-        this.editStatus = true;
-      },
-      cancelEdit() {
-        this.editStatus = false;
       },
       deleteCart() {       //删除购物车
         Object.keys(this.deleteSelectFood).forEach((restaurant_id) => {

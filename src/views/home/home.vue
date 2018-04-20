@@ -12,101 +12,33 @@
     </div>
     <div class="myFunction">
       <ul>
-        <li @click="routerChange('/home/collection')">
+        <li v-for="(item,index) in myFunList" :key="index" @click="routerChange(item.url)">
           <div class="imgWrap">
-            <img src="http://p1.meituan.net/50.0.100/xianfu/9c1388ba5fbb367c1a93996f39c2fba94506.jpg">
+            <img :src="item.picUrl">
           </div>
-          <span>我的收藏</span>
-        </li>
-        <li @click="routerChange('/home/footprint')">
-          <div class="imgWrap">
-            <img src="http://p1.meituan.net/50.0.100/xianfu/7ad7da19bfadd5e6081b7606025214254582.jpg">
-          </div>
-          <span>我的足迹</span>
-        </li>
-        <li @click="routerChange('/home/comment')">
-          <div class="imgWrap">
-            <img src="http://p0.meituan.net/50.0.100/xianfu/5d02f44df0f9f26ea0eca95957824bae4444.jpg">
-          </div>
-          <span>我的评价</span>
-        </li>
-        <li @click="routerChange('/home/friend')">
-          <div class="imgWrap">
-            <img src="http://p1.meituan.net/50.0.100/xianfu/bbae84a587711ac12badb9453406ad694851.jpg">
-          </div>
-          <span>我的好友</span>
-        </li>
-      </ul>
-      <ul>
-        <li tag="li" to="/home/thank">
-          <div class="imgWrap">
-            <img src="http://p1.meituan.net/50.0.100/xianfu/5c1bf832376403ca2ab22b8d8748e0fd5479.jpg">
-          </div>
-          <span>答谢记录</span>
-        </li>
-        <li to="/home/address" tag="li">
-          <div class="imgWrap">
-            <img src="http://p0.meituan.net/50.0.100/xianfu/a813bff1813024b05ff45422deac24bd4276.jpg">
-          </div>
-          <span>我的地址</span>
+          <span>{{item.name}}</span>
         </li>
       </ul>
     </div>
     <div class="assets">
       <h3>我的资产</h3>
       <ul>
-        <li>
+        <li v-for="(item,index) in myAssetsList" :key="index">
           <div class="imgWrap">
-            <img src="http://p1.meituan.net/50.0.100/xianfu/a361ce97f9f00f2715bb960a789d925e2315.jpg">
+            <img :src="item.picUrl">
           </div>
-          <span>红包</span>
-        </li>
-        <li>
-          <div class="imgWrap">
-            <img src="http://p0.meituan.net/50.0.100/xianfu/875f13a76045b7f6862a2b7149babec32329.jpg">
-          </div>
-          <span>代金券</span>
-        </li>
-        <li>
-          <div class="imgWrap">
-            <img src="http://p1.meituan.net/50.0.100/xianfu/2c14b3425c7bf1f3d63d11f47a7ef9ea2230.jpg">
-          </div>
-          <span>钱包</span>
-        </li>
-        <li>
-          <div class="imgWrap">
-            <img src="http://p0.meituan.net/50.0.100/xianfu/7b3e3fb4fc9b45dcda74d7e916f025ea2878.jpg">
-          </div>
-          <span>余额</span>
+          <span>{{item.name}}</span>
         </li>
       </ul>
     </div>
     <div class="intro">
       <h3>更多推荐</h3>
       <ul>
-        <li>
+        <li v-for="(item,index) in introList" :key="index">
           <div class="imgWrap">
-            <img src="http://p0.meituan.net/50.0.100/xianfu/cf5ddfcae114ed8d7d147d51064532252477.jpg">
+            <img :src="item.picUrl">
           </div>
-          <span>邀请有奖</span>
-        </li>
-        <li>
-          <div class="imgWrap">
-            <img src="http://p1.meituan.net/50.0.100/xianfu/55748d5fa531a057258f68d029fe20542466.jpg">
-          </div>
-          <span>商家入驻</span>
-        </li>
-        <li>
-          <div class="imgWrap">
-            <img src="http://p1.meituan.net/50.0.100/xianfu/317aabdd31dfcfa1739149089a2e041a2780.jpg">
-          </div>
-          <span>帮助与反馈</span>
-        </li>
-        <li>
-          <div class="imgWrap">
-            <img src="http://p0.meituan.net/50.0.100/xianfu/55454d4faaed6ad212b2b8a929edef372425.jpg">
-          </div>
-          <span>在线客服</span>
+          <span>{{item.name}}</span>
         </li>
       </ul>
     </div>
@@ -130,7 +62,74 @@
         avatar: 'http://i.waimai.meituan.com/static/img/default-avatar.png',
         loading: false,
         alertText: '',
-        showTip: false
+        showTip: false,
+        myFunList: [
+          {
+            url: '/home/collection',
+            picUrl: 'http://p1.meituan.net/50.0.100/xianfu/9c1388ba5fbb367c1a93996f39c2fba94506.jpg',
+            name: '我的收藏'
+          },
+          {
+            url: '/home/footprint',
+            picUrl: 'http://p1.meituan.net/50.0.100/xianfu/7ad7da19bfadd5e6081b7606025214254582.jpg',
+            name: '我的足迹'
+          },
+          {
+            url: '/home/comment',
+            picUrl: 'http://p0.meituan.net/50.0.100/xianfu/5d02f44df0f9f26ea0eca95957824bae4444.jpg',
+            name: '我的评价'
+          },
+          {
+            url: '/home/friend',
+            picUrl: 'http://p1.meituan.net/50.0.100/xianfu/bbae84a587711ac12badb9453406ad694851.jpg',
+            name: '我的好友'
+          },
+          {
+            url: '/home/thank',
+            picUrl: 'http://p1.meituan.net/50.0.100/xianfu/5c1bf832376403ca2ab22b8d8748e0fd5479.jpg',
+            name: '答谢记录'
+          },
+          {
+            url: '/home/address',
+            picUrl: 'http://p0.meituan.net/50.0.100/xianfu/a813bff1813024b05ff45422deac24bd4276.jpg',
+            name: '我的地址'
+          }],
+        myAssetsList: [
+          {
+            name: '红包',
+            picUrl: 'http://p1.meituan.net/50.0.100/xianfu/a361ce97f9f00f2715bb960a789d925e2315.jpg',
+          },
+          {
+            name: '代金券',
+            picUrl: 'http://p0.meituan.net/50.0.100/xianfu/875f13a76045b7f6862a2b7149babec32329.jpg',
+          },
+          {
+            name: '钱包',
+            picUrl: 'http://p1.meituan.net/50.0.100/xianfu/2c14b3425c7bf1f3d63d11f47a7ef9ea2230.jpg',
+          },
+          {
+            name: '余额',
+            picUrl: 'http://p0.meituan.net/50.0.100/xianfu/7b3e3fb4fc9b45dcda74d7e916f025ea2878.jpg'
+          }
+        ],
+        introList:[
+          {
+            picUrl:'http://p0.meituan.net/50.0.100/xianfu/cf5ddfcae114ed8d7d147d51064532252477.jpg',
+            name:'邀请有奖'
+          },
+          {
+            picUrl:'http://p1.meituan.net/50.0.100/xianfu/55748d5fa531a057258f68d029fe20542466.jpg',
+            name:'商家入驻'
+          },
+          {
+            picUrl:'http://p1.meituan.net/50.0.100/xianfu/317aabdd31dfcfa1739149089a2e041a2780.jpg',
+            name:'帮助与反馈'
+          },
+          {
+            picUrl:'http://p0.meituan.net/50.0.100/xianfu/55454d4faaed6ad212b2b8a929edef372425.jpg',
+            name:'在线客服'
+          },
+        ]
       }
     },
     methods: {
