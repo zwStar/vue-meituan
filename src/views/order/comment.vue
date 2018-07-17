@@ -1,60 +1,66 @@
 <!--对订单进行评论页面-->
 <template>
   <div id="comment">
-    <v-head title_head="评论" goBack="true" bgColor="#f4f4f4"></v-head>
-    <div class="deliver_comment">
-      <div class="deliver_info">
+    <v-head title="评论" goBack="true" bgColor="#f4f4f4"></v-head>
+    <div class="deliver-comment">
+      <div class="deliver-info">
         <div class="avatar">
           <img src="http://img.go007.com/2016/05/21/c48d2b4e639e5255_1.jpg">
         </div>
-        <div class="info_container">
-          <span class="deliver_type">美团快送</span>
-          <div class="deliver_time">
+        <div class="info-container">
+          <span class="deliver-type">美团快送</span>
+          <div class="deliver-time">
             <span>今天19：10左右送达</span>
-            <span class="time_error" href="#">时间不准 <i class="iconfont">&#xe6d7;</i></span>
+            <span class="time-error">时间不准 <i class="iconfont">&#xe6d7;</i></span>
           </div>
         </div>
       </div>
       <star @makeScore="setDeliveryScore"></star>
     </div>
 
-    <div class="main_container">
-      <div class="restaurant_info">
+    <div class="main-container">
+      <div class="restaurant-info">
         <span class="avatar">
           <img :src="restaurant_info.pic_url">
         </span>
-        <span class="restaurant_name">{{restaurant_info.name}}</span>
+        <span class="restaurant-name">{{restaurant_info.name}}</span>
       </div>
       <star @makeScore="setFoodScore"></star>
-      <div class="food_comment">
-        <textarea class="comment_data" v-model="commentData" style="resize:none" placeholder="亲，菜品口味如何，对包装服务等还满意吗？"
-                  @input="input($event);"></textarea>
+      <div class="food-comment">
+        <textarea
+          class="comment-data"
+          v-model="commentData"
+          style="resize:none"
+          placeholder="亲，菜品口味如何，对包装服务等还满意吗？"
+          @input="input($event);"></textarea>
         <span class="tip">至少输入2个字</span>
       </div>
 
-      <div class="upload_picture_container">
-        <div class="uplist_container" v-for="(item,index) in uploadList">
+      <div class="upload-picture-container">
+        <div class="uplist-container" v-for="(item,index) in uploadList">
           <div class="pic">
             <img :src="item">
           </div>
           <div class="delete" @click="deletePic(index)">
-            <i class="iconfont icon_delete">&#xe60d;</i>
+            <i class="iconfont icon-delete">&#xe60d;</i>
           </div>
         </div>
         <label class="upload">
-          <i class="iconfont upload_icon">&#xe782;</i>
+          <i class="iconfont upload-icon">&#xe782;</i>
           <input id="file" type="file" @change="fileUpload($event)" style="display: none;">
         </label>
-        <div class="upload_description" v-show="!uploadList.length">
+        <div class="upload-description" v-show="!uploadList.length">
           <h3>上传图片</h3>
           <p>内容丰富的评论有机会成为优质评价哦</p>
         </div>
       </div>
     </div>
 
-    <div class="hidden_name_comment">
-      <span class="selector no_select" v-if="!hiddenName" @click="hiddenName = !hiddenName;"></span>
-      <span class="selector select" v-else><i class="iconfont" @click="hiddenName = !hiddenName;">&#xe6da;</i></span>
+    <div class="hidden-name-comment">
+      <span class="selector no-select" v-if="!hiddenName" @click="hiddenName = !hiddenName;"></span>
+      <span class="selector select" v-else>
+        <i class="iconfont" @click="hiddenName = !hiddenName;">&#xe6da;</i>
+      </span>
       <h4>匿名评价</h4>
     </div>
     <div class="submit" :class="{active:satisfySubmit}" @click="submit()">
@@ -111,13 +117,13 @@
         let file = event.target.files[0];
         uploadToken().then((response) => {   //获取上传凭证
           if (response.data.status === 200) {
-            let data = {token: response.data.uptoken, file}
+            let data = {token: response.data.uptoken, file};
             upload(data).then((upResponse) => {     //上传到七牛云
-              this.uploadList.push(config.domain + upResponse.data.key)
+              this.uploadList.push(config.domain + upResponse.data.key);
               this.loading = false;
             })
           } else {
-            this.alertText = response.data.message
+            this.alertText = response.data.message;
             this.showTip = true;
           }
         })
@@ -199,22 +205,21 @@
       }
     }
 
-    .deliver_comment {
+    .deliver-comment {
       background: #fff;
-      .deliver_info {
+      .deliver-info {
         display: flex;
         padding: 0.5rem;
-
-        .info_container {
+        .info-container {
           flex: 1;
-          .deliver_type {
+          .deliver-type {
             font-size: 0.5rem;
             display: inline-block;
             margin-bottom: 0.2rem;
           }
-          .deliver_time {
+          .deliver-time {
             font-size: 0.5rem;
-            .time_error {
+            .time-error {
               float: right;
               font-size: 0.4rem;
               margin-top: 0.1rem;
@@ -229,22 +234,22 @@
       }
     }
 
-    .main_container {
+    .main-container {
       background: #fff;
       margin-top: 0.5rem;
       padding: 0.2rem 0.5rem;
-      .restaurant_info {
+      .restaurant-info {
         display: flex;
         align-items: center;
         margin: 0.2rem 0;
-        .restaurant_name {
+        .restaurant-name {
           font-size: 0.5rem;
         }
       }
 
-      .food_comment {
+      .food-comment {
         position: relative;
-        .comment_data {
+        .comment-data {
           width: 100%;
           height: 100px;
           border: 1px solid $mtGrey;
@@ -258,12 +263,11 @@
         }
       }
 
-      .upload_picture_container {
+      .upload-picture-container {
         display: flex;
         margin: 0.3rem 0;
         align-items: center;
-
-        .uplist_container {
+        .uplist-container {
           position: relative;
           margin-right: 0.2rem;
           border: 1px solid $mtGrey;
@@ -287,7 +291,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            .icon_delete {
+            .icon-delete {
               font-size: 0.35rem;
               color: #fff;
             }
@@ -301,12 +305,12 @@
           border: 1px solid $mtGrey;
           @include px2rem(width, 140);
           @include px2rem(height, 140);
-          .upload_icon {
+          .upload-icon {
             @include px2rem(line-height, 140);
             font-size: 1rem;
           }
         }
-        .upload_description {
+        .upload-description {
           font-size: 0.4rem;
           p {
             margin-top: 0.2rem;
@@ -316,18 +320,16 @@
       }
     }
 
-    .hidden_name_comment {
+    .hidden-name-comment {
       margin: 0.4rem 0.5rem;
       .selector {
         border-radius: 50%;
         display: inline-block;
         @include px2rem(width, 35);
         @include px2rem(height, 35);
-
       }
-      .no_select {
+      .no-select {
         border: 1px solid $mtGrey;
-
       }
       .select {
         text-align: center;

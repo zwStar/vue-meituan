@@ -30,11 +30,11 @@
       <span class="entry-icon icon"><i class="iconfont">&#xe63f;</i></span>
     </div>
     <!--商家服务-->
-    <div class="poi_service container">
+    <div class="poi-service container">
       <span class="icon"><i class="iconfont">&#xe632;</i></span>
       <span class="service">商家服务</span>
       <span v-for="(service,index) in sellerInfo.poi_service" :key="index">
-        <i class="icon_service" :style="{backgroundImage:'url('+ service.icon +')'}"></i>
+        <i class="icon-service" :style="{backgroundImage:'url('+ service.icon +')'}"></i>
         <span>{{service.content}}</span>
       </span>
     </div>
@@ -92,7 +92,7 @@
       font-size: 0.4rem;
       margin: 0 0.1rem;
     }
-    .safe-file, .delivery-info, .delivery-time, .notification, .poi_service {
+    .safe-file, .delivery-info, .delivery-time, .notification, .poi-service {
       @include px2rem(height, 80);
     }
     .notification {
@@ -100,12 +100,12 @@
         @include ellipsis;
       }
     }
-    .poi_service {
+    .poi-service {
       .service {
         color: #222;
         margin: 0 0.1rem;
       }
-      .icon_service {
+      .icon-service {
         display: inline-block;
         @include px2rem(width, 30);
         @include px2rem(height, 30);

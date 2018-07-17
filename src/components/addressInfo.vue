@@ -1,10 +1,10 @@
 <template>
-  <div id="addressInfo">
+  <div id="address-info">
     <form>
       <h3>联系人</h3>
       <div class="name">
         <label for="name">姓名:</label>
-        <div class="input_wrap">
+        <div class="input-container">
           <input type="text" v-model="formData.name" id="name" placeholder="请填写收货人的姓名">
         </div>
       </div>
@@ -20,18 +20,16 @@
           <span>女士</span>
         </div>
       </div>
-      <span></span>
-      <span></span>
       <div class="phone">
         <label for="phone">电话:</label>
-        <div class="input_wrap">
+        <div class="input-container">
           <input type="text" v-model="formData.phone" id="phone" placeholder="请填写收货手机号码">
         </div>
       </div>
       <h3>收货地址</h3>
       <div class="location">
         <label>小区/大厦/学校:</label>
-        <router-link :to="{path:'/add_address/location'}" class="toLocate input_wrap select_address_wrap">
+        <router-link :to="{path:'/add_address/location'}" class="to-locate input-container select-address-container">
           <i class="iconfont">&#xe605;</i>
           <span v-if="formData.title!=''">{{formData.title}}</span>
           <span v-else>点击选择</span>
@@ -39,10 +37,10 @@
         </router-link>
 
       </div>
-      <div class="house_number">
-        <label for="house_number">楼号-门牌号:</label>
-        <div class="input_wrap">
-          <input type="text" v-model="formData.house_number" id="house_number" placeholder="例:16号楼427室">
+      <div class="house-number">
+        <label for="house-number">楼号-门牌号:</label>
+        <div class="input-container">
+          <input type="text" v-model="formData.house_number" id="house-number" placeholder="例:16号楼427室">
         </div>
       </div>
     </form>
@@ -52,12 +50,12 @@
 <script>
 
   export default {
+    props: ['formData'],
     methods: {
       selectGender(sex) {
         this.formData.gender = sex;
       }
     },
-    props: ['formData'],
     watch: {
       formData(val) {
         this.$emit('update:formData', val);
@@ -68,14 +66,15 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../style/mixin";
-  #addressInfo {
+
+  #address-info {
     form {
       h3 {
         font-size: 0.3rem;
         font-weight: 600;
         margin: 0.4rem 0.2rem;
       }
-      .name, .phone, .location, .house_number {
+      .name, .phone, .location, .house-number {
         background: #fff;
         border-bottom: 1px solid $mtGrey;
       }
@@ -86,7 +85,7 @@
         font-weight: 600;
         margin-left: 0.2rem;
       }
-      .input_wrap {
+      .input-container {
         display: block;
         margin-left: 3rem;
       }
@@ -105,14 +104,14 @@
       /*定位*/
       .location {
         font-size: 0.4rem;
-        .select_address_wrap {
+        .select-address-container {
           @include px2rem(line-height, 85);
           .icon-right {
             float: right;
             margin-right: 10px;
           }
         }
-        .toLocate {
+        .to-locate {
           flex: 1;
           color: #9d9d9d;
         }

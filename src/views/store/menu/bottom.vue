@@ -3,12 +3,12 @@
   <div id="bottom">
     <!--购物车详细列表-->
     <transition name="fade">
-      <article class="cart_list_container" v-show="cartDetail">
+      <article class="cart-list-container" v-show="cartDetail">
         <section class="head">
           <span>餐盒费0元</span>
           <span><i class="iconfont">&#xe615;</i><span @click="emptyCart()">清空购物车</span></span>
         </section>
-        <section class="cart_list" v-for="item in  restaurantCartList" :key="item.id">
+        <section class="cart-list" v-for="item in  restaurantCartList" :key="item.id">
           <span>{{item.name}} </span>
           <span class="price">￥{{ Number((item.price * item.num).toFixed(2))}}</span>
           <selector :name="item.name" :food_id="item.id" :price="item.price" style="bottom:0.3rem;"></selector>
@@ -16,21 +16,21 @@
       </article>
     </transition>
     <!--底部bar-->
-    <div class="bottom_bar">
+    <div class="bottom-bar">
       <div class="left" @click="showCartDetail();">
-        <span class="shopping_cart" :class="{cartActive:totalPrice>0,ballInCart:ballInCart}" ref="iconCartContainer">
+        <span class="shopping-cart" :class="{cartActive:totalPrice>0,ballInCart:ballInCart}" ref="iconCartContainer">
           <i class="iconfont icon-cart">&#xe66b;</i>
           <span class="food-num" v-if="foodNum">{{foodNum}}</span>
       </span>
         <div class="price-container">
-          <span class="totalPrice" v-if="totalPrice">￥{{totalPrice}}</span>
+          <span class="total-price" v-if="totalPrice">￥{{totalPrice}}</span>
           <span class="deliver-fee" v-if="!shipping_fee">免配送费</span>
           <span class="deliver-fee" v-else>另需要配送费￥{{shipping_fee}}</span>
         </div>
       </div>
       <span class="submit" v-if="!totalPrice">{{min_price_tip}}</span>
       <span class="submit" v-else-if="totalPrice < min_price">还差{{min_price - totalPrice}}</span>
-      <span @click="prepareOrder()" class="submit goBuy" v-else>去结算</span>
+      <span @click="prepareOrder()" class="submit go-buy" v-else>去结算</span>
     </div>
     <transition name="fade">
       <div class="shade" v-show="cartDetail" @click="cartDetail=false;"></div>
@@ -141,7 +141,7 @@
     bottom: 0;
     left: 0;
     right: 0;
-    .cart_list_container {
+    .cart-list-container {
       position: fixed;
       left: 0;
       right: 0;
@@ -161,7 +161,7 @@
           font-size: 0.4rem;
         }
       }
-      .cart_list {
+      .cart-list {
         display: flex;
         align-items: center;
         position: relative;
@@ -179,7 +179,7 @@
         }
       }
     }
-    .bottom_bar {
+    .bottom-bar {
       display: flex;
       @include px2rem(height, 90);
       position: fixed;
@@ -191,11 +191,11 @@
       .left {
         flex: 1;
       }
-      .shopping_cart, .submit {
+      .shopping-cart, .submit {
         color: rgb(165, 165, 165);
         @include px2rem(line-height, 90);
       }
-      .shopping_cart {
+      .shopping-cart {
         position: absolute;
         display: inline-block;
         @include px2rem(width, 110);
@@ -240,7 +240,7 @@
         display: inline-flex;
         flex-direction: column;
         justify-content: center;
-        .totalPrice {
+        .total-price {
           display: inline-block;
           font-size: 0.6rem;
           color: #fff;

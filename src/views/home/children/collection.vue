@@ -1,17 +1,13 @@
 <!--我的收藏-->
 <template>
   <div class="collection">
-    <v-head title_head="我的收藏" goBack="true" bgColor="#f4f4f4"></v-head>
-    <div class="info_container">
+    <v-head title="我的收藏" goBack="true" bgColor="#f4f4f4"></v-head>
+    <div class="info-container">
       <img src="../../../assets/nothing.png">
       <span class="text">没有收藏的你一定是个假吃货</span>
     </div>
   </div>
 </template>
-
-<script>
-  export default {}
-</script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   .collection {
@@ -21,7 +17,7 @@
     right: 0;
     bottom: 0;
     background: #fff;
-    .info_container {
+    .info-container {
       text-align: center;
       position: absolute;
       top: 50%;

@@ -1,22 +1,22 @@
 <template>
   <div id="cart">
-    <v-head title_head="购物车" goBack="true" bgColor="#f4f4f4">
-      <span slot="edit_cart" class="edit" @click="editStatus = true;" v-if="!editStatus">编辑</span>
-      <span slot="cancel_edit_cart" class="edit" @click="editStatus = false;" v-else>取消</span>
+    <v-head title="购物车" goBack="true" bgColor="#f4f4f4">
+      <span slot="edit-cart" class="edit" @click="editStatus = true;" v-if="!editStatus">编辑</span>
+      <span slot="cancel-edit-cart" class="edit" @click="editStatus = false;" v-else>取消</span>
     </v-head>
 
-    <div class="empty_cart" v-if="emptyCart">
-      <div class="info_container">
+    <div class="empty-cart" v-if="emptyCart">
+      <div class="info-container">
         <img src="../../assets/nothing.png">
         <span class="text">购物车空空如也，快去逛逛吧</span>
-        <router-link class="redirect_index" to="/index"><span>去逛逛</span></router-link>
+        <router-link class="redirect-index" to="/index"><span>去逛逛</span></router-link>
       </div>
     </div>
 
     <article v-for="(item,restaurant_id) in cartList" :key="restaurant_id">
       <section class="title">
         <span
-          class="delete_selected selected"
+          class="delete-selected selected"
           v-if="editStatus && deleteSelectFood[restaurant_id]['allSelect'] === true"
           @click="allSelectDelete(restaurant_id,false)">
             <i class="iconfont">&#xe6da;</i>
@@ -37,23 +37,23 @@
           v-else-if="!editStatus"
           @click="allSelect(restaurant_id,true)">
         </span>
-        <span class="restaurant_picture">
+        <span class="restaurant-picture">
           <img :src="item.pic_url">
         </span>
-        <span class="restaurant_name">{{item.restaurant_name}}</span>
+        <span class="restaurant-name">{{item.restaurant_name}}</span>
       </section>
       <section
         v-for="(food,foodKey) in item"
         v-if="Number(foodKey)"
-        class="main_wrap"
+        class="main-container"
         :key="foodKey">
         <div class="foods">
-           <span class="selected delete_selected"
+           <span class="selected delete-selected"
                  v-if="editStatus && deleteSelectFood[restaurant_id][foodKey] === true"
                  @click="cancelSelectDelete(restaurant_id,foodKey)">
              <i class="iconfont">&#xe6da;</i>
            </span>
-          <span class="select delete_select"
+          <span class="select delete-select"
                 v-else-if="editStatus"
                 @click="selectDelete(restaurant_id,foodKey)">
           </span>
@@ -68,7 +68,7 @@
             v-else-if="!editStatus"
             @click="select(restaurant_id,foodKey)">
           </span>
-          <div class="picture_wrap">
+          <div class="picture-container">
             <img :src="food.foods_pic">
           </div>
           <div class="info">
@@ -85,12 +85,12 @@
               @click="submit(restaurant_id)"
               :class="{active:!selectFood[restaurant_id]['totalPrice']}">去结算
         </span>
-        <span class="total_price">￥{{selectFood[restaurant_id]['totalPrice'].toFixed(2)}}</span>
+        <span class="total-price">￥{{selectFood[restaurant_id]['totalPrice'].toFixed(2)}}</span>
       </div>
     </article>
 
-    <footer class="btn_delete" v-show="editStatus" @click="deleteCart()">
-      <span class="delete_text">删除</span>
+    <footer class="btn-delete" v-show="editStatus" @click="deleteCart()">
+      <span>删除</span>
     </footer>
   </div>
 </template>
@@ -245,7 +245,7 @@
   @import "../../style/mixin";
 
   #cart {
-    .info_container {
+    .info-container {
       text-align: center;
       position: absolute;
       top: 50%;
@@ -259,7 +259,7 @@
         display: block;
         font-size: 0.35rem;
       }
-      .redirect_index {
+      .redirect-index {
         display: flex;
         width: 3rem;
         height: 1rem;
@@ -283,11 +283,11 @@
       padding: 0.2rem;
       display: flex;
       align-items: center;
-      .restaurant_name {
+      .restaurant-name {
         font-size: 0.4rem;
         vertical-align: middle;
       }
-      .restaurant_picture {
+      .restaurant-picture {
         display: inline-block;
         margin: 0 0.2rem;
         img {
@@ -317,16 +317,16 @@
         font-size: 0.5rem;
       }
     }
-    .delete_selected {
+    .delete-selected {
       background: #ff4b37;
     }
-    .main_wrap {
+    .main-container {
       padding: 0.05rem 0 0.05rem 0.3rem;
       .foods {
         display: flex;
         align-items: center;
         margin: 0.2rem 0;
-        .picture_wrap {
+        .picture-container {
           @include px2rem(width, 160);
           @include px2rem(height, 155);
           margin-left: 0.2rem;
@@ -369,7 +369,7 @@
       flex-direction: row-reverse;
       padding: 0.5rem 0;
       border-top: 1px solid #e9e8ea;
-      .total_price {
+      .total-price {
         flex: 1;
         text-align: right;
         @include px2rem(margin-right, 20);
@@ -390,7 +390,7 @@
       }
     }
 
-    .btn_delete {
+    .btn-delete {
       position: fixed;
       bottom: 0;
       left: 0;
@@ -398,7 +398,7 @@
       text-align: center;
       @include px2rem(line-height, 68);
       background: #c54144;
-      .delete_text {
+      span {
         color: #fff;
         font-size: 0.4rem;
       }

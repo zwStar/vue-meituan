@@ -1,23 +1,23 @@
 <template>
   <header id="head" :style="{color:color,background:bgColor}">
-    <span class="goBack" v-if="goBack" @click="funGoBack()"><i class="iconfont">&#xe61c;</i></span>
-    <span class="title">{{title_head}}</span>
+    <span class="go-back" v-if="goBack" @click="funGoBack()">
+      <i class="iconfont">&#xe61c;</i>
+    </span>
+    <span class="title">{{title}}</span>
     <span class="more" v-if="more"><i class="iconfont">&#xe602;</i></span>
-    <slot name="save_address"></slot>
-    <slot name="edit_cart"></slot>
-    <slot name="cancel_edit_cart"></slot>
+    <slot name="save-address"></slot>
+    <slot name="edit-cart"></slot>
+    <slot name="cancel-edit-cart"></slot>
   </header>
 </template>
 
 <script>
-  import {mapGetters} from 'vuex'
-
   export default {
     props: {
       goBack: {
         default: false
       },
-      title_head: {
+      title: {
         type: String,
         default: ''
       },
@@ -55,13 +55,13 @@
     text-align: center;
     @include px2rem(line-height, 80);
     padding: 0 0.2rem;
-    .goBack, .more {
+    .go-back, .more {
       position: absolute;
       i {
         font-size: 0.7rem;
       }
     }
-    .goBack {
+    .go-back {
       left: 10px;
     }
     .title {

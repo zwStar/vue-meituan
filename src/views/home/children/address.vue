@@ -1,7 +1,7 @@
 <!--我的收获地址-->
 <template>
   <div id="address">
-    <v-head title_head="我的收货地址" goBack=true></v-head>
+    <v-head title="我的收货地址" goBack=true></v-head>
     <nav>
       <span>我的收获地址</span>
       <span v-show="!status" @click="managerAddress()">管理</span>

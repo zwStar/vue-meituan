@@ -1,14 +1,17 @@
 <!--搜索餐馆-->
 <template>
-  <div class="search_foods">
-    <v-head title_head="搜索" goBack=true></v-head>
-    <search placeholder="请输入商品 店铺名" title_head="选择收货地址" :fun_click="fun_click"></search>
+  <div class="search-foods">
+    <v-head title="搜索" goBack=true></v-head>
+    <search placeholder="请输入商品 店铺名" title="选择收货地址" :fun_click="fun_click"></search>
     <div class="lists">
       <ul>
-        <router-link v-for="(item,index) in searchList" :to="{path:'store',query:{id:item.id}}" :key="index" tag="li">
+        <router-link
+          v-for="(item,index) in searchList"
+          :to="{path:'store',query:{id:item.id}}"
+          :key="index" tag="li">
           <span class="avatar"><img :src="item.pic_url"></span>
           <span class="name" v-html="high_light(item.name)"></span>
-          <span class="delivery_time">{{item.delivery_time_tip}}送达</span>
+          <span class="delivery-time">{{item.delivery_time_tip}}送达</span>
           <span class="icon"><i class="iconfont">&#xe63f;</i></span>
         </router-link>
       </ul>
@@ -63,7 +66,7 @@
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../../style/mixin";
 
-  .search_foods {
+  .search-foods {
     .lists {
       ul {
         li {
@@ -85,12 +88,9 @@
             flex: 1;
             font-size: 0.4rem;
           }
-          .delivery_time {
+          .delivery-time {
             @include px2rem(width, 125);
             font-size: 0.2rem;
-          }
-          .icon {
-
           }
         }
       }

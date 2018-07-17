@@ -1,8 +1,8 @@
 <!--答谢记录-->
 <template>
   <div class="thank">
-    <v-head title_head="答谢记录" goBack="true" bgColor="#f4f4f4"></v-head>
-    <div class="info_container">
+    <v-head title="答谢记录" goBack="true" bgColor="#f4f4f4"></v-head>
+    <div class="info-container">
       <img src="../../../assets/nothing.png">
       <span class="tip">没有答谢记录呢</span>
       <p class="text">一分也是爱，一角也是情</p>
@@ -21,7 +21,7 @@
     right: 0;
     bottom: 0;
     background: #fff;
-    .info_container{
+    .info-container{
       text-align: center;
       position:absolute;
       top:50%;

@@ -1,6 +1,6 @@
 <!--附近商家组件-->
 <template>
-  <div class="nearbyShops">
+  <div class="nearby-shops">
     <nav ref="nav">
       <ul>
         <li>综合排序 <i class="iconfont icon-sort">&#xe601;</i></li>
@@ -11,30 +11,33 @@
     </nav>
     <!--商家列表-->
     <article>
-      <router-link v-for="(item,index) in shopLists" :to="{path:'store',query:{id:item.id}}" :key="item.id"
-                   tag="section">
-        <div class="imgShow">
+      <router-link
+        v-for="(item,index) in shopLists"
+        :to="{path:'store',query:{id:item.id}}"
+        :key="item.id"
+        tag="section">
+        <div class="img-show">
           <img :src="item.pic_url">
         </div>
         <div class="detail">
           <h4>{{item.name}}</h4>
-          <div class="shopsMessage">
+          <div class="shops-message">
             <v-star :score="item.wm_poi_score"></v-star>
-            <span class="sellNum">{{item.month_sales_tip}}</span>
+            <span class="sell-num">{{item.month_sales_tip}}</span>
             <div class="delivery-info">
-              <span class="deliverTime">{{item.delivery_time_tip}}/</span>
+              <span class="deliver-time">{{item.delivery_time_tip}}/</span>
               <span class="distance">{{item.distance}}</span>
             </div>
           </div>
-          <div class="priceMessage">
+          <div class="price-message">
             <span>{{item.min_price_tip}} | </span>
             <span>{{item.shipping_fee_tip}} | </span>
             <span>{{item.average_price_tip}}</span>
           </div>
-          <div class="activeMeaage">
+          <div class="active-message">
             <ul>
               <li v-for="(discount,index) in item.discounts2" v-if="index <= 1">
-                <div class="discount_left">
+                <div class="discount-left">
                   <img :src="discount.icon_url" class="icon">
                   <span class="info">{{discount.info}}</span>
                 </div>
@@ -49,9 +52,9 @@
     </article>
 
     <!--加载更多-->
-    <div class="loading_wrap" ref="loading">
+    <div class="loading-wrap" ref="loading">
       <span class="loading" v-show="loading && !noMore">正在努力加载中…</span>
-      <span class="no_more" v-show="noMore">已经到底了</span>
+      <span class="no-more" v-show="noMore">已经到底了</span>
     </div>
   </div>
 </template>
@@ -158,7 +161,7 @@
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../../style/mixin.scss";
   /*附近商家*/
-  .nearbyShops {
+  .nearby-shops {
     margin: 0.1rem 0;
     /*选择排序功能样式*/
     nav {
@@ -182,13 +185,12 @@
     }
     article {
       position: relative;
-
       section {
         display: flex;
         padding: 0.3rem 0;
         margin: 0 0.2rem;
         border-bottom: 1px solid $mtGrey;
-        .imgShow {
+        .img-show {
           @include px2rem(width, 170);
           @include px2rem(height, 130);
           margin-right: 0.2rem;
@@ -205,7 +207,7 @@
             font-size: 0.45rem;
             font-weight: bold;
           }
-          .shopsMessage {
+          .shops-message {
             display: flex;
             margin-top: 0.3rem;
             align-items: center;
@@ -214,7 +216,7 @@
               vertical-align: bottom;
               font-size: 0.3rem;
             }
-            .sellNum {
+            .sell-num {
               flex: 1;
             }
             .delivery-info {
@@ -222,7 +224,7 @@
               align-items: center;
             }
           }
-          .priceMessage {
+          .price-message {
             margin: 0.2rem 0;
             display: flex;
             align-items: center;
@@ -231,13 +233,13 @@
             }
           }
 
-          .activeMeaage {
+          .active-message {
             ul {
               li {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                .discount_left {
+                .discount-left {
                   display: flex;
                   margin: 0.1rem 0;
                   align-items: center;
@@ -278,7 +280,7 @@
     }
 
     /*loading部分*/
-    .loading_wrap {
+    .loading-wrap {
       @include loading;
     }
   }

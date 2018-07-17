@@ -1,12 +1,13 @@
 <!--选择收货地址-->
 <template>
   <div class="location">
-    <v-head goBack="true" title_head="选择收货地址"></v-head>
+    <v-head goBack="true" title="选择收货地址"></v-head>
     <search placeholder="请输入收货地址" :fun_click="fun_click"></search>
-    <div class="location_now" v-if="fromIndex && !suggestionLists.length" @click="locationNow()">
-      <i class="iconfont">&#xe793;</i><span>点击定位当前位置</span>
+    <div class="location-now" v-if="fromIndex && !suggestionLists.length" @click="locationNow">
+      <i class="iconfont">&#xe793;</i>
+      <span>点击定位当前位置</span>
     </div>
-    <div class="suggestionLists" v-else>
+    <div class="lists" v-else>
       <ul>
         <li v-for="item in suggestionLists" :key="item.id" @click="selectAddress(item)">
           <h3>{{item.title}}</h3>
@@ -75,7 +76,7 @@
     bottom: 0;
     overflow-y: auto;
     background: rgb(244, 244, 244);
-    .location_now {
+    .location-now {
       @include px2rem(height, 125);
       background: #fff;
       margin-top: 0.3rem;
@@ -92,8 +93,8 @@
         @include px2rem(line-height, 125);
       }
     }
-    //推荐列表样式
-    .suggestionLists {
+    // 推荐列表样式
+    .lists {
       ul {
         li {
           border-bottom: 1px solid rgb(231, 231, 231);

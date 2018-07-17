@@ -1,7 +1,7 @@
 <!--订单收货地址-->
 <template>
   <div id="address">
-    <v-head title_head="收货地址" goBack=true     bgColor="#f4f4f4"></v-head>
+    <v-head title="收货地址" goBack="true" bgColor="#f4f4f4"></v-head>
     <div class="container">
       <ul>
         <li v-for="item in addressLists" :key="item.id" @click="selectAddress(item)">
@@ -9,7 +9,7 @@
           <span class="name">{{item.name}}</span>
           <span class="sex">{{item.gender === 'female' ? '女士' : '先生'}}</span>
           <span class="phone">{{item.phone}}</span>
-          <i class="iconfont icon_select" v-if="item.id === selectAddressId">&#xe6da;</i>
+          <i class="iconfont icon-select" v-if="item.id === selectAddressId">&#xe6da;</i>
         </li>
       </ul>
     </div>
@@ -17,8 +17,7 @@
       <i class="iconfont icon">&#xe606;</i>
       <span>新增收获地址</span>
     </router-link>
-
-    <div class="empty_address" v-show="emptyAddress">
+    <div class="empty-address" v-show="emptyAddress">
       <span>一个地址都没有哦</span>
     </div>
   </div>
@@ -88,7 +87,7 @@
               margin: 0 0.2rem 0 0.1rem;
             }
           }
-          .icon_select {
+          .icon-select {
             font-size: 0.7rem;
             position: absolute;
             top: 50%;
@@ -99,7 +98,7 @@
         }
       }
     }
-    .empty_address {
+    .empty-address {
       position: absolute;
       top: 50%;
       left: 50%;

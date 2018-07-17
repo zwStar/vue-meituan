@@ -1,8 +1,8 @@
 <template>
   <div class="wrapper" ref="scrollWrapper">
-    <div id="food_type">
-      <v-head :title_head="type" goBack="true" bgColor="#f4f4f4"></v-head>
-      <nearby-shops :ready="'true'" :scrollWrapper="scrollWrapper"></nearby-shops>
+    <div id="food-type">
+      <v-head :title="type" goBack="true" bgColor="#f4f4f4"></v-head>
+      <nearby-shops :ready=true :scrollWrapper="scrollWrapper"></nearby-shops>
     </div>
   </div>
 </template>
@@ -33,5 +33,4 @@
     height: 100%;
     overflow: hidden;
   }
-
 </style>

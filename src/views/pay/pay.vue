@@ -1,19 +1,22 @@
 <!--支付页面-->
 <template>
   <div id="pay">
-    <v-head title_head="支付订单" goBack="true" bgColor="#f4f4f4"></v-head>
-    <div class="img_wrap">
+    <v-head title="支付订单" goBack="true" bgColor="#f4f4f4"></v-head>
+    <div class="img">
       <img src="../../assets/pay_adv.png">
     </div>
     <!--支付剩余时间-->
-    <div class="remain_time_wrap">
+    <div class="remain-time-container">
       <h3>支付剩余时间</h3>
-      <div class="remain_time" v-if="!overtime">
-        <span>{{minutes.slice(0, 1)}}</span><span>{{minutes.slice(1, 2)}}</span><span>:</span><span>{{seconds.slice(0, 1)}}</span><span>{{seconds.slice(1, 2)}}</span>
+      <div class="remain-time" v-if="!overtime">
+        <span>{{minutes.slice(0, 1)}}</span><span>{{minutes.slice(1, 2)}}</span>
+        <span>:</span>
+        <span>{{seconds.slice(0, 1)}}</span>
+        <span>{{seconds.slice(1, 2)}}</span>
       </div>
       <span class="overtime" v-else>支付超时</span>
     </div>
-    <div class="order_info">
+    <div class="order-info">
       <div class="avatar">
         <img :src="restaurant_info.pic_url">
       </div>
@@ -23,24 +26,24 @@
       </div>
     </div>
     <!--支付方式-->
-    <ul class="pay_way">
+    <ul class="pay-way">
       <li @click="payType = '1'">
-        <span class="pay_icon"><i class="iconfont" style="color:#3d91e4;">&#xe60f;</i></span>
-        <span class="pay_way_name">支付宝</span>
+        <span class="pay-icon"><i class="iconfont" style="color:#3d91e4;">&#xe60f;</i></span>
+        <span class="pay-way-name">支付宝</span>
         <span class="selected" v-if="payType === '1'"><i class="iconfont">&#xe6da;</i></span>
         <span class="select" v-else></span>
       </li>
       <li @click="payType = '2'">
-        <span class="pay_icon"><i class="iconfont" style="color:#2aaf90;">&#xe62a;</i></span>
-        <span class="pay_way_name">微信支付</span>
+        <span class="pay-icon"><i class="iconfont" style="color:#2aaf90;">&#xe62a;</i></span>
+        <span class="pay-way-name">微信支付</span>
         <span class="selected" v-if="payType === '2'"><i class="iconfont">&#xe6da;</i></span>
         <span class="select" v-else></span>
       </li>
     </ul>
     <div class="submit" @click="selectPayType()">确定支付</div>
     <transition name="fade">
-      <div class="pay_channel" v-show="payWayShow">
-        <div class="channel_select_container">
+      <div class="pay-channel" v-show="payWayShow">
+        <div class="channel-select-container">
           <div class="scan" @click="method = 'trpay.trade.create.scan'">
             <i class="iconfont selected" v-if="method === 'trpay.trade.create.scan'">&#xe6da;</i>
             <i class="select" v-else>&#xe6da;</i>
@@ -54,7 +57,7 @@
           <div class="submit" :class="{disabled:preventRepeat}" @click="submit()">确定支付</div>
         </div>
         <div class="close" @click="close();">
-          <i class="iconfont icon_close">&#xe625;</i>
+          <i class="iconfont icon-close">&#xe625;</i>
         </div>
       </div>
     </transition>
@@ -199,7 +202,7 @@
     width: 100vw;
     height: 100vh;
     background: #f3f3f6;
-    .img_wrap {
+    .img {
       margin: 0.3rem 0;
       @include px2rem(height, 156);
       img {
@@ -208,13 +211,13 @@
       }
     }
     //剩余时间
-    .remain_time_wrap {
+    .remain-time-container {
       text-align: center;
       h3 {
         font-size: 0.4rem;
         color: #727272;
       }
-      .remain_time {
+      .remain-time {
         span {
           font-size: 0.3rem;
           display: inline-block;
@@ -237,7 +240,7 @@
     }
 
     //订单信息
-    .order_info {
+    .order-info {
       display: flex;
       align-items: center;
       background: #f8f8fb;
@@ -271,7 +274,7 @@
     }
 
     //支付方式
-    .pay_way {
+    .pay-way {
       background: #fff;
 
       li {
@@ -280,10 +283,10 @@
         @include px2rem(height, 100);
         padding: 0 0.5rem;
         border-bottom: 1px solid #e9e8ea;
-        .pay_icon {
+        .pay-icon {
           margin-right: 30px;
         }
-        .pay_way_name {
+        .pay-way-name {
           flex: 1;
           font-size: 0.5rem;
         }
@@ -320,14 +323,14 @@
         background: #999;
       }
     }
-    .pay_channel {
+    .pay-channel {
       position: fixed;
       top: 0;
       right: 0;
       left: 0;
       bottom: 0;
       background: rgba(21, 17, 17, 0.8);
-      .channel_select_container {
+      .channel-select-container {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -370,7 +373,7 @@
         top: 90%;
         left: 50%;
         transform: translateX(-50%);
-        .icon_close {
+        .icon-close {
           color: #fff;
         }
       }

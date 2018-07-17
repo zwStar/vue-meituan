@@ -1,8 +1,8 @@
 <template>
   <transition name="bounce" @after-enter='afterEnter'>
-      <div id="alert_tip"  v-show="showTip">
-        <span class="tip_text">{{text}}</span>
-      </div>
+    <div id="alert-tip" v-show="showTip">
+      <span class="tip-text">{{text}}</span>
+    </div>
   </transition>
 </template>
 
@@ -18,18 +18,18 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  #alert_tip {
+  #alert-tip {
     width: 5.5rem;
     height: 1.5rem;
     position: absolute;
     text-align: center;
     top: 50%;
     left: 50%;
-    margin-top:-0.7rem;
-    margin-left:-2.3rem;
+    margin-top: -0.7rem;
+    margin-left: -2.3rem;
     background: rgba(0, 0, 0, 0.8);
     border-radius: 10px;
-    .tip_text {
+    .tip-text {
       color: #fff;
       font-size: 0.35rem;
       line-height: 1.5rem;

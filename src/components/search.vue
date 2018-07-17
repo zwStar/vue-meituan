@@ -1,9 +1,10 @@
 <template>
-  <div class="search_container">
-    <div class="search_input">
-      <i class="iconfont">&#xe7d1;</i><input type="text" autofocus="autofocus" v-model.trim="search_val" :placeholder="placeholder">
+  <div class="search-container">
+    <div class="search-input">
+      <i class="iconfont">&#xe7d1;</i>
+      <input type="text" autofocus="autofocus" v-model.trim="search_val" :placeholder="placeholder">
     </div>
-    <span class="btn_search" v-bind:class="{ active: btnActive }">搜索</span>
+    <span class="btn-search" v-bind:class="{ active: btnActive }">搜索</span>
   </div>
 </template>
 
@@ -32,15 +33,15 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../style/mixin";
-  .search_container {
+  .search-container {
     display: flex;
     padding-bottom: 0.2rem;
     background: #fff;
-    .search_input, .btn_search {
+    .search-input, .btn-search {
       @include px2rem(line-height, 60);
       font-size: 0.2rem;
     }
-    .search_input {
+    .search-input {
       flex: 1;
       background: rgb(239, 238, 244);
       border-radius: 0.4rem;
@@ -59,7 +60,7 @@
         }
       }
     }
-    .btn_search {
+    .btn-search {
       font-size:0.4rem;
       display: inline-block;
       color: #fff;

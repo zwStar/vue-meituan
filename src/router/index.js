@@ -16,7 +16,7 @@ const Address = r => require.ensure([], () => r(require('@/views/confirmOrder/ch
 const Add_Address = r => require.ensure([], () => r(require('@/views/confirmOrder/children/children/add_Address'), 'Add_Address')) //添加收货地址
 const Pay = r => require.ensure([], () => r(require('@/views/pay/pay'), 'PAY'))        //支付
 const Cart = r => require.ensure([], () => r(require('@/views/cart/cart'), 'CART'))   //购物车
-const OrderDetail = r => require.ensure([], () => r(require('@/views/order/order_detail'), 'ORDERDETAIL'))   //订单详情
+const OrderDetail = r => require.ensure([], () => r(require('@/views/order/orderDetail'), 'OrderDetail'))   //订单详情
 const Category = r => require.ensure([], () => r(require('@/views/category/category'), 'CATEGORY'))   //食物分类
 const MyAddress = r => require.ensure([], () => r(require('@/views/home/children/address'), 'MyAddress'))   //我的收货地址
 const MakeComment = r => require.ensure([], () => r(require('@/views/order/comment'), 'MakeComment'))   //作评论

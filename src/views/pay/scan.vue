@@ -1,15 +1,15 @@
 <!--扫码支付-->
 <template>
-  <div id="scan_container">
+  <div id="scan-container">
     <header>
-      <i class="iconfont pay_icon" :style="{color:payTypeObj[payType]['color']}"
+      <i class="iconfont pay-icon" :style="{color:payTypeObj[payType]['color']}"
          v-html="payTypeObj[payType]['icon']"></i>
-      <span class="pay_way_name">{{payTypeObj[payType]['name']}}</span>
+      <span class="pay-way-name">{{payTypeObj[payType]['name']}}</span>
     </header>
-    <div class="qrcode_container">
+    <div class="qrcode-container">
       <div id="qrcode" ref="qrcode"></div>
     </div>
-    <div class="info_container">
+    <div class="info-container">
       <ul>
         <li><span>产品名称：{{orderData.tradeName}}</span></li>
         <li><span>订单编号：{{orderData.outTradeNo}}</span></li>
@@ -18,7 +18,7 @@
       </ul>
     </div>
     <div class="close" @click="close();">
-      <i class="iconfont icon_close">&#xe625;</i>
+      <i class="iconfont icon-close">&#xe625;</i>
     </div>
     <alert-tip :text="alertText" :showTip.sync="showTip"></alert-tip>
   </div>
@@ -92,7 +92,7 @@
 </script>
 
 <style rel="stylesheet/scss" lang="scss" scoped>
-  #scan_container {
+  #scan-container {
     background: #fff;
     position: fixed;
     top: 0;
@@ -102,20 +102,20 @@
     header {
       margin: 0.5rem 0;
       padding-left: 1rem;
-      .pay_icon {
+      .pay-icon {
         font-size: 1.2rem;
       }
-      .pay_way_name {
+      .pay-way-name {
         font-weight: normal;
         font-size: 0.7rem;
       }
     }
-    .qrcode_container {
+    .qrcode-container {
       width: 200px;
       height: 200px;
       margin: 1rem auto;
     }
-    .info_container {
+    .info-container {
       padding-left: 1rem;
       ul {
         li {
@@ -129,7 +129,7 @@
     .close {
       margin: 0.5rem 0;
       text-align: center;
-      .icon_close {
+      .icon-close {
         font-size: 1rem;
       }
     }

@@ -1,9 +1,9 @@
 <!--我的评论-->
 <template>
-  <div id="my_comment">
-    <v-head goBack="true" title_head="我的评论"></v-head>
+  <div id="my-comment">
+    <v-head goBack="true" title="我的评论"></v-head>
 
-    <div class="empty_container" v-show="!commentList.length">
+    <div class="empty-container" v-show="!commentList.length">
       <img src="../../../assets/nothing.png">
       <span class="text">没有任何评论哦</span>
     </div>
@@ -14,36 +14,36 @@
         <img :src="userInfo.avatar">
       </div>
       <h3 class="username">{{userInfo.username}}</h3>
-      <span class="comment_count">已贡献{{commentList.length}}条评论</span>
+      <span class="comment-count">已贡献{{commentList.length}}条评论</span>
     </div>
 
     <article v-for="(item,index) in commentList" :key="item.id">
       <div class="title">
-        <div class="restaurant_info">
+        <div class="restaurant-info">
           <span class="icon"><img :src="item.restaurant.pic_url"></span>
           <span class="name">{{item.restaurant.name}}</span>
         </div>
         <span class="right"><i class="iconfont">&#xe6d7;</i></span>
       </div>
-      <div class="main_container">
+      <div class="main-container">
         <div class="avatar">
           <img :src="userInfo.avatar">
         </div>
-        <div class="info_container">
+        <div class="info-container">
           <div class="top margin-2">
             <span class="username">{{userInfo.username}}</span>
             <span class="time">{{item.comment_time.slice(0, 10)}}</span>
           </div>
-          <div class="seller_info margin-2">
+          <div class="seller-info margin-2">
             <span>商家:</span>
             <star :score="item.restaurant.wm_poi_score"></star>
             <span class="delivery">美团快送 51分钟送达</span>
           </div>
-          <div class="score_container margin-2">
+          <div class="score-container margin-2">
             <span>口味：{{item.food_score}}星</span>
             <span>配送：{{item.delivery_score}}星</span>
           </div>
-          <p class="comment_content margin-2">{{item.comment_data}}</p>
+          <p class="comment-content margin-2">{{item.comment_data}}</p>
           <div class="bottom margin-2">
             <span class="delete" @click="deleteComment(item.id,index)"><i class="iconfont">&#xe615;</i> 删除</span>
           </div>
@@ -100,7 +100,7 @@
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../../../style/mixin";
 
-  #my_comment {
+  #my-comment {
     position: fixed;
     top: 0;
     left: 0;
@@ -108,7 +108,7 @@
     bottom: 0;
     background: #fff;
 
-    .empty_container {
+    .empty-container {
       text-align: center;
       position: absolute;
       top: 50%;
@@ -137,7 +137,7 @@
       .username {
         font-size: 0.5rem;
       }
-      .comment_count {
+      .comment-count {
         font-size: 0.35rem;
       }
     }
@@ -150,7 +150,7 @@
         align-items: center;
         padding: 0.2rem 0;
         border-bottom: 1px solid $mtGrey;
-        .restaurant_info {
+        .restaurant-info {
           font-size: 0.4rem;
           display: flex;
           align-items: center;
@@ -167,7 +167,7 @@
           }
         }
       }
-      .main_container {
+      .main-container {
         display: flex;
         .avatar {
           margin: 0.3rem 0.5rem 0 0;
@@ -178,7 +178,7 @@
             border: 1px solid #333;
           }
         }
-        .info_container {
+        .info-container {
           flex: 1;
           .top {
             display: flex;
@@ -194,19 +194,19 @@
             margin: 0.2rem 0;
           }
         }
-        .seller_info, .score_container {
+        .seller-info, .score-container {
           color: #999;
           font-size: 0.35rem;
         }
-        .score_container {
+        .score-container {
           span {
             margin-right: 0.3rem;
           }
         }
-        .seller_info .delivery {
+        .seller-info .delivery {
           margin-left: 0.2rem;
         }
-        .comment_content {
+        .comment-content {
           font-size: 0.40rem;
         }
         .bottom {

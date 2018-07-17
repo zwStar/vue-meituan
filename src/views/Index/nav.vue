@@ -2,14 +2,16 @@
 <template>
   <nav>
     <mt-swipe :auto="0" :show-indicators="false">
-      <mt-swipe-item class="lists" v-for="(list, index) in categoryList" :key="index">
-        <router-link v-for="foodList in list"
-                     :to="{path:'/category',query:{type:foodList.name}}"
-                     :key="foodList.id" class="type">
-          <div class="category_img">
+      <mt-swipe-item class="lists" v-for="(item,index) in categoryListSort" :key="index">
+        <router-link
+          class="type"
+          v-for="foodList in item"
+          :to="{path:'/category',query:{type:foodList.name}}"
+          :key="foodList.id">
+          <div class="category-img">
             <img :src="foodList.url">
           </div>
-          <span class="category_name">{{foodList.name}}</span>
+          <span class="category-name">{{foodList.name}}</span>
         </router-link>
       </mt-swipe-item>
     </mt-swipe>
@@ -25,7 +27,7 @@
   export default {
     data() {
       return {
-        category_list_res: [
+        categoryList: [
           {
             name: '美食',
             url: 'http://p1.meituan.net/jungle/bd3ea637aeaa2fb6120b6938b5e468a13442.png',
@@ -82,8 +84,7 @@
             type: 'freeDeliver'
           }
         ],
-        categoryList: [],
-        location: {}
+        categoryListSort: []
       }
     },
     components: {
@@ -94,13 +95,11 @@
       ...mapGetters(['address'])
     },
     created() {
-      let refs = this.$refs;
-      let resArr = [...this.category_list_res];
-      let foodArr = [];
-      for (let i = 0, j = 0; i < this.category_list_res.length; i += 8, j++) {
-        foodArr[j] = resArr.splice(0, 8);
+      // 对列表进行排序为2维数组 用于轮播图 每页轮播图有8个item
+      let resArr = [...this.categoryList];
+      for (let i = 0, j = 0; i < this.categoryList.length; i += 8, j++) {
+        this.categoryListSort[j] = resArr.splice(0, 8);
       }
-      this.categoryList = foodArr;
     }
   }
 </script>
@@ -121,7 +120,7 @@
       margin: 0.2rem 0;
       display: inline-flex;
       flex-direction: column;
-      .category_img {
+      .category-img {
         margin: 0 auto;
         @include px2rem(width, 100);
         @include px2rem(height, 95);
@@ -142,14 +141,14 @@
     height: 100px;
     display: inline-block;
     vertical-align: top;
-    .category_img {
+    .category-img {
       img {
         width: 70%;
         height: 70%;
         margin-bottom: 0.3rem;
       }
     }
-    .category_name {
+    .category-name {
       display: inline-block;
       margin: 0.2rem 0;
       font-size: 0.3rem;
@@ -160,14 +159,11 @@
     margin: 0.5rem 0;
     .slide-box {
       .lists {
-        ul {
-          li {
-            width: 25%;
-            display: inline-block;
-            padding: 0.2rem;
-            text-align: center;
-
-          }
+        li {
+          width: 25%;
+          display: inline-block;
+          padding: 0.2rem;
+          text-align: center;
         }
       }
     }

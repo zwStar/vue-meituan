@@ -1,8 +1,8 @@
 <!--增加收货地址-->
 <template>
   <div id="address">
-    <v-head title_head="新增收货地址" goBack=true>
-      <span slot="save_address" class="save_btn_style" @click="save();">保存</span>
+    <v-head title="新增收货地址" goBack=true>
+      <span slot="save-address" class="btn-save" @click="save();">保存</span>
     </v-head>
     <address-info :formData.sync="formData"></address-info>
     <router-view></router-view>
@@ -39,8 +39,9 @@
     },
     methods: {
       save() {
-        if (this.preventRepeat)
+        if (this.preventRepeat) {
           return
+        }
         let dissatisfy = Object.values(this.formData).some((value) => {
           return !value
         })
@@ -83,7 +84,7 @@
     top: 0;
     bottom: 0;
     background: #f4f4f4;
-    .save_btn_style {
+    .btn-save {
       position: absolute;
       right: 15px;
       top: 2px;

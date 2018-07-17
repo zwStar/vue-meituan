@@ -1,16 +1,18 @@
 <!--主页-->
 <template>
-  <div class="wrapper" ref="scrollWrapper">
-    <div class="home" ref="home">
-      <v-head title_head="美团外卖+">
-      </v-head>
-      <div class="guide">
-        <router-link to="/location?fromIndex=true" class="location"><i class="iconfont">&#xe604;</i>
+  <div class="index" ref="scrollWrapper">
+    <div class="main-container">
+      <v-head title="美团外卖+"></v-head>
+      <div class="guide-container">
+        <router-link to="/location?fromIndex=true" class="location">
+          <i class="iconfont">&#xe604;</i>
           <span class="address">{{address.address}}</span>
           <i class="iconfont">&#xe6d7;</i>
         </router-link>
-        <router-link to="/search" class="search"><i class="iconfont">&#xe626;</i><span
-          class="search_text">请输入商家 商品名</span></router-link>
+        <router-link to="/search" class="search">
+          <i class="iconfont">&#xe626;</i>
+          <span>请输入商家 商品名</span>
+        </router-link>
       </div>
       <!--导航轮播部分-->
       <v-nav></v-nav>
@@ -69,15 +71,13 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../../style/mixin.scss";
-
-  .wrapper {
+  .index {
     height: 100%;
     overflow: hidden;
   }
-
-  .home {
+  .main-container {
     padding-bottom: 1rem;
-    .guide {
+    .guide-container {
       display: flex;
       .location, .search {
         display: flex;

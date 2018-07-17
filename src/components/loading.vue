@@ -1,5 +1,5 @@
 <template>
-  <div class="loading_container">
+  <div class="loading-container">
     <span class="loading"></span>
   </div>
 </template>
@@ -9,7 +9,7 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
   @import "../style/mixin";
-  .loading_container {
+  .loading-container {
     @include loading;
     height:100%;
     position: fixed;

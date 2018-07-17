@@ -1,10 +1,10 @@
 <template>
   <div id="selector">
-    <div class="ball_container" @click="reduceCart()" v-if="food_num">
+    <div class="ball-container" @click="reduceCart()" v-if="food_num">
       <span class="reduce"><i class="iconfont icon-reduce">&#xe613;</i></span>
     </div>
     <span class="number" v-if="food_num">{{food_num}}</span>
-    <div class="ball_container" @click="addCart($event)">
+    <div class="ball-container" @click="addCart($event)">
       <span class="add"><i class="iconfont icon-add">&#xe6a9;</i></span>
     </div>
   </div>
@@ -71,7 +71,7 @@
       margin: 0 0.15rem;
       font-size: 0.3rem;
     }
-    .ball_container {
+    .ball-container {
       padding: 0.1rem;
     }
     .add {

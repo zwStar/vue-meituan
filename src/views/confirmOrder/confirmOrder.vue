@@ -1,20 +1,20 @@
 <!--提交订单-->
 <template>
-  <div id="confirmOrder">
-    <v-head title_head="提交订单" goBack="true" bgColor="#f4f4f4"></v-head>
-    <div class="delivery_info_container">
+  <div id="confirm-order">
+    <v-head title="提交订单" goBack="true" bgColor="#f4f4f4"></v-head>
+    <div class="delivery-info-container">
       <!--地址信息-->
-      <router-link class="info_container address_container" v-if="emptyAddress" to="/add_address">
-        <div class="address_info">
-          <i class="iconfont icon_add">&#xe600;</i>
-          <span class="add_text">新增收货地址</span>
+      <router-link class="info-container address-container" v-if="emptyAddress" to="/add_address">
+        <div class="address-info">
+          <i class="iconfont icon-add">&#xe600;</i>
+          <span class="add-text">新增收货地址</span>
         </div>
         <i class="iconfont icon-right">&#xe63f;</i>
       </router-link>
-      <router-link class="info_container address_container" to="/confirmOrder/address" v-else>
-        <div class="address_info">
+      <router-link class="info-container address-container" to="/confirmOrder/address" v-else>
+        <div class="address-info">
           <i class="iconfont icon-location">&#xe604;</i>
-          <div class="main_info">
+          <div class="main-info">
             <p class="address">{{defineAddress.address}}</p>
             <span class="name">{{defineAddress.name}}</span>
             <span class="gender">{{gender}}</span>
@@ -25,12 +25,12 @@
       </router-link>
 
       <!--送达信息-->
-      <div class="info_container arrival_container">
-        <div class="arrival_info">
+      <div class="info-container arrival-container">
+        <div class="arrival-info">
           <i class="iconfont icon-time">&#xe621;</i>
-          <div class="main_info">
-            <span class="date_type_tip">送达时间</span>
-            <span class="select_view_time">10：25分到</span>
+          <div class="main-info">
+            <span class="date-type-tip">送达时间</span>
+            <span class="select-view-time">10：25分到</span>
           </div>
         </div>
         <i class="iconfont icon-right">&#xe63f;</i>
@@ -41,18 +41,20 @@
     <div class="container">
       <!--商家信息-->
       <div class="head" v-if="poi_info">
-        <i class="poi_icon" :style="{backgroundImage:'url('+poi_info.pic_url +')'}"></i>
-        <span class="poi_name">{{poi_info.name}}</span>
-        <span class="delivery_type_icon"
-              :style="{backgroundImage:'url('+ 'http://p0.meituan.net/aichequan/019c6ba10f8e79a694c36a474d09d81b2000.png' +')'}"></span>
+        <i class="poi-icon" :style="{backgroundImage:'url('+poi_info.pic_url +')'}"></i>
+        <span class="poi-name">{{poi_info.name}}</span>
+        <span
+          class="delivery-type-icon"
+          :style="{backgroundImage:'url(http://p0.meituan.net/aichequan/019c6ba10f8e79a694c36a474d09d81b2000.png)'}">
+        </span>
       </div>
       <!--商品列表-->
-      <ul class="foodlist">
+      <ul class="food-list">
         <li v-for="(item,key) in order_data" :key="item.id" v-if="Number(key)">
           <div class="picture">
             <img :src="item.foods_pic">
           </div>
-          <div class="foodlist_right_part">
+          <div class="food-list-right-part">
             <div>
               <span class="name">{{item.name}}</span>
               <span class="price">￥{{item.price}}</span>
@@ -63,19 +65,19 @@
           </div>
         </li>
       </ul>
-      <ul class="other_fee_container">
+      <ul class="other-fee-container">
         <li>
           <span>包装费</span>
-          <span class="box_total_price">￥0</span>
+          <span class="box-total-price">￥0</span>
         </li>
         <li>
           <span>配送费</span>
           <span>￥0</span>
         </li>
       </ul>
-      <div class="totalPrice_wrap">
+      <div class="total-price-container">
         <span>已优惠￥0</span>
-        <span class="totalPrice">小计<strong>￥{{totalPrice}}</strong></span>
+        <span class="total-price">小计<strong>￥{{totalPrice}}</strong></span>
       </div>
     </div>
     <div class="bottom">
@@ -173,7 +175,7 @@
   @import "../../style/mixin.scss";
 
   $grey: #666;
-  #confirmOrder {
+  #confirm-order {
     color: #222;
     background: #f4f4f4;
     z-index: 100;
@@ -181,7 +183,7 @@
       font-size: 0.4rem;
     }
 
-    .info_container {
+    .info-container {
       background: #fff;
       display: flex;
       align-items: center;
@@ -192,14 +194,14 @@
         font-size: 0.5rem;
       }
     }
-    .address_container {
+    .address-container {
       border-bottom: 1px solid $mtGrey;
     }
-    .address_info, .arrival_info {
+    .address-info, .arrival-info {
       display: flex;
       align-items: center;
     }
-    .address_info {
+    .address-info {
       .address {
         font-size: 0.4rem;
       }
@@ -210,11 +212,11 @@
       .phone {
         margin-left: 0.5rem;
       }
-      .add_text {
+      .add-text {
         color: $mtYellow;
         font-size: 0.4rem;
       }
-      .icon_add {
+      .icon-add {
         font-size: 0.3rem;
         padding: 0.05rem;
         border-radius: 50%;
@@ -222,17 +224,17 @@
         color: #fff;
       }
     }
-    .arrival_info {
+    .arrival-info {
       display: flex;
       align-items: center;
-      .main_info {
+      .main-info {
         display: flex;
       }
-      .date_type_tip {
+      .date-type-tip {
         font-size: 0.4rem;
         font-weight: 500;
       }
-      .select_view_time {
+      .select-view-time {
         font-size: 0.4rem;
         margin-left: 0.1rem;
         color: #368ced;
@@ -248,27 +250,27 @@
         @include px2rem(height, 95);
         display: flex;
         align-items: center;
-        .poi_icon {
+        .poi-icon {
           display: inline-block;
           @include px2rem(width, 30);
           @include px2rem(height, 30);
           margin-right: 0.2rem;
         }
-        .poi_name {
+        .poi-name {
           flex: 1;
           color: #7b7b7b;
           font-size: 0.3rem;
         }
-        .delivery_type_icon {
+        .delivery-type-icon {
           @include px2rem(width, 102);
           @include px2rem(height, 30);
         }
-        .poi_icon, .delivery_type_icon {
+        .poi-icon, .delivery-type-icon {
           background-size: 100% 100%;
         }
       }
       /*商品列表样式*/
-      .foodlist {
+      .food-list {
         li {
           display: flex;
           padding: 0.2rem 0;
@@ -282,7 +284,7 @@
               height: 100%;
             }
           }
-          .foodlist_right_part {
+          .food-list-right-part {
             flex: 1;
             & > div {
               display: flex;
@@ -309,7 +311,7 @@
                 margin-top: 0.2rem;
                 color: #9f9f9f;
               }
-              .original_price {
+              .original-price {
                 font-size: 0.2rem;
 
               }
@@ -323,7 +325,7 @@
         }
       }
       /*包装费 配送费 优惠券*/
-      .other_fee_container, .coupon_info_list_container {
+      .other-fee-container, .coupon-info-list-container {
         margin-left: 0.26rem;
         li {
           display: flex;
@@ -338,7 +340,7 @@
           }
         }
       }
-      .totalPrice_wrap {
+      .total-price-container {
         text-align: right;
         margin-right: 0.2rem;
         padding: 0.44rem 0;
@@ -349,7 +351,7 @@
           font-weight: 500;
           color: #999;
         }
-        .totalPrice {
+        .total-price {
           font-size: 0.45rem;
           font-weight: 500;
           strong {

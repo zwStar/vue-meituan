@@ -1,8 +1,8 @@
 <!--我的页面-->
 <template>
   <div id="home">
-    <v-head title_head="我的" goBack="true"></v-head>
-    <div id="userInfo">
+    <v-head title="我的" goBack="true"></v-head>
+    <div id="user-info">
       <label class="avatar" for="file">
         <img :src="avatar">
         <input id="file" type="file" @change="fileUpload($event)" style="display: none;">
@@ -10,10 +10,10 @@
       <router-link v-if="!username" class="login" to="/login">登录/注册</router-link>
       <span v-else class="username">{{username}}</span>
     </div>
-    <div class="myFunction">
+    <div class="fun-container">
       <ul>
         <li v-for="(item,index) in myFunList" :key="index" @click="routerChange(item.url)">
-          <div class="imgWrap">
+          <div class="img-wrap">
             <img :src="item.picUrl">
           </div>
           <span>{{item.name}}</span>
@@ -24,7 +24,7 @@
       <h3>我的资产</h3>
       <ul>
         <li v-for="(item,index) in myAssetsList" :key="index">
-          <div class="imgWrap">
+          <div class="img">
             <img :src="item.picUrl">
           </div>
           <span>{{item.name}}</span>
@@ -35,7 +35,7 @@
       <h3>更多推荐</h3>
       <ul>
         <li v-for="(item,index) in introList" :key="index">
-          <div class="imgWrap">
+          <div class="img">
             <img :src="item.picUrl">
           </div>
           <span>{{item.name}}</span>
@@ -112,22 +112,22 @@
             picUrl: 'http://p0.meituan.net/50.0.100/xianfu/7b3e3fb4fc9b45dcda74d7e916f025ea2878.jpg'
           }
         ],
-        introList:[
+        introList: [
           {
-            picUrl:'http://p0.meituan.net/50.0.100/xianfu/cf5ddfcae114ed8d7d147d51064532252477.jpg',
-            name:'邀请有奖'
+            picUrl: 'http://p0.meituan.net/50.0.100/xianfu/cf5ddfcae114ed8d7d147d51064532252477.jpg',
+            name: '邀请有奖'
           },
           {
-            picUrl:'http://p1.meituan.net/50.0.100/xianfu/55748d5fa531a057258f68d029fe20542466.jpg',
-            name:'商家入驻'
+            picUrl: 'http://p1.meituan.net/50.0.100/xianfu/55748d5fa531a057258f68d029fe20542466.jpg',
+            name: '商家入驻'
           },
           {
-            picUrl:'http://p1.meituan.net/50.0.100/xianfu/317aabdd31dfcfa1739149089a2e041a2780.jpg',
-            name:'帮助与反馈'
+            picUrl: 'http://p1.meituan.net/50.0.100/xianfu/317aabdd31dfcfa1739149089a2e041a2780.jpg',
+            name: '帮助与反馈'
           },
           {
-            picUrl:'http://p0.meituan.net/50.0.100/xianfu/55454d4faaed6ad212b2b8a929edef372425.jpg',
-            name:'在线客服'
+            picUrl: 'http://p0.meituan.net/50.0.100/xianfu/55454d4faaed6ad212b2b8a929edef372425.jpg',
+            name: '在线客服'
           },
         ]
       }
@@ -185,7 +185,7 @@
     background: rgb(244, 244, 244);
   }
 
-  #userInfo {
+  #user-info {
     @include px2rem(height, 200);
     color: #000;
     display: flex;
@@ -212,7 +212,7 @@
     }
   }
 
-  .myFunction {
+  .fun-container {
     margin-top: 0.3rem;
     background: #fff;
     ul {
@@ -223,7 +223,7 @@
         float: left;
         text-align: center;
         margin: 0.2rem 0;
-        .imgWrap {
+        .img {
           @include px2rem(width, 70);
           @include px2rem(height, 70);
           margin: 0.1rem auto;
@@ -255,7 +255,7 @@
       li {
         flex: 1;
         text-align: center;
-        .imgWrap {
+        .img {
           @include px2rem(width, 55);
           @include px2rem(height, 55);
           margin: 0.1rem auto;
@@ -270,7 +270,6 @@
       }
     }
   }
-
   .intro {
     padding-bottom: 1rem;
   }

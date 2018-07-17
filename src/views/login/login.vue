@@ -1,17 +1,21 @@
 <!--登录页-->
 <template>
   <div id="login">
-    <v-head goBack="true" title_head="登录">
+    <v-head goBack="true" title="登录">
     </v-head>
-    <form action="" class="login_form">
+    <form action="" class="login-form">
       <div class="username">
         <label for="username">账号</label>
         <input id="username" type="text" placeholder="请输入用户名" v-model="username">
       </div>
       <div class="password">
         <label for="password">密码</label>
-        <input id="password" :type="passwordVisible?'text':'password'" placeholder="请输入密码" v-model="password"
-               @keyup.enter="login()">
+        <input
+          id="password"
+          :type="passwordVisible?'text':'password'"
+          placeholder="请输入密码"
+          v-model="password"
+          @keyup.enter="login()">
         <span @click="changeVisible()">
           <i class="iconfont icon" v-if="!passwordVisible">&#xe60a;</i>
           <i class="iconfont icon" v-else>&#xe6d0;</i>
@@ -58,7 +62,7 @@
           if (response.data.status === 200) {
             setInfo(this.username);
             this.$router.go(-1);
-          }else{
+          } else {
             this.alertText = response.data.message;
             this.showTip = true;
           }
@@ -73,7 +77,7 @@
   @import "../../style/mixin.scss";
 
   #login {
-    .login_form {
+    .login-form {
       margin-top: 2rem;
       .toRegister {
         position: absolute;
@@ -94,7 +98,7 @@
           margin-left: 0.8rem;
         }
         input:-webkit-autofill {
-          -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+          -webkit-box-shadow: 0 0 0 1000px white inset !important;
         }
         input:focus {
           outline: none;
@@ -129,6 +133,5 @@
         margin-top: 0.5rem;
       }
     }
-
   }
 </style>

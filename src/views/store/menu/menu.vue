@@ -4,7 +4,7 @@
     <div class="left" ref="left">
       <ul>
         <li v-for="(category,index) in foodsData" :key="category.id" @click="mappingScroll(index)"
-            :class="{activity_menu: index == menuIndex}">
+            :class="{'activity-menu': index == menuIndex}">
           {{category.name}}
         </li>
       </ul>
@@ -15,7 +15,7 @@
           <h2>{{category.name}}</h2>
           <article>
             <section v-for="spus in category.spus" :key="spus.id">
-              <div class="img_container">
+              <div class="img">
                 <img :xsrc="spus.pic_url" src="../../../assets/shoploading.png">
               </div>
               <div class="info">
@@ -23,8 +23,13 @@
                 <div class="sell-num">月售 {{spus.month_saled_content}}</div>
                 <span class="price"> ￥{{spus.skus[0].price}}</span>
               </div>
-              <selector @showDot="showDotFun" :name="spus.name" :food_id="spus.skus[0].id"
-                        :price="spus.skus[0].price" :pic="spus.pic_url"></selector>
+              <selector
+                @showDot="showDotFun"
+                :name="spus.name"
+                :food_id="spus.skus[0].id"
+                :price="spus.skus[0].price"
+                :pic="spus.pic_url">
+              </selector>
             </section>
           </article>
         </section>
@@ -106,7 +111,7 @@
         if (index > this.categoryPosition.length - 1 || this.hasLoadArr.indexOf(index) !== -1)    //如果该分类已经调用过懒加载，就不用执行下面函数了
           return;
         this.hasLoadArr.push(index)
-        let imgLists = this.$refs.categorys.children[index].querySelectorAll('.img_container');
+        let imgLists = this.$refs.categorys.children[index].querySelectorAll('.img');
         imgLists = Array.from(imgLists)
         imgLists.forEach((el) => {
           let img = el.childNodes[0];
@@ -169,7 +174,7 @@
           font-size: 0.3rem;
           @include px2rem(line-height, 40);
           border-bottom: 1px dashed $mtGrey;
-          &.activity_menu {
+          &.activity-menu {
             background: #fff;
           }
         }
@@ -196,7 +201,7 @@
               margin: 0 0.5rem;
               padding: 0.2rem 0;
               border-bottom: 1px solid $mtGrey;
-              .img_container {
+              .img {
                 @include px2rem(width, 122);
                 @include px2rem(height, 126);
                 margin-right: 0.2rem;

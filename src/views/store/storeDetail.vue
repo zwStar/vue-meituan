@@ -15,7 +15,8 @@
         <ul>
           <li v-for="item in poi_info.discounts2">
             <i class="icon"
-               :style="{backgroundImage:'url('+ item.icon_url+')'}"></i>
+               :style="{backgroundImage:'url('+ item.icon_url+')'}">
+            </i>
             <span>{{item.info}}</span>
           </li>
         </ul>
@@ -57,9 +58,9 @@
   #store-detail {
     position: absolute;
     left: 0;
-    top:0;
+    top: 0;
     width: 100%;
-    height:100%;
+    height: 100%;
     background: rgba(10, 8, 8, 0.4);
     z-index: 99;
     .main {
@@ -138,7 +139,7 @@
     }
     .close {
       position: absolute;
-      bottom:10%;
+      bottom: 10%;
       left: 50%;
       transform: translateX(-50%);
       .icon-close {

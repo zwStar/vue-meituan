@@ -2,19 +2,19 @@
 <template>
   <div id="store">
     <!--skeleton-screen-loading-->
-    <div class="skeleton_loading" v-if="!poi_info.name">
+    <div class="skeleton-loading" v-if="!poi_info.name">
       <img src="../../assets/restaurant.jpg">
     </div>
     <!--头部商家信息-->
-    <div class="head-wrapper">
+    <div class="head-container">
       <!--头部-->
-      <v-head :title_head="poi_info.name" goBack=true     color="#fff" bgColor="#333" more="true"></v-head>
+      <v-head :title="poi_info.name" goBack="true" color="#fff" bgColor="#333" more="true"></v-head>
       <!--商家信息-->
       <div class="store-info">
         <div class="logo">
           <img :src="poi_info.pic_url">
         </div>
-        <div class="deliver_info">
+        <div class="deliver-info">
           <span>{{poi_info.min_price_tip}}  | {{poi_info.shipping_fee_tip}} | {{poi_info.delivery_time_tip}}</span>
           <p><i class="iconfont icon-broadcast">&#xe62d;</i>{{poi_info.bulletin}}</p>
         </div>
@@ -33,19 +33,24 @@
     </div>
     <!--导航 有3个路由  点菜 评价 和商家-->
     <div class="nav">
-      <router-link :to="{path:'/store/menu',query:{id:restaurant_id}}" class="menu" active-class="active"><span
-        class="active">点菜</span>
+      <router-link :to="{path:'/store/menu',query:{id:restaurant_id}}" class="menu" active-class="active">
+        <span class="active">点菜</span>
       </router-link>
       <router-link :to="{path:'/store/comment',query:{id:restaurant_id}}" class="comment" active-class="active">
-        <span>评价</span></router-link>
+        <span>评价</span>
+      </router-link>
       <router-link :to="{path:'/store/seller',query:{id:restaurant_id}}" class="seller" active-class="active">
         <span>商家</span>
       </router-link>
     </div>
     <!--商家详细信息 当点击活动列表右侧的 > 箭头时显示 -->
     <transition name="fade">
-      <store-detail class="store-detail" v-show="showDetail" :showFlag.sync="showDetail"
-                    :poi_info="poi_info"></store-detail>
+      <store-detail
+        class="store-detail"
+        v-show="showDetail"
+        :showFlag.sync="showDetail"
+        :poi_info="poi_info">
+      </store-detail>
     </transition>
     <!--点菜 评价 和商家-->
     <keep-alive>
@@ -104,7 +109,7 @@
     display: flex;
     flex-direction: column;
     /* skeleton-sreen-loading样式*/
-    .skeleton_loading {
+    .skeleton-loading {
       position: fixed;
       top: 0;
       left: 0;
@@ -116,7 +121,7 @@
         height: 100%;
       }
     }
-    .head-wrapper {
+    .head-container {
       background: rgb(51, 51, 51);
       #head {
         background: rgb(51, 51, 51);
@@ -135,7 +140,7 @@
             height: 100%;
           }
         }
-        .deliver_info {
+        .deliver-info {
           flex: 1;
           display: flex;
           flex-direction: column;
@@ -147,7 +152,6 @@
           }
           p {
             @include px2rem(width, 500);
-
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
@@ -219,6 +223,7 @@
       }
     }
   }
+
   /* 详情框显示动画 */
   .fade-enter-active, .fade-leave-active {
     transition: opacity .4s

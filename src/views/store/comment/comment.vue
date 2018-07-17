@@ -2,38 +2,38 @@
 <template>
   <div id="comment">
     <!--评分部分-->
-    <div ref="comment" class="scroll_container">
+    <div ref="comment" class="scroll-container">
       <article>
-        <div class="comment_score_container">
+        <div class="comment-score-container">
           <div>
-            <span class="comment_score">{{poi_info.wm_poi_score}}</span>
+            <span class="comment-score">{{poi_info.wm_poi_score}}</span>
             <h3>商家评分</h3>
           </div>
           <div>
             <div>
               <span>口味</span>
               <v-star :score="poi_info.food_score"></v-star>
-              <span class="food_score">{{poi_info.food_score}}</span>
+              <span class="food-score">{{poi_info.food_score}}</span>
             </div>
             <div>
               <span>包装</span>
               <v-star :score="poi_info.pack_score"></v-star>
-              <span class="pack_score">{{poi_info.pack_score}}</span>
+              <span class="pack-score">{{poi_info.pack_score}}</span>
             </div>
           </div>
           <div>
-            <span class="delivery_score">{{poi_info.delivery_score}}</span>
+            <span class="delivery-score">{{poi_info.delivery_score}}</span>
             <h3>配送评分</h3>
           </div>
         </div>
         <!--评分类型部分-->
-        <ul class="comment_score_type_infos">
+        <ul class="comment-score-type-info">
           <li class="active">全部</li>
           <li>有图</li>
           <li><i class="iconfont">&#xe741;</i> 点评(0.0分)</li>
         </ul>
 
-        <ul class="comment_score_type_tip">
+        <ul class="comment-score-type-tip">
           <li v-for="tip in commentData.comment_score_type_infos" :key="tip.comment_score_title">
             {{tip.comment_score_title}} {{tip.total_count}}
           </li>
@@ -41,39 +41,39 @@
         </ul>
 
         <!--评价部分-->
-        <article class="comments_container">
+        <article class="comments-container">
           <section v-for="item in commentData" :key="item.id">
-            <div class="user_pic_url">
+            <div class="user-pic-url">
               <img :src="item.avatar">
             </div>
-            <div class="comment_main_part">
+            <div class="comment-main-part">
               <div>
-                <span class="user_name">{{item.user_name}}</span>
-                <span class="comment_time">{{item.comment_time.slice(0, 10)}}</span>
+                <span class="user-name">{{item.user_name}}</span>
+                <span class="comment-time">{{item.comment_time.slice(0, 10)}}</span>
               </div>
-              <div class="order_comment_score"><span>评分 <v-star :score="item.food_score"></v-star></span>
+              <div class="order-comment-score"><span>评分 <v-star :score="item.food_score"></v-star></span>
               </div>
               <p class="comment">{{item.comment_data}}</p>
-              <div class="comment_pics">
+              <div class="comment-pic">
                 <div v-for="(pic,index) in  item.pic_url" @click="show_big_pic_event(pic)" :key="index">
                   <img :src="pic">
                 </div>
               </div>
-              <div class="poi_reply_contents_container" v-if="item.add_comment_list">
+              <div class="poi-reply-contents-container" v-if="item.add_comment_list">
               </div>
             </div>
           </section>
         </article>
         <!--加载更多-->
-        <div class="loading_wrap" ref="loading">
+        <div class="loading-container" ref="loading">
           <span class="loading" v-show="loading && !noMore">正在努力加载中…</span>
-          <span class="no_more" v-show="noMore">已经到底了</span>
+          <span class="no-more" v-show="noMore">已经到底了</span>
         </div>
       </article>
     </div>
     <!--图片大图-->
     <transition>
-      <div class="show_big_pic" v-show="show_big_pic" @click="show_big_pic = false;">
+      <div class="show-big-pic" v-show="show_big_pic" @click="show_big_pic = false;">
         <div>
           <img :src="big_pic_url">
         </div>
@@ -175,11 +175,11 @@
     flex: 1;
     background: grey;
     overflow: hidden;
-    .scroll_container {
+    .scroll-container {
       width: 100%;
       overflow: hidden;
     }
-    .comment_score_container {
+    .comment-score-container {
       display: flex;
       align-items: center;
       padding: 0.35rem 0.3rem;
@@ -190,10 +190,10 @@
         span {
           font-size: 1.2rem;
         }
-        .comment_score {
+        .comment-score {
           color: #ffb000;
         }
-        .delivery_score {
+        .delivery-score {
           color: #999;
         }
         h3 {
@@ -221,7 +221,7 @@
       }
     }
 
-    .comment_score_type_infos {
+    .comment-score-type-info {
       background: #fff;
       display: flex;
       padding: 0.4rem;
@@ -242,7 +242,7 @@
       }
     }
 
-    .comment_score_type_tip {
+    .comment-score-type-tip {
       background: #fff;
       padding: 0 0.4rem;
       li {
@@ -255,12 +255,12 @@
       }
     }
 
-    .comments_container {
+    .comments-container {
       background: #fff;
       section {
         display: flex;
         padding: 0.53rem 0.1rem 0.1rem;
-        .user_pic_url {
+        .user-pic-url {
           @include px2rem(width, 80);
           @include px2rem(height, 70);
           border-radius: 50%;
@@ -270,23 +270,23 @@
             height: 100%;
           }
         }
-        .comment_main_part {
+        .comment-main-part {
           flex: 1;
           padding-left: 0.1rem;
           & > div:first-child {
             display: flex;
             justify-content: space-between;
-            .user_name {
+            .user-name {
               font-size: 0.3rem;
               font-weight: 600;
             }
-            .comment_time {
+            .comment-time {
               font-size: 0.3rem;
             }
 
           }
           /*评分*/
-          .order_comment_score {
+          .order-comment-score {
             margin: 0.1rem 0;
             span {
               font-size: 0.3rem;
@@ -300,7 +300,7 @@
             color: #222;
             font-weight: 500;
           }
-          .comment_pics {
+          .comment-pic {
             div {
               display: inline-block;
               @include px2rem(width, 120);
@@ -312,26 +312,26 @@
               }
             }
           }
-          .praise_food_tip_container {
-            .praise_food_tip {
+          .praise-food-tip-container {
+            .praise-food-tip {
               padding: 0 0.1rem;
               border: 1px solid $mtGrey;
               border-radius: 3px;
               margin: 0 0.1rem;
             }
-            .give_prise {
+            .give-prise {
               .iconfont {
                 font-size: 0.3rem;
                 font-weight: bold;
               }
             }
-            .praise_food_tip {
+            .praise-food-tip {
               font-size: 0.3rem;
             }
           }
         }
       }
-      .poi_reply_contents_container {
+      .poi-reply-contents-container {
         margin: 0.28rem 0;
         padding: 0.1rem;
         background: #f8f8f8;
@@ -343,7 +343,7 @@
       }
     }
 
-    .show_big_pic {
+    .show-big-pic {
       position: fixed;
       top: 0;
       left: 0;
@@ -365,7 +365,7 @@
       }
     }
     /*loading部分*/
-    .loading_wrap {
+    .loading-container {
       @include loading;
       padding-bottom: 1rem;
     }
