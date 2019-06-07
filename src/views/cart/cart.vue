@@ -143,7 +143,7 @@
         this.deleteSelectFood[restaurant_id]['allSelect'] = allSelect;
         this.deleteSelectFood = {...this.deleteSelectFood};   //拓展运算符使vue更新视图
       },
-      isAllSelect(newObj, restaurant_id) {      //判断商品是否全选中了 如果全选中那么商家头像左边的按钮对应选中
+      isAllSelect(newObj) {      //判断商品是否全选中了 如果全选中那么商家头像左边的按钮对应选中
         delete newObj.allSelect;
         let values = Object.values(newObj);
         let noAllSelect = values.some((el) => {
@@ -200,7 +200,7 @@
           foods
         };
         localStorage.setItem('confirmOrderData', JSON.stringify(data));
-        this.$router.push({path: '/confirmOrder'});
+        this.$router.push({path: '/confirm_order'});
       },
       deleteCart() {       //删除购物车
         Object.keys(this.deleteSelectFood).forEach((restaurant_id) => {

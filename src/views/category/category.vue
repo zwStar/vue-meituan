@@ -8,7 +8,7 @@
 </template>
 
 <script>
-  import nearbyShops from '@/views/Index/nearbyShops'
+  import nearbyShops from '@/views/index/nearby_shops'
 
   export default {
     data() {

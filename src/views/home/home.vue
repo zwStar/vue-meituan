@@ -147,7 +147,7 @@
                 let pic_url = config.domain + upResponse.data.key
                 this.avatar = pic_url;
                 this.loading = false;
-                changeAvatar({pic_url}).then((updateResponse) => {
+                changeAvatar({pic_url}).then(() => {
                 })     //更新到数据库
               })
             } else {

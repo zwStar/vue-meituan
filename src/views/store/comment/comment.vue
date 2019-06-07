@@ -103,19 +103,18 @@
     },
     mounted() {
       let _this = this;
-      this.restaurant_id = this.$route.query.id;
-      let fetching = false;
-      this.fetchComment((response) => {
-        this.commentData = response.data.data;
-        this.$nextTick(() => {       //初始化better-scroll
-          this.BScrollEvent = new BScroll(this.$refs.comment, {click: true, probeType: 2});
+      _this.restaurant_id = _this.$route.query.id;
+      _this.fetchComment((response) => {
+        _this.commentData = response.data.data;
+        _this.$nextTick(() => {       //初始化better-scroll
+          _this.BScrollEvent = new BScroll(_this.$refs.comment, {click: true, probeType: 2});
           //监听scroll事件
-          this.listenScroll();
+          _this.listenScroll();
         })
       })
       //根据商店id获取店家信息
-      getRestaurant({restaurant_id: this.restaurant_id}).then((response) => {
-        this.poi_info = response.data.data;
+      getRestaurant({restaurant_id: _this.restaurant_id}).then((response) => {
+        _this.poi_info = response.data.data;
       })
     },
     methods: {

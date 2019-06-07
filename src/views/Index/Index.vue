@@ -34,7 +34,7 @@
 
 <script>
   import littleCart from '../../components/littleCart.vue'
-  import nearbyShops from './nearbyShops.vue'
+  import nearbyShops from './nearby_shops.vue'
   import vNav from './nav.vue'
   import {mapGetters} from 'vuex'
 

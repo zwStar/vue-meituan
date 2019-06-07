@@ -1,8 +1,8 @@
 <!--选择评分-->
 <template>
   <div class="star-container">
-    <i class="iconfont star active" v-for="item in score" @click="makeScore(item)">&#xe70a;</i>
-    <i class="iconfont star no-active" v-for="item in (5 - score)" @click="makeScore(item + score)">&#xe70a;</i>
+    <i class="iconfont star active" v-for="item in score" @click="makeScore(item)" :key="item">&#xe70a;</i>
+    <i class="iconfont star no-active" v-for="item in (5 - score)" @click="makeScore(item + score)" :key="item">&#xe70a;</i>
   </div>
 </template>
 

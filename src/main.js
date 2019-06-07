@@ -6,7 +6,7 @@ import router from './router'
 import store from './stores'
 
 import Head from '@/components/head'
-import Bottom from '@/components/Bottom'
+import Bottom from '@/components/bottom'
 import Star from '@/components/star'
 import AlertTip from '@/components/alertTip'
 import Loading from '@/components/loading'
@@ -30,10 +30,7 @@ if ('addEventListener' in document) {
 
 /* eslint-disable no-new */
 new Vue({
-  el: '#app',
-  router,
-  store,
-  template: '<App/>',
-  components: {App}
-})
-
+    router,
+    store,
+    render: h => h(App),
+}).$mount('#app')

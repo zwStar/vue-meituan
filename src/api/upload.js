@@ -1,4 +1,4 @@
-import {_get, _post, _postNoWithCredentials} from './index'
+import {_get, _postNoWithCredentials} from './index'
 //获取七牛云上次凭证
 export const uploadToken = (data) => {
   let req = {

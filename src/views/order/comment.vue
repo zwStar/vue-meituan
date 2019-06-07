@@ -37,7 +37,7 @@
       </div>
 
       <div class="upload-picture-container">
-        <div class="uplist-container" v-for="(item,index) in uploadList">
+        <div class="uplist-container" v-for="(item,index) in uploadList" :key="index">
           <div class="pic">
             <img :src="item">
           </div>
@@ -141,8 +141,8 @@
         }).then((response) => {
           let res = response.data;
           let _this = this;
-          this.alertText = res.message;
-          this.showTip = true;
+          _this.alertText = res.message;
+          _this.showTip = true;
           if (res.status === 200) {
             setTimeout(() => {
               _this.$router.push('/index')

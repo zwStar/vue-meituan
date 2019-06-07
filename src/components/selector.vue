@@ -1,6 +1,6 @@
 <template>
   <div id="selector">
-    <div class="ball-container" @click="reduceCart()" v-if="food_num">
+    <div class="ball-container" @click="reduceCart" v-if="food_num">
       <span class="reduce"><i class="iconfont icon-reduce">&#xe613;</i></span>
     </div>
     <span class="number" v-if="food_num">{{food_num}}</span>
@@ -29,10 +29,10 @@
           foods_pic: this.pic,
           food_id: this.food_id,
           restaurant_id: this.poi_info.id,
-        })
+        });
         this.$emit('showDot', elRight, elBottom);
       },
-      reduceCart(event) {
+      reduceCart() {
         this.$store.dispatch('reduceCart', {restaurant_id: this.poi_info.id, food_id: this.food_id})
       }
     },

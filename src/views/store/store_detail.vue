@@ -13,7 +13,7 @@
         class="deliver-info">{{poi_info.min_price_tip}}  | {{poi_info.shipping_fee_tip}} | {{poi_info.delivery_time_tip}}</span>
       <div class="active-lists">
         <ul>
-          <li v-for="item in poi_info.discounts2">
+          <li v-for="(item, index) in poi_info.discounts2" :key="index">
             <i class="icon"
                :style="{backgroundImage:'url('+ item.icon_url+')'}">
             </i>

@@ -17,7 +17,7 @@
         <div class="allow-item">
           <span class="selected" v-if="allowItem" @click="allowItem=false;"><i class="iconfont">&#xe6da;</i></span>
           <span class="select" v-else @click="allowItem=true;"></span>
-          <span class="text">同意 <<strong>信息授权使用协议</strong>> </span>
+          <span class="text">同意 &lt;<strong>信息授权使用协议</strong>&lt; </span>
         </div>
       </div>
     </div>

@@ -6,7 +6,6 @@ body, div, span, header, footer, nav, section, aside, article, ul, dl, dt, dd, l
   text-decoration: none;
   border: none;
   font-weight: normal;
-  //font-family: "Microsoft Yahei";
   box-sizing: border-box;
   -webkit-tap-highlight-color:transparent;
   -webkit-font-smoothing: antialiased;
@@ -53,7 +52,7 @@ html,body{
 
 //自动填写密码出现的黄色背景
 input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0px 1000px white inset !important;
+  -webkit-box-shadow: 0 0 0 1000px white inset !important;
 }
 //focus产生黄色边框
 input:focus{  outline:none; }
