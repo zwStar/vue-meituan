@@ -126,8 +126,9 @@ npm run dev
 
 # 打赏
 如果觉得这个项目对你有帮忙，可以请我喝杯奶茶哈
+
 ![微信](screenshots/weChat.jpg)
-![支付宝](screenshots/aliPay.jpg)
+![支付宝](screenshots/alipay.jpg)
 
 
 
