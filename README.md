@@ -130,5 +130,7 @@ npm run dev
 ![微信](screenshots/weChat.jpg)
 ![支付宝](screenshots/alipay.jpg)
 
+微信  支付宝
+
 
 
