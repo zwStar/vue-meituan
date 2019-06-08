@@ -86,7 +86,7 @@ cd vue-meituan
 
 npm install
 
-npm run dev
+npm run serve
 
 访问: http://localhost:8080 (确保后端项目服务已开启)
 
