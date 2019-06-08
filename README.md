@@ -127,9 +127,15 @@ npm run dev
 # 打赏
 如果觉得这个项目对你有帮忙，可以请我喝杯奶茶哈
 
-![微信](screenshots/weChat.jpg)
+微信：
+
 <img src="https://github.com/zwStar/vue-meituan/blob/v2.0/screenshots/weChat.jpg" width="375" alt="微信"/>
-![支付宝](screenshots/alipay.jpg)
+
+支付宝：
+
+<img src="https://github.com/zwStar/vue-meituan/blob/v2.0/screenshots/alipay.jpg" width="375" alt="支付宝"/>
+
+
 
 
 
