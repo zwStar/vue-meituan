@@ -4,23 +4,27 @@
     <v-head goBack="true" title="登录">
     </v-head>
     <form action="" class="login-form">
-      <div class="username">
-        <label for="username">账号</label>
+
+      <label class="form-label" for="username">
+        <span class="label">账号</span>
         <input id="username" type="text" placeholder="请输入用户名" v-model="username">
-      </div>
-      <div class="password">
-        <label for="password">密码</label>
+      </label>
+
+      <label class="form-label" for="password">
+        <span class="label">密码</span>
         <input
           id="password"
           :type="passwordVisible?'text':'password'"
           placeholder="请输入密码"
           v-model="password"
-          @keyup.enter="login()">
-        <span @click="changeVisible()">
+          @keyup.enter="login">
+
+        <span @click="changeVisible">
           <i class="iconfont icon" v-if="!passwordVisible">&#xe60a;</i>
           <i class="iconfont icon" v-else>&#xe6d0;</i>
         </span>
-      </div>
+      </label>
+
       <div class="button" @click.prevent="login();">
         <span>登录</span>
       </div>
@@ -86,17 +90,30 @@
         @include px2rem(line-height, 85);
         font-weight: bold;
       }
-      .username, .password {
-        margin: 0.4rem 0.6rem;
-        border-bottom: 1px solid $bottomLine;
-        label, ::-webkit-input-placeholder {
+
+      .form-label {
+        display: flex;
+        line-height: 1rem;
+        margin: 0 0.4rem;
+
+        .label {
+          font-size: 0.4rem;
+          margin-right: 0.2rem;
+        }
+
+        .icon {
           font-size: 0.4rem;
         }
+
         input {
+          flex: 1;
           font-size: 0.4rem;
-          width: 70%;
-          margin-left: 0.8rem;
         }
+
+        ::-webkit-input-placeholder {
+          font-size: 0.4rem;
+        }
+
         input:-webkit-autofill {
           -webkit-box-shadow: 0 0 0 1000px white inset !important;
         }
@@ -104,14 +121,7 @@
           outline: none;
         }
       }
-      .password {
-        span {
-          float: right;
-          .icon {
-            font-size: 0.5rem;
-          }
-        }
-      }
+
       .button {
         text-align: center;
         margin-top: 0.1rem;

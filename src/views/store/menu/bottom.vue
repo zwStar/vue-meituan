@@ -257,7 +257,7 @@
         font-size: 0.4rem;
         background: #2c2c2c;
         text-align: center;
-        &.goBuy {
+        &.go-buy {
           color: #000;
           background: $mtYellow;
         }
