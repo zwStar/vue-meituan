@@ -21,7 +21,6 @@
 <script>
 
   import {Swipe, SwipeItem} from 'mint-ui';
-  import 'mint-ui/lib/style.css'
   import {mapGetters} from 'vuex'
 
   export default {

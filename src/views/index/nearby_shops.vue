@@ -12,7 +12,7 @@
     <!--商家列表-->
     <article>
       <router-link
-        v-for="(item,index) in shopLists"
+        v-for="(item) in shopLists"
         :to="{path:'store',query:{id:item.id}}"
         :key="item.id"
         tag="section">
@@ -36,7 +36,7 @@
           </div>
           <div class="active-message">
             <ul>
-              <li v-for="(discount,index) in item.discounts2" v-if="index <= 1">
+              <li v-for="(discount,index) in item.discounts2.slice(0, 1)" :key="index">
                 <div class="discount-left">
                   <img :src="discount.icon_url" class="icon">
                   <span class="info">{{discount.info}}</span>

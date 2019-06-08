@@ -85,7 +85,6 @@
 <script>
   import scan from './scan.vue'
   import {initPay, orderInfo} from '@/api/order'
-  import {requestPay} from '@/api/order'
 
   export default {
     data() {

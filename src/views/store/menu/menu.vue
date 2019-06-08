@@ -11,7 +11,7 @@
     </div>
     <div class="right" ref="right">
       <article ref="categorys">
-        <section v-for="(category,index) in foodsData" :key="category.id">
+        <section v-for="category in foodsData" :key="category.id">
           <h2>{{category.name}}</h2>
           <article>
             <section v-for="spus in category.spus" :key="spus.id">
@@ -48,7 +48,7 @@
 
 <script>
   import BScroll from 'better-scroll'
-  import {getRestaurant, getFoods} from '@/api/restaurant'
+  import {getFoods} from '@/api/restaurant'
   import Bottom from './bottom'
   import selector from '@/components/selector'
 

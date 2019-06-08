@@ -22,7 +22,7 @@
       <!--活动列表-->
       <div class="actives">
         <ul :style=" 'transform: translateY('+ positionY % discountsLength * -0.9 +'rem)'">
-          <li v-for="item in poi_info.discounts2">
+          <li v-for="(item, index) in poi_info.discounts2" :key="index">
             <i class="icon"
                :style="{backgroundImage:'url('+ item.icon_url+')'}"></i>
             <span>{{item.info}}</span>
@@ -61,8 +61,7 @@
 
 <script>
 
-  import {getRestaurant, getFoods} from '@/api/restaurant'
-  import StoreDetail from './storeDetail.vue'
+  import StoreDetail from './store_detail.vue'
   import {mapGetters} from 'vuex'
 
   export default {
@@ -108,7 +107,7 @@
     height: 100%;
     display: flex;
     flex-direction: column;
-    /* skeleton-sreen-loading样式*/
+    /* skeleton-screen-loading样式*/
     .skeleton-loading {
       position: fixed;
       top: 0;

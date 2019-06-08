@@ -93,7 +93,7 @@
 
         if(getInfo){
           localStorage.setItem('confirmOrderData', JSON.stringify(data));
-          this.$router.push({path: '/confirmOrder'})
+          this.$router.push({path: '/confirm_order'})
         }else{
           this.$router.push({path:'/login'})
         }
